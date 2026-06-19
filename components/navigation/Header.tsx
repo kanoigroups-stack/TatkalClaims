@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone, Shield } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { scrollToForm } from "@/utils/scroll";
@@ -81,18 +81,14 @@ export default function Header() {
       >
         <div className="container-main px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-2.5 group" aria-label="Tatkal Claims Home">
-              <div className="w-10 h-10 bg-primary-800 rounded-xl flex items-center justify-center shadow-lg shadow-primary-800/20 group-hover:shadow-primary-800/30 transition-shadow">
-                <Shield className="w-5 h-5 text-white" aria-hidden="true" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-heading font-bold text-xl leading-none text-primary-800">
-                  Tatkal Claims
-                </span>
-                <span className="text-[10px] font-semibold tracking-widest uppercase text-accent-500">
-                  Pro
-                </span>
-              </div>
+            <Link href="/" className="flex items-center group" aria-label="Tatkal Claims Home">
+              <img
+                src="/logo.png"
+                alt="Tatkal Claims"
+                className="h-10 w-auto object-contain"
+                width="180"
+                height="40"
+              />
             </Link>
 
             <nav className="hidden lg:flex items-center gap-8" aria-label="Main navigation">
