@@ -81,13 +81,11 @@ export default function Header() {
       >
         <div className="container-main px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center group" aria-label="Tatkal Claims Home">
+            <Link href="/" className="flex items-center group shrink-0" aria-label="Tatkal Claims Home">
               <img
                 src="/logo.png"
                 alt="Tatkal Claims"
-                className="h-14 w-auto object-contain"
-                width="252"
-                height="56"
+                className="h-11 w-auto object-contain"
               />
             </Link>
 
