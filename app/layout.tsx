@@ -24,7 +24,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: "Tatkal Claims | India&apos;s Most Trusted Insurance Dispute Resolution Platform",
+    default: "Tatkal Claims | India's Most Trusted Insurance Dispute Resolution Platform",
     template: "%s | Tatkal Claims",
   },
   description: "Resolve your insurance claim disputes with expert legal professionals. 500+ cases assisted, ₹20+ Crores claims recovered. Claim rejection, delay, mis-selling & more.",
