@@ -16,13 +16,15 @@ export default function Footer() {
       <div className="container-main px-4 sm:px-6 lg:px-8 py-16">
         <div className="max-w-2xl">
           <Link href="/" className="flex items-center mb-6" aria-label="Tatkal Claims Home">
-            <img
-              src="/logo.png"
-              alt="Tatkal Claims"
-              className="h-10 w-auto object-contain brightness-0 invert"
-              width="180"
-              height="40"
-            />
+            <div className="bg-white rounded-xl px-4 py-2">
+              <img
+                src="/logo.png"
+                alt="Tatkal Claims"
+                className="h-12 w-auto object-contain"
+                width="216"
+                height="48"
+              />
+            </div>
           </Link>
           <p className="text-slate-400 leading-relaxed mb-6">
             India&apos;s most trusted platform for resolving insurance complaints. We help policyholders recover rightful claims through expert dispute resolution.
