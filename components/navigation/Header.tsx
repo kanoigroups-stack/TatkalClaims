@@ -85,9 +85,9 @@ export default function Header() {
               <img
                 src="/logo.png"
                 alt="Tatkal Claims"
-                className="h-10 w-auto object-contain"
-                width="180"
-                height="40"
+                className="h-14 w-auto object-contain"
+                width="252"
+                height="56"
               />
             </Link>
 
