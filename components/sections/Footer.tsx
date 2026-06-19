@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Shield, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
   const [year, setYear] = useState(2026);
@@ -15,13 +15,14 @@ export default function Footer() {
     <footer className="bg-slate-900 text-slate-300">
       <div className="container-main px-4 sm:px-6 lg:px-8 py-16">
         <div className="max-w-2xl">
-          <Link href="/" className="flex items-center gap-2.5 mb-6" aria-label="Tatkal Claims Home">
-            <div className="w-10 h-10 bg-primary-700 rounded-xl flex items-center justify-center">
-              <Shield className="w-5 h-5 text-white" aria-hidden="true" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-heading font-bold text-xl text-white leading-none">Tatkal Claims</span>
-            </div>
+          <Link href="/" className="flex items-center mb-6" aria-label="Tatkal Claims Home">
+            <img
+              src="/logo.png"
+              alt="Tatkal Claims"
+              className="h-10 w-auto object-contain brightness-0 invert"
+              width="180"
+              height="40"
+            />
           </Link>
           <p className="text-slate-400 leading-relaxed mb-6">
             India&apos;s most trusted platform for resolving insurance complaints. We help policyholders recover rightful claims through expert dispute resolution.
