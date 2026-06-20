@@ -20,7 +20,6 @@ interface FormErrors {
   email?: string;
   phone?: string;
   issueType?: string;
-  submit?: string;
 }
 
 export default function LeadCaptureForm() {
@@ -81,31 +80,43 @@ export default function LeadCaptureForm() {
     validate();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
-    setErrors((prev) => ({ ...prev, submit: undefined }));
 
     const formUrl = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
+    const hiddenForm = document.createElement("form");
+    hiddenForm.method = "POST";
+    hiddenForm.action = formUrl;
+    hiddenForm.target = "hidden-iframe";
+    hiddenForm.style.display = "none";
 
-    // Build URL-encoded form data
-    const formBody = new URLSearchParams();
     Object.entries(GOOGLE_FORM_ENTRIES).forEach(([key, entryId]) => {
-      formBody.append(entryId, formData[key as keyof typeof formData] || "");
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = entryId;
+      input.value = formData[key as keyof typeof formData];
+      hiddenForm.appendChild(input);
     });
 
-    try {
-      await fetch(formUrl, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: formBody.toString(),
-      });
+    let iframe = document.getElementById("hidden-iframe") as HTMLIFrameElement | null;
+    if (!iframe) {
+      iframe = document.createElement("iframe");
+      iframe.id = "hidden-iframe";
+      iframe.name = "hidden-iframe";
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
+    }
 
-      // Show success (no-cors hides response, but request is sent)
+    document.body.appendChild(hiddenForm);
+    hiddenForm.submit();
+
+    setTimeout(() => {
+      document.body.removeChild(hiddenForm);
+    }, 1000);
+
+    setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
       setErrors({});
@@ -113,11 +124,8 @@ export default function LeadCaptureForm() {
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
-      }, 4000);
-    } catch (error) {
-      setIsSubmitting(false);
-      setErrors((prev) => ({ ...prev, submit: "Submission failed. Please try again or contact us directly." }));
-    }
+      }, 3000);
+    }, 1500);
   };
 
   if (isSubmitted) {
@@ -146,21 +154,6 @@ export default function LeadCaptureForm() {
         <p className="text-sm text-slate-500">Fill in your details and our experts will reach out</p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        <AnimatePresence>
-          {errors.submit && (
-            <motion.div 
-              initial={{ opacity: 0, y: -5 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              exit={{ opacity: 0, y: -5 }}
-              className="flex items-center gap-1.5 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm"
-              role="alert"
-            >
-              <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-              <span>{errors.submit}</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         <div>
           <label htmlFor="name" className="sr-only">Full Name</label>
           <input 
