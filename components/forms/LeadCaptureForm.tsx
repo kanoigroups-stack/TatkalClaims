@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle, Loader2, AlertCircle } from "lucide-react";
 
@@ -29,7 +29,6 @@ export default function LeadCaptureForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const validate = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -82,7 +81,7 @@ export default function LeadCaptureForm() {
     validate();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
@@ -90,42 +89,23 @@ export default function LeadCaptureForm() {
 
     const formUrl = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
 
-    // Ensure iframe exists for submission
-    let iframe = iframeRef.current;
-    if (!iframe) {
-      iframe = document.createElement("iframe");
-      iframe.id = "hidden-iframe";
-      iframe.name = "hidden-iframe";
-      iframe.style.display = "none";
-      document.body.appendChild(iframe);
-      iframeRef.current = iframe;
-    }
-
-    const hiddenForm = document.createElement("form");
-    hiddenForm.method = "POST";
-    hiddenForm.action = formUrl;
-    hiddenForm.target = "hidden-iframe";
-    hiddenForm.style.display = "none";
-
+    // Build URL-encoded form data
+    const formBody = new URLSearchParams();
     Object.entries(GOOGLE_FORM_ENTRIES).forEach(([key, entryId]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = entryId;
-      input.value = formData[key as keyof typeof formData];
-      hiddenForm.appendChild(input);
+      formBody.append(entryId, formData[key as keyof typeof formData] || "");
     });
 
-    document.body.appendChild(hiddenForm);
-    hiddenForm.submit();
+    try {
+      await fetch(formUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formBody.toString(),
+      });
 
-    setTimeout(() => {
-      if (document.body.contains(hiddenForm)) {
-        document.body.removeChild(hiddenForm);
-      }
-    }, 1000);
-
-    // Show success after giving the form time to submit
-    setTimeout(() => {
+      // Show success (no-cors hides response, but request is sent)
       setIsSubmitting(false);
       setIsSubmitted(true);
       setErrors({});
@@ -134,7 +114,10 @@ export default function LeadCaptureForm() {
         setIsSubmitted(false);
         setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
       }, 4000);
-    }, 2000);
+    } catch (error) {
+      setIsSubmitting(false);
+      setErrors((prev) => ({ ...prev, submit: "Submission failed. Please try again or contact us directly." }));
+    }
   };
 
   if (isSubmitted) {
