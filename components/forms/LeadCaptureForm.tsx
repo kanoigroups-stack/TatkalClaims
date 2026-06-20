@@ -90,52 +90,41 @@ export default function LeadCaptureForm() {
 
     const formUrl = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
 
-    // Create or get the hidden iframe - MUST be in DOM with proper name
+    // Ensure iframe exists for submission
     let iframe = iframeRef.current;
     if (!iframe) {
       iframe = document.createElement("iframe");
       iframe.id = "hidden-iframe";
       iframe.name = "hidden-iframe";
       iframe.style.display = "none";
-      iframe.style.width = "0";
-      iframe.style.height = "0";
-      iframe.style.border = "none";
       document.body.appendChild(iframe);
       iframeRef.current = iframe;
     }
 
-    // Create the hidden form with proper encoding
     const hiddenForm = document.createElement("form");
     hiddenForm.method = "POST";
     hiddenForm.action = formUrl;
     hiddenForm.target = "hidden-iframe";
     hiddenForm.style.display = "none";
-    hiddenForm.acceptCharset = "UTF-8";
-    hiddenForm.enctype = "application/x-www-form-urlencoded";
 
-    // Add all form fields
     Object.entries(GOOGLE_FORM_ENTRIES).forEach(([key, entryId]) => {
       const input = document.createElement("input");
       input.type = "hidden";
       input.name = entryId;
-      input.value = formData[key as keyof typeof formData] || "";
+      input.value = formData[key as keyof typeof formData];
       hiddenForm.appendChild(input);
     });
 
-    // CRITICAL: Append form to DOM BEFORE submitting
     document.body.appendChild(hiddenForm);
-    
-    // Submit the form
     hiddenForm.submit();
 
-    // Clean up form after submission
     setTimeout(() => {
       if (document.body.contains(hiddenForm)) {
         document.body.removeChild(hiddenForm);
       }
-    }, 2000);
+    }, 1000);
 
-    // Show success UI after giving time for submission
+    // Show success after giving the form time to submit
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -145,7 +134,7 @@ export default function LeadCaptureForm() {
         setIsSubmitted(false);
         setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
       }, 4000);
-    }, 2500);
+    }, 2000);
   };
 
   if (isSubmitted) {
