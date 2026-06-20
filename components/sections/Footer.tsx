@@ -23,7 +23,7 @@ export default function Footer() {
             />
           </Link>
           <p className="text-slate-400 leading-relaxed mb-6">
-            India&apos;s most trusted platform for resolving insurance complaints. We help policyholders recover rightful claims through expert dispute resolution.
+            India's most trusted platform for resolving insurance complaints. We help policyholders recover rightful claims through expert dispute resolution.
           </p>
           <div className="space-y-3">
             <a href="tel:+919321152524" className="flex items-center gap-3 text-sm hover:text-white transition-colors" aria-label="Call us">
