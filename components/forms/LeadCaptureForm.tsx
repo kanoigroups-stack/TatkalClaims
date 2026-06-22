@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle, Loader2, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 const issueTypes = ["Claim Rejection", "Claim Delay", "Short Settlement", "Mis-selling", "Policy Dispute", "Other"];
 
@@ -301,7 +302,15 @@ export default function LeadCaptureForm() {
         </button>
 
         <p className="text-xs text-center text-slate-400 mt-4">
-          By submitting, you agree to our privacy policy. We respect your data.
+          By submitting, you agree to our{" "}
+          <Link 
+            href="/privacy-policy/" 
+            className="text-primary-600 hover:text-primary-800 underline underline-offset-2 transition-colors font-medium"
+            aria-label="Read our Privacy Policy"
+          >
+            privacy policy
+          </Link>
+          . We respect your data.
         </p>
       </form>
     </div>
