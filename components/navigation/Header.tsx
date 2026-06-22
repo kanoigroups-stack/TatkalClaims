@@ -15,6 +15,7 @@ const navLinks = [
   { href: "#testimonials", label: "Success Stories" },
   { href: "#faq", label: "FAQs" },
   { href: "/blog/", label: "Blog" },
+  { href: "/partner-with-us/", label: "Partner With Us" },
 ];
 
 export default function Header() {
@@ -57,7 +58,7 @@ export default function Header() {
 
   const isActive = (href: string) => {
     if (href.startsWith("#")) return false;
-    return pathname === href || pathname.startsWith(href.replace(/\/$/, ""));
+    return pathname === href || pathname.startsWith(href.replace(/\\/$/, ""));
   };
 
   const getHref = (href: string) => {
@@ -89,7 +90,7 @@ export default function Header() {
               />
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-8" aria-label="Main navigation">
+            <nav className="hidden lg:flex items-center gap-6" aria-label="Main navigation">
               {navLinks.map((link) => {
                 const active = isActive(link.href);
                 const href = getHref(link.href);
