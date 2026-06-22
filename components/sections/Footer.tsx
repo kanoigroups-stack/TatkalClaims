@@ -23,7 +23,7 @@ export default function Footer() {
             />
           </Link>
           <p className="text-slate-400 leading-relaxed mb-6">
-            India's most trusted platform for resolving insurance complaints. We help policyholders recover rightful claims through expert dispute resolution.
+            India&apos;s most trusted platform for resolving insurance complaints. We help policyholders recover rightful claims through expert dispute resolution.
           </p>
           <div className="space-y-3">
             <a href="tel:+919321152524" className="flex items-center gap-3 text-sm hover:text-white transition-colors" aria-label="Call us">
@@ -41,9 +41,29 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      
+      {/* Legal Links Bar */}
       <div className="border-t border-slate-800">
         <div className="container-main px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-sm text-slate-500">© {year} Tatkal Claims. All rights reserved.</p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <p className="text-sm text-slate-500">© {year} Tatkal Claims. All rights reserved.</p>
+            <div className="flex items-center gap-6 text-sm">
+              <Link 
+                href="/privacy-policy/" 
+                className="text-slate-400 hover:text-white transition-colors"
+                aria-label="Read our Privacy Policy"
+              >
+                Privacy Policy
+              </Link>
+              <Link 
+                href="/terms-and-conditions/" 
+                className="text-slate-400 hover:text-white transition-colors"
+                aria-label="Read our Terms and Conditions"
+              >
+                Terms & Conditions
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
