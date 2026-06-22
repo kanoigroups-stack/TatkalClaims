@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/blog/`, lastModified: buildDate, changeFrequency: "weekly" as const, priority: 0.8 },
     { url: `${baseUrl}/privacy-policy/`, lastModified: buildDate, changeFrequency: "monthly" as const, priority: 0.5 },
     { url: `${baseUrl}/terms-and-conditions/`, lastModified: buildDate, changeFrequency: "monthly" as const, priority: 0.5 },
+    { url: `${baseUrl}/partner-with-us/`, lastModified: buildDate, changeFrequency: "monthly" as const, priority: 0.7 },
   ];
 
   const blogPosts = blogsData.posts.map((post) => ({
