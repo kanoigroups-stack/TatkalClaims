@@ -370,11 +370,11 @@ export default function PartnerWithUsPage() {
           <div className="mt-8 p-6 bg-white rounded-2xl border border-slate-100 shadow-card">
             <p className="text-sm text-slate-500 mb-2">Prefer email?</p>
             <a 
-              href="mailto:partners@tatkalclaims.com" 
+              href="mailto:help@tatkalclaims.com" 
               className="inline-flex items-center gap-2 text-primary-700 font-semibold hover:text-primary-900 transition-colors"
             >
               <Mail className="w-5 h-5" aria-hidden="true" />
-              partners@tatkalclaims.com
+              help@tatkalclaims.com
             </a>
           </div>
         </div>
