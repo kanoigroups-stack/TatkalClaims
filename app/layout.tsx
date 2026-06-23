@@ -37,6 +37,7 @@ export const metadata: Metadata = {
     canonical: "/",
     languages: {
       "en-IN": "/",
+      "hi-IN": "/",
     },
   },
   openGraph: {
@@ -92,6 +93,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        
+        {/* Google Translate */}
+        <script type="text/javascript">
+          {`
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,mr,gu,ta,te,bn,kn,ml,pa',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+              }, 'google_translate_element');
+            }
+          `}
+        </script>
+        <script 
+          type="text/javascript" 
+          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          async
+        />
+        
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-M3ZBJ1B7V8" />
         <script
           dangerouslySetInnerHTML={{
@@ -144,6 +165,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="font-body text-slate-800 antialiased bg-white">
+        {/* Hidden Google Translate container */}
+        <div id="google_translate_element" style={{ display: "none" }}></div>
+        
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-primary-800 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
           Skip to main content
         </a>
