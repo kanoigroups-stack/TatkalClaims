@@ -1,37 +1,72 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, ShieldCheck, Clock, Users, Award, ChevronRight, Languages } from "lucide-react";
-import LeadCaptureForm from "../forms/LeadCaptureForm";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Phone, Globe } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { scrollToForm } from "@/utils/scroll";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useState, useEffect } from "react";
 
-const trustBadges = [
-  { icon: ShieldCheck, label: "100% Secure" },
-  { icon: Clock, label: "24/7 Support" },
-  { icon: Users, label: "500+ Helped" },
-  { icon: Award, label: "Expert Team" },
+const navLinks = [
+  { href: "#services", label: "Services" },
+  { href: "#process", label: "How It Works" },
+  { href: "#trust", label: "Why Us" },
+  { href: "#testimonials", label: "Success Stories" },
+  { href: "#faq", label: "FAQs" },
+  { href: "/blog/", label: "Blog" },
+  { href: "/partner-with-us/", label: "Partner With Us" },
 ];
 
-export default function HeroSection() {
-  const prefersReducedMotion = useReducedMotion();
+export default function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState("en");
   const [translateReady, setTranslateReady] = useState(false);
+  const pathname = usePathname();
+  const prefersReducedMotion = useReducedMotion();
+  const retryCount = useRef(0);
+  const maxRetries = 50; // 5 seconds total
+
+  const isHomePage = pathname === "/" || pathname === "";
 
   useEffect(() => {
-    const checkReady = () => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isMobileMenuOpen]);
+
+  // Wait for Google Translate to be ready
+  useEffect(() => {
+    const checkTranslateReady = () => {
       const select = document.querySelector(".goog-te-combo") as HTMLSelectElement;
       if (select) {
         setTranslateReady(true);
+        // Sync current language with what's already selected
+        if (select.value && select.value !== currentLang) {
+          setCurrentLang(select.value);
+        }
         return true;
       }
       return false;
     };
 
-    if (checkReady()) return;
+    // Check immediately
+    if (checkTranslateReady()) return;
 
+    // Retry with interval
     const interval = setInterval(() => {
-      if (checkReady()) {
+      retryCount.current++;
+      if (checkTranslateReady() || retryCount.current >= maxRetries) {
         clearInterval(interval);
       }
     }, 100);
@@ -39,115 +74,247 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleTranslateToHindi = () => {
+  const handleLanguageChange = (lang: string) => {
+    setCurrentLang(lang);
+    
     const tryTranslate = () => {
       const select = document.querySelector(".goog-te-combo") as HTMLSelectElement;
       if (select) {
-        select.value = "hi";
+        select.value = lang;
         select.dispatchEvent(new Event("change"));
         return true;
       }
       return false;
     };
 
+    // Try immediately
     if (tryTranslate()) return;
 
+    // If not ready, wait and retry
     let attempts = 0;
-    const retry = setInterval(() => {
+    const retryInterval = setInterval(() => {
       attempts++;
       if (tryTranslate() || attempts >= 30) {
-        clearInterval(retry);
+        clearInterval(retryInterval);
       }
     }, 100);
   };
 
-  return (
-    <section id="contact" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50/30 -z-10" />
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 -z-10" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-200/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 -z-10" />
-      <div 
-        className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMxRTNBOEEiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0aDR2NGgtNHpNMzQgMzZoNHY0aC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-60 -z-10" 
-        aria-hidden="true"
-      />
-      <div className="container-main">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <motion.div 
-            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: "easeOut" }}
-            className="max-w-2xl"
-          >
-            {/* Translate to Hindi Button - Prominent */}
-            <motion.button
-              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              onClick={handleTranslateToHindi}
-              disabled={!translateReady}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-4 transition-all duration-200 ${
-                translateReady
-                  ? "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-0.5 active:translate-y-0"
-                  : "bg-slate-200 text-slate-400 cursor-not-allowed"
-              }`}
-              aria-label="Translate this page to Hindi"
-            >
-              <Languages className="w-4 h-4" aria-hidden="true" />
-              <span>हिंदी में पढ़ें</span>
-              <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">Translate to Hindi</span>
-            </motion.button>
+  const handleNavClick = useCallback((href: string) => {
+    setIsMobileMenuOpen(false);
+    if (href.startsWith("#") && isHomePage) {
+      setTimeout(() => {
+        const element = document.getElementById(href.replace("#", ""));
+        if (element) {
+          const headerOffset = 100;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.scrollY - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+      }, 300);
+    }
+  }, [isHomePage]);
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 text-primary-800 rounded-full text-sm font-semibold mb-6">
-              <ShieldCheck className="w-4 h-4" aria-hidden="true" />
-              India's Most Trusted Insurance Dispute Resolution Platform
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 leading-[1.1] mb-6 text-balance">
-              Resolve Your Insurance Claim <span className="gradient-text">Disputes With Experts</span>
-            </h1>
-            <p className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed max-w-xl">
-              Helping policyholders recover their rightful insurance claims through professional dispute resolution. From rejection to recovery, we handle it all.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-10">
+  const isActive = (href: string) => {
+    if (href.startsWith("#")) return false;
+    return pathname === href || pathname.startsWith(href.replace(/\/$/, ""));
+  };
+
+  const getHref = (href: string) => {
+    if (href.startsWith("#")) {
+      return isHomePage ? href : `/${href}`;
+    }
+    return href;
+  };
+
+  return (
+    <>
+      <motion.header
+        initial={prefersReducedMotion ? { y: 0 } : { y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
+          isScrolled 
+            ? "bg-white/95 backdrop-blur-xl shadow-lg shadow-slate-900/5 border-b border-slate-100" 
+            : "bg-white/80 backdrop-blur-sm"
+        }`}
+      >
+        <div className="container-main px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <Link href="/" className="flex items-center group shrink-0" aria-label="Tatkal Claims Home">
+              <img
+                src="/logo.png"
+                alt="Tatkal Claims"
+                className="h-11 w-auto object-contain"
+              />
+            </Link>
+
+            <nav className="hidden lg:flex items-center gap-6" aria-label="Main navigation">
+              {navLinks.map((link) => {
+                const active = isActive(link.href);
+                const href = getHref(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={href}
+                    className={`text-sm font-medium transition-colors hover:text-primary-600 ${
+                      active ? "text-primary-700 font-semibold" : "text-slate-700"
+                    }`}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="hidden lg:flex items-center gap-3">
+              {/* Language Switcher */}
+              <div className="relative">
+                <select
+                  value={currentLang}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  disabled={!translateReady}
+                  className={`appearance-none border text-slate-700 text-sm rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-500 cursor-pointer ${
+                    translateReady 
+                      ? "bg-white border-slate-200" 
+                      : "bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed"
+                  }`}
+                  aria-label="Select language"
+                >
+                  <option value="en">English</option>
+                  <option value="hi">हिंदी</option>
+                  <option value="mr">मराठी</option>
+                  <option value="gu">ગુજરાતી</option>
+                  <option value="ta">தமிழ்</option>
+                  <option value="te">తెలుగు</option>
+                  <option value="bn">বাংলা</option>
+                  <option value="kn">ಕನ್ನಡ</option>
+                  <option value="ml">മലയാളം</option>
+                  <option value="pa">ਪੰਜਾਬੀ</option>
+                </select>
+                <Globe className="w-4 h-4 text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
+              </div>
+
+              <a 
+                href="tel:+919321152524" 
+                className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-primary-700 transition-colors"
+                aria-label="Call us at +91 9321152524"
+              >
+                <Phone className="w-4 h-4" aria-hidden="true" />
+                <span>Call Us</span>
+              </a>
               <button 
                 type="button" 
-                onClick={scrollToForm} 
-                className="btn-primary text-base group"
-                aria-label="Submit your insurance complaint"
+                onClick={() => {
+                  if (!isHomePage) {
+                    window.location.href = "/#contact-form";
+                  } else {
+                    scrollToForm();
+                  }
+                }} 
+                className="btn-primary text-sm py-2.5 px-5"
+                aria-label="Submit your case"
               >
-                Submit Your Complaint
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                Submit Case
               </button>
-              <a 
-                href="#process" 
-                className="btn-secondary text-base group"
-                aria-label="Learn how our process works"
-              >
-                How It Works
-                <ChevronRight className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-              </a>
             </div>
-            <div className="flex flex-wrap gap-4 md:gap-6">
-              {trustBadges.map((badge, index) => (
-                <motion.div 
-                  key={badge.label} 
-                  initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: prefersReducedMotion ? 0 : 0.5 + index * 0.1 }}
-                  className="flex items-center gap-2 text-sm font-medium text-slate-600"
+
+            <div className="flex items-center gap-2 lg:hidden">
+              {/* Mobile Language Switcher */}
+              <div className="relative">
+                <select
+                  value={currentLang}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  disabled={!translateReady}
+                  className={`appearance-none border text-slate-700 text-sm rounded-lg px-2 py-2 pr-7 focus:outline-none focus:ring-2 focus:ring-primary-200 cursor-pointer ${
+                    translateReady 
+                      ? "bg-white border-slate-200" 
+                      : "bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed"
+                  }`}
+                  aria-label="Select language"
                 >
-                  <div className="w-8 h-8 bg-white rounded-lg shadow-md flex items-center justify-center">
-                    <badge.icon className="w-4 h-4 text-primary-700" aria-hidden="true" />
-                  </div>
-                  {badge.label}
-                </motion.div>
-              ))}
+                  <option value="en">EN</option>
+                  <option value="hi">HI</option>
+                  <option value="mr">MR</option>
+                  <option value="gu">GU</option>
+                  <option value="ta">TA</option>
+                </select>
+                <Globe className="w-3.5 h-3.5 text-slate-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
+              </div>
+
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 rounded-lg hover:bg-slate-100 transition-colors relative z-[10000]"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6 text-slate-800" aria-hidden="true" /> : <Menu className="w-6 h-6 text-slate-800" aria-hidden="true" />}
+              </button>
             </div>
-          </motion.div>
-          <div id="contact-form" tabIndex={-1} className="lg:justify-self-end w-full max-w-md scroll-mt-24">
-            <LeadCaptureForm />
           </div>
         </div>
-      </div>
-    </section>
+      </motion.header>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            id="mobile-menu"
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[9998] bg-white pt-24 px-6 lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
+          >
+            <nav className="flex flex-col gap-4" aria-label="Mobile navigation">
+              {navLinks.map((link) => {
+                const active = isActive(link.href);
+                const href = getHref(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={href}
+                    onClick={() => handleNavClick(link.href)}
+                    className={`text-lg font-medium py-3 border-b border-slate-100 ${
+                      active ? "text-primary-700 font-semibold" : "text-slate-800"
+                    }`}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+              <button 
+                type="button" 
+                onClick={() => { 
+                  setIsMobileMenuOpen(false); 
+                  if (!isHomePage) {
+                    window.location.href = "/#contact-form";
+                  } else {
+                    scrollToForm();
+                  }
+                }} 
+                className="btn-primary mt-4 text-center w-full"
+                aria-label="Submit your case"
+              >
+                Submit Your Case
+              </button>
+              <a 
+                href="tel:+919321152524" 
+                className="flex items-center justify-center gap-2 text-primary-700 font-medium mt-2"
+                aria-label="Call our experts"
+              >
+                <Phone className="w-5 h-5" aria-hidden="true" />
+                Call: +91 9321152524
+              </a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
