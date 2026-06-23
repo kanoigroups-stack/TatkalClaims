@@ -1,11 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ShieldCheck, Clock, Users, Award, ChevronRight, Languages } from "lucide-react";
+import { ArrowRight, ShieldCheck, Clock, Users, Award, ChevronRight } from "lucide-react";
 import LeadCaptureForm from "../forms/LeadCaptureForm";
 import { scrollToForm } from "@/utils/scroll";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useState, useEffect } from "react";
 
 const trustBadges = [
   { icon: ShieldCheck, label: "100% Secure" },
@@ -16,50 +15,6 @@ const trustBadges = [
 
 export default function HeroSection() {
   const prefersReducedMotion = useReducedMotion();
-  const [translateReady, setTranslateReady] = useState(false);
-
-  useEffect(() => {
-    const checkReady = () => {
-      const select = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-      if (select) {
-        setTranslateReady(true);
-        return true;
-      }
-      return false;
-    };
-
-    if (checkReady()) return;
-
-    const interval = setInterval(() => {
-      if (checkReady()) {
-        clearInterval(interval);
-      }
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleTranslateToHindi = () => {
-    const tryTranslate = () => {
-      const select = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-      if (select) {
-        select.value = "hi";
-        select.dispatchEvent(new Event("change"));
-        return true;
-      }
-      return false;
-    };
-
-    if (tryTranslate()) return;
-
-    let attempts = 0;
-    const retry = setInterval(() => {
-      attempts++;
-      if (tryTranslate() || attempts >= 30) {
-        clearInterval(retry);
-      }
-    }, 100);
-  };
 
   return (
     <section id="contact" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -78,25 +33,6 @@ export default function HeroSection() {
             transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: "easeOut" }}
             className="max-w-2xl"
           >
-            {/* Translate to Hindi Button - Prominent */}
-            <motion.button
-              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              onClick={handleTranslateToHindi}
-              disabled={!translateReady}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-4 transition-all duration-200 ${
-                translateReady
-                  ? "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600 shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-0.5 active:translate-y-0"
-                  : "bg-slate-200 text-slate-400 cursor-not-allowed"
-              }`}
-              aria-label="Translate this page to Hindi"
-            >
-              <Languages className="w-4 h-4" aria-hidden="true" />
-              <span>हिंदी में पढ़ें</span>
-              <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">Translate to Hindi</span>
-            </motion.button>
-
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 text-primary-800 rounded-full text-sm font-semibold mb-6">
               <ShieldCheck className="w-4 h-4" aria-hidden="true" />
               India's Most Trusted Insurance Dispute Resolution Platform
