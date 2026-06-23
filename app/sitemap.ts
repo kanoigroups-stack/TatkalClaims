@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import blogsData from "@/data/blogs.json";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.tatkalclaims.com";
+  const baseUrl = "https://tatkalclaims.com";
   const buildDate = new Date("2026-06-22");
 
   const staticPages = [
