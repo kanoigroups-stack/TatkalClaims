@@ -163,7 +163,7 @@ export default function PrivacyPolicyPage() {
               <div className="space-y-2 text-slate-600">
                 <p className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-primary-600" aria-hidden="true" />
-                  <a href="mailto:privacy@tatkalclaims.com" className="text-primary-700 hover:underline">privacy@tatkalclaims.com</a>
+                  <a href="mailto:help@tatkalclaims.com" className="text-primary-700 hover:underline">help@tatkalclaims.com</a>
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-primary-600" aria-hidden="true" />
