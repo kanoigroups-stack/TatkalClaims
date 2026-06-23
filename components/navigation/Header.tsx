@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone, Globe } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { scrollToForm } from "@/utils/scroll";
@@ -21,12 +21,8 @@ const navLinks = [
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState("en");
-  const [translateReady, setTranslateReady] = useState(false);
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
-  const retryCount = useRef(0);
-  const maxRetries = 50; // 5 seconds total
 
   const isHomePage = pathname === "/" || pathname === "";
 
@@ -44,61 +40,6 @@ export default function Header() {
     }
     return () => { document.body.style.overflow = ""; };
   }, [isMobileMenuOpen]);
-
-  // Wait for Google Translate to be ready
-  useEffect(() => {
-    const checkTranslateReady = () => {
-      const select = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-      if (select) {
-        setTranslateReady(true);
-        // Sync current language with what's already selected
-        if (select.value && select.value !== currentLang) {
-          setCurrentLang(select.value);
-        }
-        return true;
-      }
-      return false;
-    };
-
-    // Check immediately
-    if (checkTranslateReady()) return;
-
-    // Retry with interval
-    const interval = setInterval(() => {
-      retryCount.current++;
-      if (checkTranslateReady() || retryCount.current >= maxRetries) {
-        clearInterval(interval);
-      }
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleLanguageChange = (lang: string) => {
-    setCurrentLang(lang);
-    
-    const tryTranslate = () => {
-      const select = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-      if (select) {
-        select.value = lang;
-        select.dispatchEvent(new Event("change"));
-        return true;
-      }
-      return false;
-    };
-
-    // Try immediately
-    if (tryTranslate()) return;
-
-    // If not ready, wait and retry
-    let attempts = 0;
-    const retryInterval = setInterval(() => {
-      attempts++;
-      if (tryTranslate() || attempts >= 30) {
-        clearInterval(retryInterval);
-      }
-    }, 100);
-  };
 
   const handleNavClick = useCallback((href: string) => {
     setIsMobileMenuOpen(false);
@@ -169,33 +110,6 @@ export default function Header() {
             </nav>
 
             <div className="hidden lg:flex items-center gap-3">
-              {/* Language Switcher */}
-              <div className="relative">
-                <select
-                  value={currentLang}
-                  onChange={(e) => handleLanguageChange(e.target.value)}
-                  disabled={!translateReady}
-                  className={`appearance-none border text-slate-700 text-sm rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-500 cursor-pointer ${
-                    translateReady 
-                      ? "bg-white border-slate-200" 
-                      : "bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed"
-                  }`}
-                  aria-label="Select language"
-                >
-                  <option value="en">English</option>
-                  <option value="hi">हिंदी</option>
-                  <option value="mr">मराठी</option>
-                  <option value="gu">ગુજરાતી</option>
-                  <option value="ta">தமிழ்</option>
-                  <option value="te">తెలుగు</option>
-                  <option value="bn">বাংলা</option>
-                  <option value="kn">ಕನ್ನಡ</option>
-                  <option value="ml">മലയാളം</option>
-                  <option value="pa">ਪੰਜਾਬੀ</option>
-                </select>
-                <Globe className="w-4 h-4 text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
-              </div>
-
               <a 
                 href="tel:+919321152524" 
                 className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-primary-700 transition-colors"
@@ -220,39 +134,15 @@ export default function Header() {
               </button>
             </div>
 
-            <div className="flex items-center gap-2 lg:hidden">
-              {/* Mobile Language Switcher */}
-              <div className="relative">
-                <select
-                  value={currentLang}
-                  onChange={(e) => handleLanguageChange(e.target.value)}
-                  disabled={!translateReady}
-                  className={`appearance-none border text-slate-700 text-sm rounded-lg px-2 py-2 pr-7 focus:outline-none focus:ring-2 focus:ring-primary-200 cursor-pointer ${
-                    translateReady 
-                      ? "bg-white border-slate-200" 
-                      : "bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed"
-                  }`}
-                  aria-label="Select language"
-                >
-                  <option value="en">EN</option>
-                  <option value="hi">HI</option>
-                  <option value="mr">MR</option>
-                  <option value="gu">GU</option>
-                  <option value="ta">TA</option>
-                </select>
-                <Globe className="w-3.5 h-3.5 text-slate-400 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
-              </div>
-
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg hover:bg-slate-100 transition-colors relative z-[10000]"
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="mobile-menu"
-                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-              >
-                {isMobileMenuOpen ? <X className="w-6 h-6 text-slate-800" aria-hidden="true" /> : <Menu className="w-6 h-6 text-slate-800" aria-hidden="true" />}
-              </button>
-            </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors relative z-[10000]"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6 text-slate-800" aria-hidden="true" /> : <Menu className="w-6 h-6 text-slate-800" aria-hidden="true" />}
+            </button>
           </div>
         </div>
       </motion.header>
