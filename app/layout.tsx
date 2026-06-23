@@ -89,9 +89,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-IN" className={`${inter.variable} ${poppins.variable} scroll-smooth`}>
       <head>
+        {/* Favicon */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+        
+        {/* Apple Touch Icon */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        
+        {/* Web Manifest */}
+        <link rel="manifest" href="/site.webmanifest" />
+        
+        {/* Theme Color */}
+        <meta name="theme-color" content="#1E3A8A" />
+        <meta name="msapplication-TileColor" content="#1E3A8A" />
+        
+        {/* Preconnect */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        
+        {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-M3ZBJ1B7V8" />
         <script
           dangerouslySetInnerHTML={{
@@ -131,7 +150,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {
                   "@type": "WebSite",
                   name: "Tatkal Claims",
-                  url: "https://tatkalclaims.com",
+                  url: "https://www.tatkalclaims.com",
                   potentialAction: {
                     "@type": "SearchAction",
                     target: "https://tatkalclaims.com/blog?q={search_term_string}",
