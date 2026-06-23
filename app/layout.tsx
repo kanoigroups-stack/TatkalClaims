@@ -29,10 +29,10 @@ export const metadata: Metadata = {
   },
   description: "Resolve your insurance claim disputes with expert legal professionals. 500+ cases assisted, ₹20+ Crores claims recovered. Claim rejection, delay, mis-selling & more.",
   keywords: ["insurance claim rejection","insurance dispute resolution","claim delay help","insurance ombudsman","mis-sold insurance","claim recovery","insurance grievance","health insurance dispute","motor insurance claim","insurance lawyer india","irdai complaint"],
-  authors: [{ name: "Tatkal Claims", url: "https://www.tatkalclaims.com" }],
+  authors: [{ name: "Tatkal Claims", url: "https://tatkalclaims.com" }],
   creator: "Tatkal Claims",
   publisher: "Tatkal Claims",
-  metadataBase: new URL("https://www.tatkalclaims.com"),
+  metadataBase: new URL("https://tatkalclaims.com"),
   alternates: {
     canonical: "/",
     languages: {
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     siteName: "Tatkal Claims",
     locale: "en_IN",
     type: "website",
-    url: "https://www.tatkalclaims.com",
+    url: "https://tatkalclaims.com",
     images: [{
-      url: "https://www.tatkalclaims.com/og-image.jpg",
+      url: "https://tatkalclaims.com/og-image.jpg",
       width: 1200,
       height: 630,
       alt: "Tatkal Claims - Insurance Dispute Resolution Experts",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Tatkal Claims | Insurance Dispute Experts",
     description: "Recover your rightful insurance claims with professional dispute resolution.",
-    images: ["https://www.tatkalclaims.com/og-image.jpg"],
+    images: ["https://tatkalclaims.com/og-image.jpg"],
     creator: "@tatkalclaims",
   },
   robots: { 
@@ -112,14 +112,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {
                   "@type": "Organization",
                   name: "Tatkal Claims",
-                  url: "https://www.tatkalclaims.com",
+                  url: "https://tatkalclaims.com",
                   logo: {
                     "@type": "ImageObject",
-                    url: "https://www.tatkalclaims.com/logo.png",
+                    url: "https://tatkalclaims.com/logo.png",
                     width: 512,
                     height: 512,
                   },
-                  description: "India&apos;s most trusted platform for resolving insurance complaints and disputes.",
+                  description: "India's most trusted platform for resolving insurance complaints and disputes.",
                   contactPoint: {
                     "@type": "ContactPoint",
                     telephone: "+91-9321152524",
@@ -131,10 +131,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {
                   "@type": "WebSite",
                   name: "Tatkal Claims",
-                  url: "https://www.tatkalclaims.com",
+                  url: "https://tatkalclaims.com",
                   potentialAction: {
                     "@type": "SearchAction",
-                    target: "https://www.tatkalclaims.com/blog?q={search_term_string}",
+                    target: "https://tatkalclaims.com/blog?q={search_term_string}",
                     "query-input": "required name=search_term_string",
                   },
                 },
