@@ -3,7 +3,7 @@ import blogsData from "@/data/blogs.json";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://tatkalclaims.com";
-  const buildDate = new Date("2026-06-22");
+  const buildDate = new Date("2026-06-01");
 
   const staticPages = [
     { url: baseUrl, lastModified: buildDate, changeFrequency: "daily" as const, priority: 1.0 },
