@@ -1,0 +1,32 @@
+# llms.txt for Tatkal Claims
+# https://tatkalclaims.com/llms.txt
+
+## About
+Tatkal Claims is India's most trusted insurance dispute resolution platform. We help policyholders recover rightful claims through expert legal professionals. 500+ cases assisted, ₹20+ Crores recovered.
+
+## Services
+- Claim Rejection Appeals
+- Claim Delay Resolution
+- Health Insurance Disputes
+- Motor Insurance Claims
+- Mis-selling Complaints
+- Short Settlement Issues
+
+## Contact
+- Phone: +91 9321152524
+- Email: help@tatkalclaims.com
+- Address: 84, Bakol Street, Laudin Villa, Bhayander West, Mumbai - 401101
+
+## Important Pages
+- Home: https://tatkalclaims.com/
+- Blog: https://tatkalclaims.com/blog/
+- Partner With Us: https://tatkalclaims.com/partner-with-us/
+- Privacy Policy: https://tatkalclaims.com/privacy-policy/
+- Terms: https://tatkalclaims.com/terms-and-conditions/
+
+## Key Facts
+- Founded in Mumbai, India
+- Serves all IRDAI-registered insurance companies
+- Free initial case evaluation
+- Success rate: 82%
+- Average resolution time: 3 months
