@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/admin/", "/_next/"],
     },
-    sitemap: "https://tatkalclaims.com/sitemap.xml",
-    host: "https://tatkalclaims.com",
+    sitemap: "https://www.tatkalclaims.com/sitemap.xml",
+    host: "https://www.tatkalclaims.com",
   };
 }
