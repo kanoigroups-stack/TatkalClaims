@@ -27,6 +27,7 @@ interface FormErrors {
   email?: string;
   phone?: string;
   issueType?: string;
+  message?: string;
 }
 
 export default function LeadCaptureForm() {
@@ -71,6 +72,11 @@ export default function LeadCaptureForm() {
       isValid = false;
     }
 
+    if (formData.issueType === "Other" && !formData.message.trim()) {
+      newErrors.message = "Please briefly describe your issue";
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   }, [formData]);
@@ -87,14 +93,25 @@ export default function LeadCaptureForm() {
     validate();
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
 
     const body = new URLSearchParams();
     Object.entries(GOOGLE_FORM_ENTRIES).forEach(([key, entryId]) => {
-      body.append(entryId, formData[key as keyof typeof formData]);
+      if (key === "issueType" && formData.issueType === "Other") {
+        // Google Forms doesn't accept the literal string "Other" as a valid
+        // answer for a required multiple-choice/dropdown question — it
+        // expects this sentinel value, plus the free-text answer in a
+        // companion "<entryId>.other_option_response" field. Sending the
+        // literal "Other" fails required-field validation server-side and
+        // silently drops the whole submission.
+        body.append(entryId, "__other_option__");
+        body.append(`${entryId}.other_option_response`, formData.message.trim() || "Other");
+      } else {
+        body.append(entryId, formData[key as keyof typeof formData]);
+      }
     });
 
     try {
@@ -276,15 +293,35 @@ const handleSubmit = async (e: React.FormEvent) => {
           </AnimatePresence>
         </div>
 
-        <label htmlFor="message" className="sr-only">Briefly describe your issue</label>
-        <textarea 
-          id="message"
-          placeholder="Briefly describe your issue (optional)" 
-          rows={3} 
-          value={formData.message} 
-          onChange={(e) => handleChange("message", e.target.value)} 
-          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all text-sm resize-none"
-        />
+        <div>
+          <label htmlFor="message" className="sr-only">Briefly describe your issue</label>
+          <textarea 
+            id="message"
+            placeholder={formData.issueType === "Other" ? "Please describe your issue *" : "Briefly describe your issue (optional)"} 
+            rows={3} 
+            value={formData.message} 
+            onChange={(e) => handleChange("message", e.target.value)} 
+            onBlur={() => handleBlur("message")}
+            className={`w-full px-4 py-3 rounded-xl border ${errors.message ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200" : "border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200"} outline-none transition-all text-sm resize-none`}
+            aria-invalid={!!errors.message}
+            aria-describedby={errors.message ? "message-error" : undefined}
+          />
+          <AnimatePresence>
+            {errors.message && (
+              <motion.div 
+                initial={{ opacity: 0, y: -5 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0, y: -5 }}
+                id="message-error" 
+                className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
+                role="alert"
+              >
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+                <span>{errors.message}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         <button 
           type="submit" 
