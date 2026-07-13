@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const issueTypes = ["Claim Rejection", "Claim Delay", "Short Settlement", "Mis-selling", "Policy Dispute", "Other"];
 
-const GOOGLE_FORM_ID = "1FAIpQLSeTkodT19oTHy2ZJeKm_uG1imDMRr_CTrPnlyuVNkYsOD9zFA";
+const GOOGLE_FORM_ID = "https://forms.gle/WPrUUTSShuEMc13y5";
 const GOOGLE_FORM_ENTRIES = {
   name: "entry.280581221",
   email: "entry.577275878",
@@ -86,7 +86,7 @@ export default function LeadCaptureForm() {
     if (!validate()) return;
     setIsSubmitting(true);
 
-    const formUrl = `https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`;
+    const formUrl = `https://forms.gle/WPrUUTSShuEMc13y5`;
     const hiddenForm = document.createElement("form");
     hiddenForm.method = "POST";
     hiddenForm.action = formUrl;
