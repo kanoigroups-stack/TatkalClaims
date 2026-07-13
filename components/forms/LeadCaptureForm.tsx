@@ -7,13 +7,19 @@ import Link from "next/link";
 
 const issueTypes = ["Claim Rejection", "Claim Delay", "Short Settlement", "Mis-selling", "Policy Dispute", "Other"];
 
-const GOOGLE_FORM_ID = "https://forms.gle/snQxG5gYNmGSYY15A";
+// NOTE: forms.gle/... is just a short redirect link — Google's servers reject
+// entry.* POST data sent there. Submissions must go to the real formResponse
+// endpoint, which is what the short link resolves to:
+// https://docs.google.com/forms/d/e/1FAIpQLSf4V-9TMQUR6GqYWjYRu4o3yScg1yQ7ceku-vNr7jjubpLtlw/viewform
+const GOOGLE_FORM_ACTION_URL =
+  "https://docs.google.com/forms/d/e/1FAIpQLSf4V-9TMQUR6GqYWjYRu4o3yScg1yQ7ceku-vNr7jjubpLtlw/formResponse";
+
 const GOOGLE_FORM_ENTRIES = {
-  name: "entry.280581221",
-  email: "entry.577275878",
-  phone: "entry.1741549894",
-  issueType: "entry.1897162496",
-  message: "entry.1257999619",
+  name: "entry.579743851",
+  email: "entry.388628471",
+  phone: "entry.884134232",
+  issueType: "entry.1709593049",
+  message: "entry.1352040908",
 };
 
 interface FormErrors {
@@ -81,43 +87,27 @@ export default function LeadCaptureForm() {
     validate();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
 
-    const formUrl = `https://forms.gle/snQxG5gYNmGSYY15A`;
-    const hiddenForm = document.createElement("form");
-    hiddenForm.method = "POST";
-    hiddenForm.action = formUrl;
-    hiddenForm.target = "hidden-iframe";
-    hiddenForm.style.display = "none";
-
+    const body = new FormData();
     Object.entries(GOOGLE_FORM_ENTRIES).forEach(([key, entryId]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = entryId;
-      input.value = formData[key as keyof typeof formData];
-      hiddenForm.appendChild(input);
+      body.append(entryId, formData[key as keyof typeof formData]);
     });
 
-    let iframe = document.getElementById("hidden-iframe") as HTMLIFrameElement | null;
-    if (!iframe) {
-      iframe = document.createElement("iframe");
-      iframe.id = "hidden-iframe";
-      iframe.name = "hidden-iframe";
-      iframe.style.display = "none";
-      document.body.appendChild(iframe);
-    }
+    try {
+      // Google Forms doesn't send CORS headers back, so the response is
+      // opaque in "no-cors" mode — we can't read status/body. As long as the
+      // request doesn't throw, treat it as sent. This is the standard,
+      // reliable way to submit a Google Form from client-side JS.
+      await fetch(GOOGLE_FORM_ACTION_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body,
+      });
 
-    document.body.appendChild(hiddenForm);
-    hiddenForm.submit();
-
-    setTimeout(() => {
-      document.body.removeChild(hiddenForm);
-    }, 1000);
-
-    setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
       setErrors({});
@@ -126,7 +116,13 @@ export default function LeadCaptureForm() {
         setIsSubmitted(false);
         setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
       }, 3000);
-    }, 1500);
+    } catch (err) {
+      // Network-level failure (e.g. offline, blocked request) — this is the
+      // one case "no-cors" still lets us detect.
+      console.error("Lead form submission failed:", err);
+      setIsSubmitting(false);
+      alert("Something went wrong submitting the form. Please try again or contact us directly.");
+    }
   };
 
   if (isSubmitted) {
