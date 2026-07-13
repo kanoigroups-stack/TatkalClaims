@@ -87,12 +87,12 @@ export default function LeadCaptureForm() {
     validate();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
 
-    const body = new FormData();
+    const body = new URLSearchParams();
     Object.entries(GOOGLE_FORM_ENTRIES).forEach(([key, entryId]) => {
       body.append(entryId, formData[key as keyof typeof formData]);
     });
@@ -100,12 +100,16 @@ export default function LeadCaptureForm() {
     try {
       // Google Forms doesn't send CORS headers back, so the response is
       // opaque in "no-cors" mode — we can't read status/body. As long as the
-      // request doesn't throw, treat it as sent. This is the standard,
-      // reliable way to submit a Google Form from client-side JS.
+      // request doesn't throw, treat it as sent. URLSearchParams sends this
+      // as application/x-www-form-urlencoded, matching what Google's
+      // formResponse endpoint expects from a real form submission.
       await fetch(GOOGLE_FORM_ACTION_URL, {
         method: "POST",
         mode: "no-cors",
-        body,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body.toString(),
       });
 
       setIsSubmitting(false);
@@ -117,8 +121,6 @@ export default function LeadCaptureForm() {
         setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
       }, 3000);
     } catch (err) {
-      // Network-level failure (e.g. offline, blocked request) — this is the
-      // one case "no-cors" still lets us detect.
       console.error("Lead form submission failed:", err);
       setIsSubmitting(false);
       alert("Something went wrong submitting the form. Please try again or contact us directly.");
