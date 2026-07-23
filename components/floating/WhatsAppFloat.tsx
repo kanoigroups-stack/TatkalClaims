@@ -8,7 +8,7 @@ export default function WhatsAppFloat() {
 
   return (
     <motion.a 
-      href="https://wa.me/919321152524?text=Hi%2C%20I%20need%20help%20with%20my%20insurance%20claim" 
+      href="https://wa.me/917207382073?text=Hi%2C%20I%20need%20help%20with%20my%20insurance%20claim" 
       target="_blank" 
       rel="noopener noreferrer" 
       initial={prefersReducedMotion ? { scale: 1 } : { scale: 0 }}
