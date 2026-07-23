@@ -167,7 +167,7 @@ export default function PrivacyPolicyPage() {
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-primary-600" aria-hidden="true" />
-                  <a href="tel:+919321152524" className="text-primary-700 hover:underline">+91 9321152524</a>
+                  <a href="tel:+917207382073" className="text-primary-700 hover:underline">+91 7207382073</a>
                 </p>
                 <p>84, Bakol Street, Laudin Villa, Bhayander West, Mumbai - 401101</p>
               </div>
