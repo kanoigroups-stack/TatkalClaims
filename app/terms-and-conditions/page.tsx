@@ -187,7 +187,7 @@ export default function TermsAndConditionsPage() {
               <p className="font-semibold text-slate-900 mb-2">Tatkal Claims</p>
               <div className="space-y-2 text-slate-600">
                 <p>Email: <a href="mailto:help@tatkalclaims.com" className="text-primary-700 hover:underline">help@tatkalclaims.com</a></p>
-                <p>Phone: <a href="tel:+919321152524" className="text-primary-700 hover:underline">+91 9321152524</a></p>
+                <p>Phone: <a href="tel:+917207382073" className="text-primary-700 hover:underline">+91 7207382073</a></p>
                 <p>Address: 84, Bakol Street, Laudin Villa, Bhayander West, Mumbai - 401101</p>
               </div>
             </div>
