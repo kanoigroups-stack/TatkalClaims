@@ -111,9 +111,9 @@ export default function Header() {
 
             <div className="hidden lg:flex items-center gap-3">
               <a 
-                href="tel:+919321152524" 
+                href="tel:+917207382073" 
                 className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-primary-700 transition-colors"
-                aria-label="Call us at +91 9321152524"
+                aria-label="Call us at +91 7207382073"
               >
                 <Phone className="w-4 h-4" aria-hidden="true" />
                 <span>Call Us</span>
@@ -194,12 +194,12 @@ export default function Header() {
                 Submit Your Case
               </button>
               <a 
-                href="tel:+919321152524" 
+                href="tel:+917207382073" 
                 className="flex items-center justify-center gap-2 text-primary-700 font-medium mt-2"
                 aria-label="Call our experts"
               >
                 <Phone className="w-5 h-5" aria-hidden="true" />
-                Call: +91 9321152524
+                Call: +91 7207382073
               </a>
             </nav>
           </motion.div>
