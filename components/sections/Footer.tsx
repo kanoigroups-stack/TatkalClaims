@@ -28,9 +28,9 @@ export default function Footer() {
               India&apos;s most trusted platform for resolving insurance complaints. We help policyholders recover rightful claims through expert dispute resolution.
             </p>
             <div className="space-y-3">
-              <a href="tel:+919321152524" className="flex items-center gap-3 text-sm hover:text-white transition-colors" aria-label="Call us">
+              <a href="tel:+917207382073" className="flex items-center gap-3 text-sm hover:text-white transition-colors" aria-label="Call us">
                 <Phone className="w-4 h-4 text-accent-500 flex-shrink-0" aria-hidden="true" />
-                +91 9321152524
+                +91 7207382073
               </a>
               <a href="mailto:help@tatkalclaims.com" className="flex items-center gap-3 text-sm hover:text-white transition-colors" aria-label="Email us">
                 <Mail className="w-4 h-4 text-accent-500 flex-shrink-0" aria-hidden="true" />
