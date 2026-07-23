@@ -36,7 +36,7 @@ export default function CTABannerSection() {
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </button>
               <a 
-                href="tel:+919321152524" 
+                href="tel:+917207382073" 
                 className="inline-flex items-center justify-center px-6 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
                 aria-label="Call our insurance experts"
               >
