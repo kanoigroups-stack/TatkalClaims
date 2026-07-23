@@ -135,7 +135,7 @@ export default function PartnerWithUsPage() {
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
               <a 
-                href="https://wa.me/919321152524?text=Hi%2C%20I%20am%20interested%20in%20partnering%20with%20Tatkal%20Claims" 
+                href="https://wa.me/917207382073?text=Hi%2C%20I%20am%20interested%20in%20partnering%20with%20Tatkal%20Claims" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary text-base group"
@@ -146,7 +146,7 @@ export default function PartnerWithUsPage() {
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </a>
               <a 
-                href="tel:+919321152524" 
+                href="tel:+917207382073" 
                 className="btn-secondary text-base"
                 aria-label="Call us to discuss partnership"
               >
@@ -360,7 +360,7 @@ export default function PartnerWithUsPage() {
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
             </a>
             <a 
-              href="tel:+919321152524" 
+              href="tel:+917207382073" 
               className="btn-secondary text-base"
             >
               <Phone className="w-5 h-5 mr-2" aria-hidden="true" />
