@@ -141,7 +141,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   description: "India's most trusted platform for resolving insurance complaints and disputes.",
                   contactPoint: {
                     "@type": "ContactPoint",
-                    telephone: "+91-9321152524",
+                    telephone: "+91-7207382073",
                     contactType: "customer service",
                     areaServed: "IN",
                     availableLanguage: ["English", "Hindi"],
