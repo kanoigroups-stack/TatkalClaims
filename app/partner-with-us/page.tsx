@@ -320,11 +320,11 @@ export default function PartnerWithUsPage() {
                     <div className="text-2xl font-bold text-accent-400 mb-1">Custom</div>
                     <div className="text-sm text-primary-200">Enterprise Deal</div>
                   </div>
-                </div>
+                </div>l
               </div>
               <div className="flex-shrink-0">
                 <a 
-                  href="https://wa.me/919321152524?text=Hi%2C%20I%20am%20interested%20in%20partnering%20with%20Tatkal%20Claims" 
+                  href="https://wa.me/917207382073?text=Hi%2C%20I%20am%20interested%20in%20partnering%20with%20Tatkal%20Claims" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-accent text-base px-8 py-4 group inline-flex items-center"
@@ -350,7 +350,7 @@ export default function PartnerWithUsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
-              href="https://wa.me/919321152524?text=Hi%2C%20I%20am%20interested%20in%20partnering%20with%20Tatkal%20Claims" 
+              href="https://wa.me/917207382073?text=Hi%2C%20I%20am%20interested%20in%20partnering%20with%20Tatkal%20Claims" 
               target="_blank" 
               rel="noopener noreferrer"
               className="btn-primary text-base group"
