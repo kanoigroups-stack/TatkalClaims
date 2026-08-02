@@ -11,7 +11,7 @@ const testimonials = [
   { name: "Ravi Anjania", location: "Mumbai, Maharashtra", claimType: "Health Insurance Rejection", rating: 5, text: "My daughter's cancer claim was rejected citing a pre-existing condition. Tatkal Claims team found a loophole in the insurer's reasoning and got us ₹8.5 lakhs within 3 months. Life-changing!" },
   { name: "Suryakant Sharma", location: "Ponda, Goa", claimType: "Motor Total Loss", rating: 5, text: "After my car accident, the insurance offered only 60% of the value. The Tatkal Claims experts negotiated and I received 95% of the insured amount. Professional, responsive, and truly caring." },
   { name: "Nidhi Bajaj", location: "Kolkata, West Bengal", claimType: "Mis-sold ULIP Policy", rating: 5, text: "I was sold a policy as a 'fixed deposit' by my bank. Tatkal Claims helped me file a complaint with IRDAI and recover my entire premium of ₹5 lakhs plus interest. Highly recommended!" },
-  { name: "Dr. Rajeev Agarwal", location: "Delhi NCR", claimType: "Claim Delay - 8 Months", rating: 4, text: "My home insurance claim was stuck for 8 months. Within 2 weeks of hiring Tatkal Claims, the insurer released ₹12 lakhs. Their regulatory pressure approach works wonders." },
+  { name: "Dr. Rajeev Agarwal", location: "Thane, Maharashtra", claimType: "Claim Delay - 8 Months", rating: 4, text: "My home insurance claim was stuck for 8 months. Within 2 weeks of hiring Tatkal Claims, the insurer released ₹12 lakhs. Their regulatory pressure approach works wonders." },
 ];
 
 export default function TestimonialsSection() {
