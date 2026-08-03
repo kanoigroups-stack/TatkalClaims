@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/", "/admin/", "/_next/"],
+      disallow: ["/api/", "/admin/"],
     },
     sitemap: "https://tatkalclaims.com/sitemap.xml",
     host: "https://tatkalclaims.com",
