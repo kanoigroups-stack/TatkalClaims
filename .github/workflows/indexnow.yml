@@ -14,5 +14,5 @@ jobs:
         with:
           sitemap-location: 'https://tatkalclaims.com/sitemap.xml'
           key: ${{ secrets.INDEXNOW_KEY }}
-          since: 1
+          since: 365
           since-unit: day
