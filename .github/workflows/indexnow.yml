@@ -1,0 +1,18 @@
+name: Submit to IndexNow
+
+on:
+  schedule:
+    - cron: '0 2 * * *'   # Runs daily at 7:30 AM IST
+  workflow_dispatch:        # Allows you to run it manually anytime
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit recent URLs to IndexNow
+        uses: bojieyang/indexnow-action@v3
+        with:
+          sitemap-location: 'https://tatkalclaims.com/sitemap.xml'
+          key: ${{ secrets.INDEXNOW_KEY }}
+          since: 1
+          since-unit: day
