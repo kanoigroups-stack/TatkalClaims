@@ -128,18 +128,18 @@ export default function FAQsPage() {
 
   return (
     <main className="min-h-screen bg-white pt-20">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-800 via-primary-900 to-slate-900 text-white py-20 md:py-24 px-4">
+      {/* Hero — White background, homepage theme */}
+      <section className="bg-white text-slate-900 py-16 md:py-24 px-4 border-b border-slate-200">
         <div className="container-main max-w-7xl mx-auto">
           <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex items-center gap-2 text-sm text-primary-200">
+            <ol className="flex items-center gap-2 text-sm text-slate-500">
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/" className="hover:text-blue-900 transition-colors">
                   Home
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li aria-current="page" className="text-white font-medium">
+              <li aria-current="page" className="text-slate-900 font-medium">
                 FAQs
               </li>
             </ol>
@@ -148,9 +148,9 @@ export default function FAQsPage() {
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               Frequently Asked{" "}
-              <span className="text-accent-400">Questions</span>
+              <span className="text-blue-700">Questions</span>
             </h1>
-            <p className="text-lg md:text-xl text-primary-100 leading-relaxed mb-8 max-w-2xl">
+            <p className="text-lg md:text-xl text-slate-600 leading-relaxed mb-8 max-w-2xl">
               Everything you need to know about our claim resolution process,
               fees, and how we can help you recover your rightful insurance
               settlement.
@@ -164,7 +164,7 @@ export default function FAQsPage() {
                 placeholder="Search questions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-10 py-4 rounded-xl bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-accent-400"
+                className="w-full pl-12 pr-10 py-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {searchQuery && (
                 <button
@@ -189,7 +189,7 @@ export default function FAQsPage() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   activeCategory === cat
-                    ? "bg-primary-800 text-white shadow-md"
+                    ? "bg-blue-900 text-white shadow-md"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
@@ -221,7 +221,7 @@ export default function FAQsPage() {
                       className="w-full flex items-center justify-between p-5 md:p-6 text-left hover:bg-slate-50 transition-colors"
                     >
                       <div className="flex items-start gap-3">
-                        <HelpCircle className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
+                        <HelpCircle className="w-5 h-5 text-blue-700 shrink-0 mt-0.5" />
                         <span className="font-semibold text-slate-900 pr-4">
                           {faq.question}
                         </span>
@@ -261,7 +261,7 @@ export default function FAQsPage() {
                   setSearchQuery("");
                   setActiveCategory("All");
                 }}
-                className="text-primary-700 font-semibold hover:underline"
+                className="text-blue-700 font-semibold hover:underline"
               >
                 Clear filters
               </button>
@@ -270,10 +270,10 @@ export default function FAQsPage() {
         </div>
       </SectionWrapper>
 
-      {/* Still Have Questions */}
-      <section className="py-16 md:py-20 px-4 bg-white">
+      {/* Still Have Questions — White background, homepage theme */}
+      <section className="py-16 md:py-20 px-4 bg-white border-t border-slate-200">
         <div className="container-main max-w-4xl mx-auto">
-          <div className="bg-gradient-to-br from-primary-50 to-accent-50 rounded-3xl p-8 md:p-12 border border-primary-100 text-center">
+          <div className="bg-slate-50 rounded-3xl p-8 md:p-12 border border-slate-200 text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
               Still Have Questions?
             </h2>
@@ -286,16 +286,16 @@ export default function FAQsPage() {
                 href="https://wa.me/917207382073"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors"
               >
-                <MessageSquare className="w-4 h-4 mr-2" />
+                <MessageSquare className="w-4 h-4" />
                 WhatsApp Us
               </a>
               <a
                 href="tel:+917207382073"
-                className="btn-secondary border-primary-200 text-primary-800"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-900 font-semibold rounded-lg border-2 border-blue-900 hover:bg-blue-900 hover:text-white transition-all duration-300"
               >
-                <Phone className="w-4 h-4 mr-2" />
+                <Phone className="w-4 h-4" />
                 Call +91 72073 82073
               </a>
             </div>
