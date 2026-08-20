@@ -56,17 +56,18 @@ export default function ServicesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
 
-      <section className="bg-gradient-to-br from-primary-800 to-primary-900 text-white py-20 md:py-28 px-4">
+      {/* TOP SECTION — White background, homepage theme */}
+      <section className="bg-white text-slate-900 py-16 md:py-24 px-4">
         <div className="container-main max-w-7xl mx-auto">
           <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex items-center gap-2 text-sm text-primary-200">
+            <ol className="flex items-center gap-2 text-sm text-slate-500">
               <li>
-                <Link href="/" className="hover:text-white transition-colors">
+                <Link href="/" className="hover:text-blue-900 transition-colors">
                   Home
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li aria-current="page" className="text-white font-medium">
+              <li aria-current="page" className="text-slate-900 font-medium">
                 Services
               </li>
             </ol>
@@ -75,9 +76,9 @@ export default function ServicesPage() {
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               Insurance Dispute Resolution{" "}
-              <span className="text-accent-400">Services</span>
+              <span className="text-blue-700">Services</span>
             </h1>
-            <p className="text-lg md:text-xl text-primary-100 leading-relaxed mb-8 max-w-2xl">
+            <p className="text-lg md:text-xl text-slate-600 leading-relaxed mb-8 max-w-2xl">
               From claim rejection to recovery, our expert team handles every
               type of insurance dispute with proven strategies. Over ₹20
               Crores recovered for policyholders across India.
@@ -85,15 +86,15 @@ export default function ServicesPage() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/#contact-form"
-                className="btn-accent text-center"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors text-center"
               >
                 Get Free Evaluation
               </Link>
               <a
                 href="tel:+917207382073"
-                className="btn-secondary border-white/30 text-white hover:bg-white/10 text-center"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-900 font-semibold rounded-lg border-2 border-blue-900 hover:bg-blue-900 hover:text-white transition-all duration-300 text-center"
               >
-                <Phone className="w-4 h-4 mr-2" />
+                <Phone className="w-4 h-4" />
                 Call +91 72073 82073
               </a>
             </div>
@@ -162,24 +163,28 @@ export default function ServicesPage() {
         </div>
       </SectionWrapper>
 
-      <section className="py-16 md:py-20 px-4 bg-gradient-to-r from-primary-800 to-primary-900">
+      {/* BOTTOM SECTION — White background, homepage theme */}
+      <section className="py-16 md:py-20 px-4 bg-white border-t border-slate-200">
         <div className="container-main max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Facing an Insurance Claim Issue?
           </h2>
-          <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-slate-600 text-lg mb-8 max-w-2xl mx-auto">
             Don't let insurers deny what is rightfully yours. Get a free case
             evaluation from our experts today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/#contact-form" className="btn-accent">
+            <Link
+              href="/#contact-form"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors"
+            >
               Get Free Case Evaluation
             </Link>
             <a
               href="https://wa.me/917207382073"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-900 font-semibold rounded-lg border-2 border-white hover:bg-blue-900 hover:text-white hover:border-blue-900 transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-900 font-semibold rounded-lg border-2 border-blue-900 hover:bg-blue-900 hover:text-white transition-all duration-300"
             >
               <MessageSquare className="w-4 h-4" />
               WhatsApp Us
