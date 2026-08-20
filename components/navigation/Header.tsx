@@ -9,11 +9,10 @@ import { scrollToForm } from "@/utils/scroll";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const navLinks = [
-  { href: "#services", label: "Services" },
-  { href: "#process", label: "How It Works" },
-  { href: "#trust", label: "Why Us" },
-  { href: "#testimonials", label: "Success Stories" },
-  { href: "#faq", label: "FAQs" },
+  { href: "/services/", label: "Services" },
+  { href: "/how-it-works/", label: "How It Works" },
+  { href: "/why-us/", label: "Why Us" },
+  { href: "/faqs/", label: "FAQs" },
   { href: "/blog/", label: "Blog" },
   { href: "/partner-with-us/", label: "Partner With Us" },
 ];
@@ -41,31 +40,12 @@ export default function Header() {
     return () => { document.body.style.overflow = ""; };
   }, [isMobileMenuOpen]);
 
-  const handleNavClick = useCallback((href: string) => {
+  const handleNavClick = useCallback(() => {
     setIsMobileMenuOpen(false);
-    if (href.startsWith("#") && isHomePage) {
-      setTimeout(() => {
-        const element = document.getElementById(href.replace("#", ""));
-        if (element) {
-          const headerOffset = 100;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.scrollY - headerOffset;
-          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-        }
-      }, 300);
-    }
-  }, [isHomePage]);
+  }, []);
 
   const isActive = (href: string) => {
-    if (href.startsWith("#")) return false;
     return pathname === href || pathname.startsWith(href.replace(/\/$/, ""));
-  };
-
-  const getHref = (href: string) => {
-    if (href.startsWith("#")) {
-      return isHomePage ? href : `/${href}`;
-    }
-    return href;
   };
 
   return (
@@ -93,11 +73,10 @@ export default function Header() {
             <nav className="hidden lg:flex items-center gap-6" aria-label="Main navigation">
               {navLinks.map((link) => {
                 const active = isActive(link.href);
-                const href = getHref(link.href);
                 return (
                   <Link
                     key={link.href}
-                    href={href}
+                    href={link.href}
                     className={`text-sm font-medium transition-colors hover:text-primary-600 ${
                       active ? "text-primary-700 font-semibold" : "text-slate-700"
                     }`}
@@ -163,12 +142,11 @@ export default function Header() {
             <nav className="flex flex-col gap-4" aria-label="Mobile navigation">
               {navLinks.map((link) => {
                 const active = isActive(link.href);
-                const href = getHref(link.href);
                 return (
                   <Link
                     key={link.href}
-                    href={href}
-                    onClick={() => handleNavClick(link.href)}
+                    href={link.href}
+                    onClick={() => handleNavClick()}
                     className={`text-lg font-medium py-3 border-b border-slate-100 ${
                       active ? "text-primary-700 font-semibold" : "text-slate-800"
                     }`}
