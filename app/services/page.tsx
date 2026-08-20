@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import {
   ArrowRight,
   Phone,
@@ -74,12 +73,7 @@ export default function ServicesPage() {
             </ol>
           </nav>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl"
-          >
+          <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
               Insurance Dispute Resolution{" "}
               <span className="text-accent-400">Services</span>
@@ -104,7 +98,7 @@ export default function ServicesPage() {
                 Call +91 72073 82073
               </a>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -116,15 +110,11 @@ export default function ServicesPage() {
         />
 
         <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-          {services.map((service, index) => {
+          {services.map((service) => {
             const Icon = service.icon;
             return (
-              <motion.div
+              <div
                 key={service.slug}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className={`group bg-white rounded-2xl border-2 p-6 md:p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${service.color}`}
               >
                 <div className="flex items-start gap-5">
@@ -168,7 +158,7 @@ export default function ServicesPage() {
                     </Link>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
