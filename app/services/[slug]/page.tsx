@@ -59,26 +59,24 @@ export default function ServiceDetailPage({
 
   return (
     <main className="min-h-screen bg-white pt-20">
-      {/* Hero */}
-      <section
-        className={`py-16 md:py-24 px-4 ${service.color.split(" ")[0]} border-b ${service.color.split(" ")[2]}`}
-      >
+      {/* Hero — White background, homepage theme */}
+      <section className="py-16 md:py-24 px-4 bg-white border-b border-slate-200">
         <div className="container-main max-w-7xl mx-auto">
           <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center gap-2 text-sm opacity-70">
+            <ol className="flex items-center gap-2 text-sm text-slate-500">
               <li>
-                <Link href="/" className="hover:underline">
+                <Link href="/" className="hover:text-blue-900 transition-colors">
                   Home
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
               <li>
-                <Link href="/services/" className="hover:underline">
+                <Link href="/services/" className="hover:text-blue-900 transition-colors">
                   Services
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li aria-current="page" className="font-semibold">
+              <li aria-current="page" className="font-semibold text-slate-900">
                 {service.title}
               </li>
             </ol>
@@ -97,19 +95,19 @@ export default function ServiceDetailPage({
               {service.fullDesc}
             </p>
             <div className="flex flex-wrap items-center gap-4">
-              <span className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
+              <span className="inline-flex items-center gap-1.5 bg-slate-100 px-4 py-2 rounded-full text-sm font-semibold text-slate-700">
                 <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                 {service.stats}
               </span>
               <Link
                 href="/#contact-form"
-                className="btn-primary text-sm"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors text-sm"
               >
                 Get Free Evaluation
               </Link>
               <a
                 href="tel:+917207382073"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-primary-700"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-blue-900 transition-colors"
               >
                 <Phone className="w-4 h-4" />
                 Call Us
@@ -224,27 +222,30 @@ export default function ServiceDetailPage({
         </SectionWrapper>
       )}
 
-      {/* CTA */}
-      <section className="py-16 md:py-20 px-4 bg-gradient-to-r from-primary-800 to-primary-900">
+      {/* CTA — White background, homepage theme */}
+      <section className="py-16 md:py-20 px-4 bg-white border-t border-slate-200">
         <div className="container-main max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Ready to Resolve Your {service.title}?
           </h2>
-          <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-slate-600 text-lg mb-8 max-w-2xl mx-auto">
             Get a free case evaluation from our experts. No obligation, no hidden
             fees.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/#contact-form" className="btn-accent">
+            <Link
+              href="/#contact-form"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors"
+            >
               Get Free Evaluation
             </Link>
             <a
               href="https://wa.me/917207382073"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary border-white/30 text-white hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-900 font-semibold rounded-lg border-2 border-blue-900 hover:bg-blue-900 hover:text-white transition-all duration-300"
             >
-              <MessageSquare className="w-4 h-4 mr-2" />
+              <MessageSquare className="w-4 h-4" />
               WhatsApp Us
             </a>
           </div>
