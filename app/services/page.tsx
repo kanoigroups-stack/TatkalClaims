@@ -179,9 +179,9 @@ export default function ServicesPage() {
               href="https://wa.me/917207382073"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary border-white/30 text-white hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-900 font-semibold rounded-lg border-2 border-white hover:bg-blue-900 hover:text-white hover:border-blue-900 transition-all duration-300"
             >
-              <MessageSquare className="w-4 h-4 mr-2" />
+              <MessageSquare className="w-4 h-4" />
               WhatsApp Us
             </a>
           </div>
