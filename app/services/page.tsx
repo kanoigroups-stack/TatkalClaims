@@ -56,8 +56,7 @@ export default function ServicesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
 
-      {/* TOP SECTION — White background, homepage theme */}
-      <section className="bg-white text-slate-900 py-16 md:py-24 px-4">
+      <section className="bg-white text-slate-900 py-16 md:py-24 px-4 border-b border-slate-200">
         <div className="container-main max-w-7xl mx-auto">
           <nav aria-label="Breadcrumb" className="mb-8">
             <ol className="flex items-center gap-2 text-sm text-slate-500">
@@ -95,7 +94,7 @@ export default function ServicesPage() {
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-900 font-semibold rounded-lg border-2 border-blue-900 hover:bg-blue-900 hover:text-white transition-all duration-300 text-center"
               >
                 <Phone className="w-4 h-4" />
-                Call +91 72073 82073
+                Call Us
               </a>
             </div>
           </div>
@@ -163,7 +162,6 @@ export default function ServicesPage() {
         </div>
       </SectionWrapper>
 
-      {/* BOTTOM SECTION — White background, homepage theme */}
       <section className="py-16 md:py-20 px-4 bg-white border-t border-slate-200">
         <div className="container-main max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
