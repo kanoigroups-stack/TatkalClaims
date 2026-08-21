@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   ChevronDown,
@@ -113,6 +113,7 @@ export default function FAQsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const isFirstRender = useRef(true);
 
   const filteredFaqs = faqs.filter((faq) => {
     const matchesCategory =
@@ -125,15 +126,19 @@ export default function FAQsPage() {
     return matchesCategory && matchesSearch;
   });
 
-  // FIX: Scroll to top of FAQ section when category changes
+  // FIX: Only scroll on tab click, NOT on initial page load
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     const faqSection = document.getElementById("faq-accordion");
     if (faqSection) {
-      const offset = 100; // Account for sticky header
+      const offset = 100;
       const top = faqSection.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: "smooth" });
     }
-    // Reset open accordion when switching categories
     setOpenIndex(0);
   }, [activeCategory]);
 
