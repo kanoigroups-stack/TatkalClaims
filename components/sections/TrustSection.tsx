@@ -8,20 +8,31 @@ import SectionHeader from "../ui/SectionHeader";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 function AnimatedCounter({ target, suffix = "", prefix = "", isDecimal = false }: { target: number; suffix?: string; prefix?: string; isDecimal?: boolean }) {
-  const [count, setCount] = useState(0);
+  // Start with target for SSR/SEO — Google sees the real number
+  const [count, setCount] = useState(target);
+  const [hasMounted, setHasMounted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const hasAnimated = useRef(false);
   const prefersReducedMotion = useReducedMotion();
 
+  // After hydration, flag that we're on the client
   useEffect(() => {
-    if (!isInView || hasAnimated.current) return;
+    setHasMounted(true);
+  }, []);
+
+  // Animate only on client after mount
+  useEffect(() => {
+    if (!hasMounted || !isInView || hasAnimated.current) return;
     hasAnimated.current = true;
 
     if (prefersReducedMotion) {
       setCount(target);
       return;
     }
+
+    // Reset to 0 then animate up
+    setCount(0);
 
     const duration = 2000;
     const steps = 60;
@@ -41,18 +52,7 @@ function AnimatedCounter({ target, suffix = "", prefix = "", isDecimal = false }
     }, duration / steps);
 
     return () => clearInterval(timer);
-  }, [isInView, target, isDecimal, prefersReducedMotion]);
-
-  // SSR/Hydration fallback: show target value immediately on mount if not animating
-  useEffect(() => {
-    const fallbackTimer = setTimeout(() => {
-      if (!hasAnimated.current) {
-        hasAnimated.current = true;
-        setCount(target);
-      }
-    }, 500);
-    return () => clearTimeout(fallbackTimer);
-  }, [target]);
+  }, [hasMounted, isInView, target, isDecimal, prefersReducedMotion]);
 
   const displayValue = isDecimal ? count.toFixed(1) : count.toLocaleString();
 
