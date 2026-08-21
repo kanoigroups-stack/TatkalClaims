@@ -35,32 +35,28 @@ const stats = [
     value: "500+",
     suffix: "",
     label: "Cases Assisted",
-    color: "text-blue-700",
-    bg: "bg-blue-50",
+    color: "text-blue-400",
   },
   {
     icon: IndianRupee,
     value: "₹20+",
     suffix: "Crores",
     label: "Claims Recovered",
-    color: "text-amber-600",
-    bg: "bg-amber-50",
+    color: "text-amber-400",
   },
   {
     icon: Star,
     value: "4.6",
     suffix: "",
     label: "Client Rating",
-    color: "text-amber-500",
-    bg: "bg-amber-50",
+    color: "text-amber-300",
   },
   {
     icon: TrendingUp,
     value: "82%",
     suffix: "",
     label: "Success Rate",
-    color: "text-emerald-600",
-    bg: "bg-emerald-50",
+    color: "text-emerald-400",
   },
 ];
 
@@ -218,58 +214,30 @@ export default function WhyUsPage() {
         </div>
       </section>
 
-      {/* Stats — White/light background */}
-      <SectionWrapper className="bg-slate-50/50">
+      {/* Stats — Dark blue background like homepage */}
+      <SectionWrapper className="bg-gradient-to-b from-blue-900 to-blue-950 text-white">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="bg-white rounded-2xl p-8 text-center border border-slate-200 shadow-sm hover:shadow-lg transition-shadow duration-300"
+              className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center border border-white/10"
             >
-              <div className={`w-12 h-12 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-4`}>
-                <stat.icon className={`w-6 h-6 ${stat.color}`} />
-              </div>
-              <div className="text-4xl md:text-5xl font-bold text-slate-900 mb-2">
+              <stat.icon className={`w-10 h-10 mx-auto mb-4 ${stat.color}`} />
+              <div className="text-4xl md:text-5xl font-bold text-white mb-2">
                 {stat.value}
                 {stat.suffix && (
-                  <span className="text-xl ml-1 text-slate-500">
+                  <span className="text-xl ml-1 text-white/70">
                     {stat.suffix}
                   </span>
                 )}
               </div>
-              <div className="text-slate-600 font-medium">{stat.label}</div>
+              <div className="text-white/70 font-medium">{stat.label}</div>
             </div>
           ))}
         </div>
       </SectionWrapper>
 
-      {/* Credentials */}
-      <SectionWrapper className="bg-white">
-        <SectionHeader
-          title="Our Expertise"
-          subtitle="A multidisciplinary team built to win insurance disputes"
-        />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {credentials.map((cred) => (
-            <div
-              key={cred.title}
-              className="flex items-start gap-4 p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-lg hover:border-blue-100 transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                <cred.icon className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <h4 className="font-bold text-slate-900 mb-1">{cred.title}</h4>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  {cred.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </SectionWrapper>
-
-      {/* Differentiators + Testimonials */}
+      {/* What Makes Us Different + Client Success Stories — MOVED UP */}
       <SectionWrapper className="bg-slate-50/50">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
@@ -299,7 +267,7 @@ export default function WhyUsPage() {
             </div>
           </div>
 
-          {/* FIXED: Client Success Stories */}
+          {/* Client Success Stories */}
           <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
             <h3 className="text-xl font-bold text-slate-900 mb-6">
               Client Success Stories
@@ -342,6 +310,32 @@ export default function WhyUsPage() {
               ))}
             </div>
           </div>
+        </div>
+      </SectionWrapper>
+
+      {/* Our Expertise — MOVED DOWN */}
+      <SectionWrapper className="bg-white">
+        <SectionHeader
+          title="Our Expertise"
+          subtitle="A multidisciplinary team built to win insurance disputes"
+        />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {credentials.map((cred) => (
+            <div
+              key={cred.title}
+              className="flex items-start gap-4 p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-lg hover:border-blue-100 transition-all duration-300"
+            >
+              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                <cred.icon className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-900 mb-1">{cred.title}</h4>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  {cred.desc}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </SectionWrapper>
 
