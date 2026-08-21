@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ChevronDown,
-  Search,
   X,
   MessageSquare,
   Phone,
@@ -126,6 +125,18 @@ export default function FAQsPage() {
     return matchesCategory && matchesSearch;
   });
 
+  // FIX: Scroll to top of FAQ section when category changes
+  useEffect(() => {
+    const faqSection = document.getElementById("faq-accordion");
+    if (faqSection) {
+      const offset = 100; // Account for sticky header
+      const top = faqSection.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+    // Reset open accordion when switching categories
+    setOpenIndex(0);
+  }, [activeCategory]);
+
   return (
     <main className="min-h-screen bg-white pt-20">
       {/* Hero — White background, homepage theme */}
@@ -155,26 +166,6 @@ export default function FAQsPage() {
               fees, and how we can help you recover your rightful insurance
               settlement.
             </p>
-
-            {/* Search */}
-            <div className="relative max-w-lg">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search questions..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-10 py-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
           </div>
         </div>
       </section>
@@ -201,7 +192,7 @@ export default function FAQsPage() {
       </div>
 
       {/* FAQ Accordion */}
-      <SectionWrapper className="bg-slate-50/50">
+      <SectionWrapper className="bg-slate-50/50" id="faq-accordion">
         <div className="max-w-3xl mx-auto">
           {filteredFaqs.length > 0 ? (
             <div className="space-y-3">
@@ -296,7 +287,7 @@ export default function FAQsPage() {
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-blue-900 font-semibold rounded-lg border-2 border-blue-900 hover:bg-blue-900 hover:text-white transition-all duration-300"
               >
                 <Phone className="w-4 h-4" />
-                Call +91 72073 82073
+                Call Us
               </a>
             </div>
           </div>
