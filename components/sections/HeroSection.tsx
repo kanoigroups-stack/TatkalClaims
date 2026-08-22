@@ -19,19 +19,21 @@ export default function HeroSection() {
   return (
     <section id="contact" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50/30 -z-10" />
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 -z-10" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-200/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 -z-10" />
+      {/* Reduced blur on mobile to prevent GPU compositing corruption */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-200/20 rounded-full blur-2xl lg:blur-3xl -translate-y-1/2 translate-x-1/4 -z-10" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-200/20 rounded-full blur-2xl lg:blur-3xl translate-y-1/2 -translate-x-1/4 -z-10" />
       <div 
         className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMxRTNBOEEiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0aDR2NGgtNHpNMzQgMzZoNHY0aC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-60 -z-10" 
         aria-hidden="true"
       />
       <div className="container-main">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* transform-gpu isolates this content in its own compositing layer */}
           <motion.div 
             initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: "easeOut" }}
-            className="max-w-2xl"
+            className="max-w-2xl transform-gpu"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 text-primary-800 rounded-full text-sm font-semibold mb-6">
               <ShieldCheck className="w-4 h-4" aria-hidden="true" />
