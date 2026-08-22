@@ -1,48 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-body text-slate-800 antialiased bg-white;
+  }
+}
+
+@layer components {
+  .container-main {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-primary-800 text-white font-semibold rounded-xl shadow-lg shadow-primary-800/20 hover:bg-primary-900 transition-all duration-200 hover:shadow-xl hover:shadow-primary-800/30 active:scale-[0.98];
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 border-2 border-primary-800 text-primary-800 font-semibold rounded-xl hover:bg-primary-50 transition-all duration-200 active:scale-[0.98];
+  }
+  
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-accent-500 text-white font-semibold rounded-xl shadow-lg shadow-accent-500/20 hover:bg-accent-600 transition-all duration-200 hover:shadow-xl hover:shadow-accent-500/30 active:scale-[0.98];
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-700 to-accent-500 bg-clip-text text-transparent;
+  }
+  
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+  
+  .card {
+    @apply bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300;
+  }
+  
+  .card-premium {
+    @apply bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-card hover:shadow-card-hover transition-all duration-300;
+  }
+}
+
 /* ============================================
    GHOSTING FIX — Desktop + Mobile
    ============================================ */
 
-/* 
-  Hero entrance animation using CSS instead of Framer Motion.
-  Framer Motion leaves stale GPU layers when the page hydrates 
-  at an anchor and the user scrolls up into the hero.
-*/
-@keyframes heroEnter {
-  from {
-    opacity: 0;
-    transform: translate3d(-30px, 0, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-.hero-enter {
-  animation: heroEnter 0.7s ease-out forwards;
-  /* Force a clean compositing layer */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-/* 
-  Prevent any element from using backdrop-filter.
-  This is the #1 cause of compositor ghosting after anchor navigation 
-  in Chrome and Safari on both desktop and mobile.
-*/
-header,
-[role="banner"],
-.fixed,
-.sticky {
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-}
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
+@layer utilities {
+  /* 
+    Force hero content into its own GPU compositing layer.
+    This prevents stale layer ghosting when scrolling up 
+    after anchor navigation from inner pages.
+  */
   .hero-enter {
-    animation: none;
-    opacity: 1;
-    transform: none;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 }
