@@ -13,28 +13,18 @@ const trustBadges = [
 
 export default function HeroSection() {
   return (
-    <section id="contact" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-4 sm:px-6 lg:px-8">
-      {/* Background gradient */}
+    <section id="contact" className="relative pt-32 pb-20 md:pt-40 md:pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-accent-50/30 -z-10" />
-      
-      {/* Decorative blobs — hidden on mobile/tablet, shown on lg+ with reduced opacity */}
-      <div className="hidden lg:block absolute top-0 right-0 w-[600px] h-[600px] bg-primary-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 -z-10 pointer-events-none" />
-      <div className="hidden lg:block absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-200/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 -z-10 pointer-events-none" />
-      
-      {/* Dot pattern */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 -z-10" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-200/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 -z-10" />
       <div 
-        className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMxRTNBOEEiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0aDR2NGgtNHpNMzQgMzZoNHY0aC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-60 -z-10 pointer-events-none" 
+        className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMxRTNBOEEiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0aDR2NGgtNHpNMzQgMzZoNHY0aC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-60 -z-10" 
         aria-hidden="true"
       />
-      
       <div className="container-main">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* 
-            CRITICAL: Plain div instead of motion.div.
-            Framer Motion leaves stale GPU layers after anchor navigation.
-            CSS animation handles the entrance instead.
-          */}
-          <div className="max-w-2xl hero-enter">
+          {/* Original div restored — no motion wrapper to prevent GPU ghosting */}
+          <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 text-primary-800 rounded-full text-sm font-semibold mb-6">
               <ShieldCheck className="w-4 h-4" aria-hidden="true" />
               India's Most Trusted Insurance Dispute Resolution Platform
@@ -78,7 +68,6 @@ export default function HeroSection() {
               ))}
             </div>
           </div>
-          
           <div id="contact-form" tabIndex={-1} className="lg:justify-self-end w-full max-w-md scroll-mt-24">
             <LeadCaptureForm />
           </div>
