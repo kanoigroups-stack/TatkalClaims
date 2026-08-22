@@ -237,7 +237,7 @@ export default function WhyUsPage() {
         </div>
       </SectionWrapper>
 
-      {/* What Makes Us Different + Client Success Stories — MOVED UP */}
+      {/* What Makes Us Different + Client Success Stories */}
       <SectionWrapper className="bg-slate-50/50">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
@@ -267,12 +267,12 @@ export default function WhyUsPage() {
             </div>
           </div>
 
-          {/* Client Success Stories */}
+          {/* Client Success Stories — FIX: only scrollable on desktop */}
           <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
             <h3 className="text-xl font-bold text-slate-900 mb-6">
               Client Success Stories
             </h3>
-            <div className="space-y-6 max-h-[600px] overflow-y-auto pr-2">
+            <div className="space-y-6 md:max-h-[600px] md:overflow-y-auto pr-0 md:pr-2">
               {testimonials.map((t, i) => (
                 <div
                   key={i}
@@ -313,7 +313,7 @@ export default function WhyUsPage() {
         </div>
       </SectionWrapper>
 
-      {/* Our Expertise — MOVED DOWN */}
+      {/* Our Expertise */}
       <SectionWrapper className="bg-white">
         <SectionHeader
           title="Our Expertise"
