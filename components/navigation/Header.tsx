@@ -20,12 +20,17 @@ const navLinks = [
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [loadedScrolled, setLoadedScrolled] = useState(false);
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
 
   const isHomePage = pathname === "/" || pathname === "";
 
   useEffect(() => {
+    // If page loaded at an anchor (scrollY > 0), skip the header drop-in animation
+    if (window.scrollY > 10) {
+      setLoadedScrolled(true);
+    }
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -48,16 +53,21 @@ export default function Header() {
     return pathname === href || pathname.startsWith(href.replace(/\/$/, ""));
   };
 
+  // Determine initial animation state
+  const headerInitial = prefersReducedMotion || loadedScrolled
+    ? { y: 0 }
+    : { y: -100 };
+
   return (
     <>
       <motion.header
-        initial={prefersReducedMotion ? { y: 0 } : { y: -100 }}
+        initial={headerInitial}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
           isScrolled 
-            ? "bg-white/95 backdrop-blur-xl shadow-lg shadow-slate-900/5 border-b border-slate-100" 
-            : "bg-white/80 backdrop-blur-sm"
+            ? "bg-white/95 lg:bg-white/95 lg:backdrop-blur-xl shadow-lg shadow-slate-900/5 border-b border-slate-100" 
+            : "bg-white/95 lg:bg-white/80 lg:backdrop-blur-sm"
         }`}
       >
         <div className="container-main px-4 sm:px-6 lg:px-8">
