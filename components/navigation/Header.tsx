@@ -20,16 +20,16 @@ const navLinks = [
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [loadedScrolled, setLoadedScrolled] = useState(false);
+  const [skipAnimation, setSkipAnimation] = useState(false);
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
 
   const isHomePage = pathname === "/" || pathname === "";
 
   useEffect(() => {
-    // If page loaded at an anchor (scrollY > 0), skip the header drop-in animation
-    if (window.scrollY > 10) {
-      setLoadedScrolled(true);
+    // Skip header drop-in if page loaded at an anchor (scrollY > 0)
+    if (typeof window !== "undefined" && window.scrollY > 10) {
+      setSkipAnimation(true);
     }
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -53,21 +53,21 @@ export default function Header() {
     return pathname === href || pathname.startsWith(href.replace(/\/$/, ""));
   };
 
-  // Determine initial animation state
-  const headerInitial = prefersReducedMotion || loadedScrolled
-    ? { y: 0 }
-    : { y: -100 };
-
   return (
     <>
       <motion.header
-        initial={headerInitial}
+        initial={skipAnimation || prefersReducedMotion ? { y: 0 } : { y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
+        /* 
+          CRITICAL: Solid background only — NO backdrop-filter.
+          backdrop-blur creates GPU compositor corruption after anchor nav 
+          on both mobile and desktop Chrome/Safari.
+        */
         className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
           isScrolled 
-            ? "bg-white/95 lg:bg-white/95 lg:backdrop-blur-xl shadow-lg shadow-slate-900/5 border-b border-slate-100" 
-            : "bg-white/95 lg:bg-white/80 lg:backdrop-blur-sm"
+            ? "bg-white shadow-lg shadow-slate-900/5 border-b border-slate-100" 
+            : "bg-white"
         }`}
       >
         <div className="container-main px-4 sm:px-6 lg:px-8">
