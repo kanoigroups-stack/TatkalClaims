@@ -70,7 +70,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Quick Links — Services, How it Works, Why Us, FAQs */}
+          {/* Services, How it Works, Why Us, FAQs */}
           <div>
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-3">
