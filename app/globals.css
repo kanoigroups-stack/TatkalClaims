@@ -30,7 +30,7 @@
   }
   
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-800 to-primary-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-700 to-accent-500 bg-clip-text text-transparent;
   }
   
   .section-padding {
@@ -43,14 +43,5 @@
   
   .card-premium {
     @apply bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-card hover:shadow-card-hover transition-all duration-300;
-  }
-}
-
-@layer utilities {
-  .hero-enter {
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
   }
 }
