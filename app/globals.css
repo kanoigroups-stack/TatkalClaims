@@ -30,7 +30,7 @@
   }
   
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-700 to-accent-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-800 to-primary-500 bg-clip-text text-transparent;
   }
   
   .section-padding {
@@ -46,16 +46,7 @@
   }
 }
 
-/* ============================================
-   GHOSTING FIX — Desktop + Mobile
-   ============================================ */
-
 @layer utilities {
-  /* 
-    Force hero content into its own GPU compositing layer.
-    This prevents stale layer ghosting when scrolling up 
-    after anchor navigation from inner pages.
-  */
   .hero-enter {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
