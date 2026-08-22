@@ -1,37 +1,48 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ============================================
+   GHOSTING FIX — Desktop + Mobile
+   ============================================ */
 
-@layer base {
-  html { 
-    scroll-behavior: smooth;
-    scroll-padding-top: 100px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+/* 
+  Hero entrance animation using CSS instead of Framer Motion.
+  Framer Motion leaves stale GPU layers when the page hydrates 
+  at an anchor and the user scrolls up into the hero.
+*/
+@keyframes heroEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
   }
-  body { 
-    @apply text-slate-800 antialiased bg-white;
-    overflow-x: hidden;
-  }
-  h1, h2, h3, h4, h5, h6 { @apply font-heading font-bold tracking-tight; }
-
-  /* Fluid scrolling for all anchor links */
-  [id] {
-    scroll-margin-top: 100px;
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
-@layer components {
-  .btn-primary { @apply inline-flex items-center justify-center px-6 py-3.5 bg-primary-800 hover:bg-primary-900 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-primary-800/20 hover:shadow-xl hover:shadow-primary-800/30 hover:-translate-y-0.5 active:translate-y-0; }
-  .btn-secondary { @apply inline-flex items-center justify-center px-6 py-3.5 bg-white border-2 border-primary-800 text-primary-800 font-semibold rounded-xl transition-all duration-200 hover:bg-primary-50 hover:-translate-y-0.5 active:translate-y-0; }
-  .btn-accent { @apply inline-flex items-center justify-center px-6 py-3.5 bg-accent-500 hover:bg-accent-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-accent-500/20 hover:shadow-xl hover:shadow-accent-500/30 hover:-translate-y-0.5 active:translate-y-0; }
-  .section-padding { @apply py-20 md:py-28 px-4 sm:px-6 lg:px-8; }
-  .container-main { @apply max-w-7xl mx-auto; }
-  .card-premium { @apply bg-white rounded-2xl p-6 md:p-8 shadow-card border border-slate-100 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1; }
-  .gradient-text { @apply bg-gradient-to-r from-primary-800 to-primary-600 bg-clip-text text-transparent; }
-  .glass { @apply bg-white/80 backdrop-blur-xl border border-white/20; }
+.hero-enter {
+  animation: heroEnter 0.7s ease-out forwards;
+  /* Force a clean compositing layer */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-@layer utilities {
-  .text-balance { text-wrap: balance; }
+/* 
+  Prevent any element from using backdrop-filter.
+  This is the #1 cause of compositor ghosting after anchor navigation 
+  in Chrome and Safari on both desktop and mobile.
+*/
+header,
+[role="banner"],
+.fixed,
+.sticky {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .hero-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
