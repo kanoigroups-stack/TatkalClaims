@@ -70,18 +70,28 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Legal Links */}
+          {/* Quick Links — Services, How it Works, Why Us, FAQs */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Legal</h4>
+            <h4 className="text-white font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/privacy-policy/" className="text-slate-400 hover:text-white transition-colors text-sm">
-                  Privacy Policy
+                <Link href="/services/" className="text-slate-400 hover:text-white transition-colors text-sm">
+                  Services
                 </Link>
               </li>
               <li>
-                <Link href="/terms-and-conditions/" className="text-slate-400 hover:text-white transition-colors text-sm">
-                  Terms & Conditions
+                <Link href="/how-it-works/" className="text-slate-400 hover:text-white transition-colors text-sm">
+                  How It Works
+                </Link>
+              </li>
+              <li>
+                <Link href="/why-us/" className="text-slate-400 hover:text-white transition-colors text-sm">
+                  Why Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/faqs/" className="text-slate-400 hover:text-white transition-colors text-sm">
+                  FAQs
                 </Link>
               </li>
             </ul>
