@@ -1,11 +1,16 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 const issueTypes = ["Claim Rejection", "Claim Delay", "Short Settlement", "Mis-selling", "Policy Dispute", "Other"];
 
+// NOTE: forms.gle/... is just a short redirect link — Google's servers reject
+// entry.* POST data sent there. Submissions must go to the real formResponse
+// endpoint, which is what the short link resolves to:
+// https://docs.google.com/forms/d/e/1FAIpQLSf4V-9TMQUR6GqYWjYRu4o3yScg1yQ7ceku-vNr7jjubpLtlw/viewform
 const GOOGLE_FORM_ACTION_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSf4V-9TMQUR6GqYWjYRu4o3yScg1yQ7ceku-vNr7jjubpLtlw/formResponse";
 
@@ -96,6 +101,12 @@ export default function LeadCaptureForm() {
     const body = new URLSearchParams();
     Object.entries(GOOGLE_FORM_ENTRIES).forEach(([key, entryId]) => {
       if (key === "issueType" && formData.issueType === "Other") {
+        // Google Forms doesn't accept the literal string "Other" as a valid
+        // answer for a required multiple-choice/dropdown question — it
+        // expects this sentinel value, plus the free-text answer in a
+        // companion "<entryId>.other_option_response" field. Sending the
+        // literal "Other" fails required-field validation server-side and
+        // silently drops the whole submission.
         body.append(entryId, "__other_option__");
         body.append(`${entryId}.other_option_response`, formData.message.trim() || "Other");
       } else {
@@ -104,6 +115,11 @@ export default function LeadCaptureForm() {
     });
 
     try {
+      // Google Forms doesn't send CORS headers back, so the response is
+      // opaque in "no-cors" mode — we can't read status/body. As long as the
+      // request doesn't throw, treat it as sent. URLSearchParams sends this
+      // as application/x-www-form-urlencoded, matching what Google's
+      // formResponse endpoint expects from a real form submission.
       await fetch(GOOGLE_FORM_ACTION_URL, {
         method: "POST",
         mode: "no-cors",
@@ -130,8 +146,10 @@ export default function LeadCaptureForm() {
 
   if (isSubmitted) {
     return (
-      <div 
-        className="bg-white rounded-2xl p-8 shadow-float border border-slate-100 text-center transition-all duration-300"
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }} 
+        animate={{ opacity: 1, scale: 1 }} 
+        className="bg-white rounded-2xl p-8 shadow-float border border-slate-100 text-center"
         role="alert"
         aria-live="polite"
       >
@@ -140,7 +158,7 @@ export default function LeadCaptureForm() {
         </div>
         <h3 className="text-xl font-bold text-slate-900 mb-2">Thank You!</h3>
         <p className="text-slate-600">Our experts will contact you within 24 hours to discuss your case.</p>
-      </div>
+      </motion.div>
     );
   }
 
@@ -165,16 +183,21 @@ export default function LeadCaptureForm() {
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? "name-error" : undefined}
           />
-          {errors.name && (
-            <div 
-              id="name-error" 
-              className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
-              role="alert"
-            >
-              <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-              <span>{errors.name}</span>
-            </div>
-          )}
+          <AnimatePresence>
+            {errors.name && (
+              <motion.div 
+                initial={{ opacity: 0, y: -5 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0, y: -5 }}
+                id="name-error" 
+                className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
+                role="alert"
+              >
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+                <span>{errors.name}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -191,16 +214,21 @@ export default function LeadCaptureForm() {
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "email-error" : undefined}
             />
-            {errors.email && (
-              <div 
-                id="email-error" 
-                className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
-                role="alert"
-              >
-                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-                <span>{errors.email}</span>
-              </div>
-            )}
+            <AnimatePresence>
+              {errors.email && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -5 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  exit={{ opacity: 0, y: -5 }}
+                  id="email-error" 
+                  className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
+                  role="alert"
+                >
+                  <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+                  <span>{errors.email}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           <div>
             <label htmlFor="phone" className="sr-only">Phone Number</label>
@@ -216,16 +244,21 @@ export default function LeadCaptureForm() {
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? "phone-error" : undefined}
             />
-            {errors.phone && (
-              <div 
-                id="phone-error" 
-                className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
-                role="alert"
-              >
-                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-                <span>{errors.phone}</span>
-              </div>
-            )}
+            <AnimatePresence>
+              {errors.phone && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -5 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  exit={{ opacity: 0, y: -5 }}
+                  id="phone-error" 
+                  className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
+                  role="alert"
+                >
+                  <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+                  <span>{errors.phone}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -243,16 +276,21 @@ export default function LeadCaptureForm() {
             <option value="">Select Issue Type *</option>
             {issueTypes.map((type) => <option key={type} value={type}>{type}</option>)}
           </select>
-          {errors.issueType && (
-            <div 
-              id="issue-error" 
-              className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
-              role="alert"
-            >
-              <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-              <span>{errors.issueType}</span>
-            </div>
-          )}
+          <AnimatePresence>
+            {errors.issueType && (
+              <motion.div 
+                initial={{ opacity: 0, y: -5 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0, y: -5 }}
+                id="issue-error" 
+                className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
+                role="alert"
+              >
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+                <span>{errors.issueType}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div>
@@ -268,16 +306,21 @@ export default function LeadCaptureForm() {
             aria-invalid={!!errors.message}
             aria-describedby={errors.message ? "message-error" : undefined}
           />
-          {errors.message && (
-            <div 
-              id="message-error" 
-              className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
-              role="alert"
-            >
-              <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-              <span>{errors.message}</span>
-            </div>
-          )}
+          <AnimatePresence>
+            {errors.message && (
+              <motion.div 
+                initial={{ opacity: 0, y: -5 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0, y: -5 }}
+                id="message-error" 
+                className="flex items-center gap-1.5 mt-1.5 text-red-500 text-xs"
+                role="alert"
+              >
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+                <span>{errors.message}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <button 
