@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   const [year, setYear] = useState(2026);
@@ -18,9 +19,11 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center mb-6" aria-label="Tatkal Claims Home">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Tatkal Claims"
+                width={200}
+                height={50}
                 className="h-11 w-auto object-contain"
               />
             </Link>
