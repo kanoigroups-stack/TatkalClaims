@@ -14,6 +14,19 @@ const testimonials = [
   { name: "Dr. Rajeev Agarwal", location: "Thane, Maharashtra", claimType: "Claim Delay - 8 Months", rating: 4, text: "My home insurance claim was stuck for 8 months. Within 2 weeks of hiring Tatkal Claims, the insurer released ₹12 lakhs. Their regulatory pressure approach works wonders." },
 ];
 
+const reviewSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Tatkal Claims Insurance Dispute Resolution",
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.6",
+    bestRating: "5",
+    ratingCount: "500",
+    reviewCount: "500",
+  },
+};
+
 export default function TestimonialsSection() {
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -41,6 +54,10 @@ export default function TestimonialsSection() {
 
   return (
     <SectionWrapper id="testimonials" className="bg-slate-50/50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
+      />
       <SectionHeader title="Success Stories From Real Clients" subtitle="Join thousands of policyholders who recovered their rightful claims" />
       <div 
         className="max-w-4xl mx-auto relative"
