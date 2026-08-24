@@ -7,6 +7,7 @@ import SectionWrapper from "../ui/SectionWrapper";
 import blogsData from "@/data/blogs.json";
 import { formatDate } from "@/utils/date";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import Image from "next/image";
 
 export default function KnowledgeSection() {
   const articles = blogsData.posts.slice(0, 3);
@@ -42,11 +43,12 @@ export default function KnowledgeSection() {
           >
             <Link href={`/blog/${article.slug}/`} className="block">
               <div className="relative h-48 overflow-hidden bg-slate-100">
-                <img
+                <Image
                   src={article.image}
                   alt={article.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4 bg-primary-800 text-white text-xs font-semibold px-3 py-1 rounded-full">
                   {article.category}
