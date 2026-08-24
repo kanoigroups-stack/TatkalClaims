@@ -119,7 +119,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             "@context": "https://schema.org",
             "@graph": [
               {
-                "@type": "Organization",
+                "@type": "LocalBusiness",
+                "@id": "https://tatkalclaims.com/#localbusiness",
                 name: "Tatkal Claims",
                 url: "https://tatkalclaims.com",
                 logo: {
@@ -128,7 +129,34 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   width: 512,
                   height: 512,
                 },
-                description: "India's most trusted platform for resolving insurance complaints and disputes.",
+                image: "https://tatkalclaims.com/logo.png",
+                description: "India's most trusted platform for resolving insurance complaints and disputes. 500+ cases assisted, ₹20+ Crores recovered.",
+                telephone: "+91-7207382073",
+                email: "help@tatkalclaims.com",
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "84, Bakol street, Laudin Villa, Bhayander West",
+                  addressLocality: "Mumbai",
+                  addressRegion: "Maharashtra",
+                  postalCode: "401101",
+                  addressCountry: "IN",
+                },
+                geo: {
+                  "@type": "GeoCoordinates",
+                  latitude: "19.2961",
+                  longitude: "72.8503",
+                },
+                areaServed: {
+                  "@type": "Country",
+                  name: "India",
+                },
+                priceRange: "₹₹",
+                openingHoursSpecification: {
+                  "@type": "OpeningHoursSpecification",
+                  dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                  opens: "00:00",
+                  closes: "23:59",
+                },
                 contactPoint: {
                   "@type": "ContactPoint",
                   telephone: "+91-7207382073",
@@ -136,9 +164,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   areaServed: "IN",
                   availableLanguage: ["English", "Hindi"],
                 },
+                sameAs: [
+                  "https://tatkalclaims.com/blog/",
+                  "https://tatkalclaims.com/partner-with-us/",
+                ],
               },
               {
                 "@type": "WebSite",
+                "@id": "https://tatkalclaims.com/#website",
                 name: "Tatkal Claims",
                 url: "https://www.tatkalclaims.com",
                 potentialAction: {
