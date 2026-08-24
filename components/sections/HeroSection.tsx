@@ -29,17 +29,12 @@ export default function HeroSection() {
       
       <div className="container-main">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* 
-            CRITICAL: Plain div instead of motion.div.
-            Framer Motion leaves stale GPU layers after anchor navigation.
-            CSS animation handles the entrance instead.
-          */}
-          <div className="max-w-2xl hero-enter">
+          <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 text-primary-800 rounded-full text-sm font-semibold mb-6">
               <ShieldCheck className="w-4 h-4" aria-hidden="true" />
               India's Most Trusted Insurance Dispute Resolution Platform
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 leading-[1.1] mb-6 text-balance">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 leading-[1.1] mb-6">
               Resolve Your Insurance Claim <span className="gradient-text">Disputes With Experts</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed max-w-xl">
