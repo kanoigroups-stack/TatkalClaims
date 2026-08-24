@@ -17,7 +17,7 @@ const inter = Inter({
 
 const poppins = Poppins({ 
   subsets: ["latin"], 
-  weight: ["400","500","600","700","800"], 
+  weight: ["400","500","600","700"], 
   variable: "--font-poppins", 
   display: "swap",
   preload: true,
@@ -106,7 +106,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#1E3A8A" />
         <meta name="msapplication-TileColor" content="#1E3A8A" />
         
-        {/* Preconnect */}
+        {/* Preconnect to speed up font and image loading */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
@@ -114,42 +115,40 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Schema */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@graph": [
-                {
-                  "@type": "Organization",
-                  name: "Tatkal Claims",
-                  url: "https://tatkalclaims.com",
-                  logo: {
-                    "@type": "ImageObject",
-                    url: "https://tatkalclaims.com/logo.png",
-                    width: 512,
-                    height: 512,
-                  },
-                  description: "India's most trusted platform for resolving insurance complaints and disputes.",
-                  contactPoint: {
-                    "@type": "ContactPoint",
-                    telephone: "+91-7207382073",
-                    contactType: "customer service",
-                    areaServed: "IN",
-                    availableLanguage: ["English", "Hindi"],
-                  },
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                name: "Tatkal Claims",
+                url: "https://tatkalclaims.com",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://tatkalclaims.com/logo.png",
+                  width: 512,
+                  height: 512,
                 },
-                {
-                  "@type": "WebSite",
-                  name: "Tatkal Claims",
-                  url: "https://www.tatkalclaims.com",
-                  potentialAction: {
-                    "@type": "SearchAction",
-                    target: "https://tatkalclaims.com/blog?q={search_term_string}",
-                    "query-input": "required name=search_term_string",
-                  },
+                description: "India's most trusted platform for resolving insurance complaints and disputes.",
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  telephone: "+91-7207382073",
+                  contactType: "customer service",
+                  areaServed: "IN",
+                  availableLanguage: ["English", "Hindi"],
                 },
-              ],
-            }),
-          }}
+              },
+              {
+                "@type": "WebSite",
+                name: "Tatkal Claims",
+                url: "https://www.tatkalclaims.com",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: "https://tatkalclaims.com/blog?q={search_term_string}",
+                  "query-input": "required name=search_term_string",
+                },
+              },
+            ],
+          }) }}
         />
       </head>
       <body className="font-body text-slate-800 antialiased bg-white">
