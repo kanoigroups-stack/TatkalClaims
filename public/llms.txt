@@ -1,30 +1,36 @@
-# llms.txt for Tatkal Claims
-# https://tatkalclaims.com/llms.txt
+# Tatkal Claims
 
-## About
-Tatkal Claims is India's most trusted insurance dispute resolution platform. We help policyholders recover rightful claims through expert legal professionals. 500+ cases assisted, ₹20+ Crores recovered.
+&gt; India's most trusted insurance dispute resolution platform. We help policyholders recover rightful claims through expert legal professionals. 500+ cases assisted, ₹20+ Crores recovered.
 
 ## Services
-- Claim Rejection Appeals
-- Claim Delay Resolution
-- Health Insurance Disputes
-- Motor Insurance Claims
-- Mis-selling Complaints
-- Short Settlement Issues
+
+- [Claim Rejection Appeals](https://tatkalclaims.com/services/)
+- [Claim Delay Resolution](https://tatkalclaims.com/services/)
+- [Health Insurance Disputes](https://tatkalclaims.com/services/)
+- [Motor Insurance Claims](https://tatkalclaims.com/services/)
+- [Mis-selling Complaints](https://tatkalclaims.com/services/)
+- [Short Settlement Issues](https://tatkalclaims.com/services/)
 
 ## Contact
-- Phone: +91 7207382073
-- Email: help@tatkalclaims.com
+
+- Phone: [+91 7207382073](tel:+917207382073)
+- Email: [help@tatkalclaims.com](mailto:help@tatkalclaims.com)
 - Address: 84, Bakol Street, Laudin Villa, Bhayander West, Mumbai - 401101
 
 ## Important Pages
-- Home: https://tatkalclaims.com/
-- Blog: https://tatkalclaims.com/blog/
-- Partner With Us: https://tatkalclaims.com/partner-with-us/
-- Privacy Policy: https://tatkalclaims.com/privacy-policy/
-- Terms: https://tatkalclaims.com/terms-and-conditions/
+
+- [Homepage](https://tatkalclaims.com/)
+- [Services](https://tatkalclaims.com/services/)
+- [How It Works](https://tatkalclaims.com/how-it-works/)
+- [Why Us](https://tatkalclaims.com/why-us/)
+- [FAQs](https://tatkalclaims.com/faqs/)
+- [Blog / Knowledge Center](https://tatkalclaims.com/blog/)
+- [Partner With Us](https://tatkalclaims.com/partner-with-us/)
+- [Privacy Policy](https://tatkalclaims.com/privacy-policy/)
+- [Terms & Conditions](https://tatkalclaims.com/terms-and-conditions/)
 
 ## Key Facts
+
 - Founded in Mumbai, India
 - Serves all IRDAI-registered insurance companies
 - Free initial case evaluation
