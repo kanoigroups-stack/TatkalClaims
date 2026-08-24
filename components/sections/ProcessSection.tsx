@@ -14,11 +14,34 @@ const steps = [
   { icon: BadgeCheck, title: "Claim Resolution", description: "Receive your rightful settlement. Transparent fixed fees based on case complexity." },
 ];
 
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Resolve an Insurance Claim Dispute",
+  description: "A transparent 5-step process designed to maximize your chances of claim recovery",
+  totalTime: "P3M",
+  estimatedCost: {
+    "@type": "MonetaryAmount",
+    currency: "INR",
+    value: "0",
+  },
+  step: steps.map((step, index) => ({
+    "@type": "HowToStep",
+    position: index + 1,
+    name: step.title,
+    text: step.description,
+  })),
+};
+
 export default function ProcessSection() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
     <SectionWrapper id="process">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
       <SectionHeader title="How Our Claim Resolution Works" subtitle="A transparent, 5-step process designed to maximize your chances of recovery" />
       <div className="relative">
         <div className="hidden lg:block absolute top-24 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-primary-200 via-primary-400 to-accent-300" aria-hidden="true" />
