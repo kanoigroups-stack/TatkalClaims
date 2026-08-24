@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
 import Link from "next/link";
@@ -73,9 +74,12 @@ export default function Header() {
         <div className="container-main px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center group shrink-0" aria-label="Tatkal Claims Home">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Tatkal Claims"
+                width={200}
+                height={50}
+                priority
                 className="h-11 w-auto object-contain"
               />
             </Link>
