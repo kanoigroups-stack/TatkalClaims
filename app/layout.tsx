@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Poppins } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/navigation/Header";
 import Footer from "@/components/sections/Footer";
@@ -110,18 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         
-        {/* Google Analytics */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-M3ZBJ1B7V8" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-M3ZBJ1B7V8', { send_page_view: false });
-            `,
-          }}
-        />
+        {/* Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -172,6 +162,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WhatsAppFloat />
         <StickyMobileCTA />
         <GATracker />
+        
+        {/* Google Analytics - deferred to reduce main-thread blocking */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-M3ZBJ1B7V8"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-M3ZBJ1B7V8', { send_page_view: false });
+          `}
+        </Script>
       </body>
     </html>
   );
