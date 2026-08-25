@@ -1,15 +1,15 @@
 # Tatkal Claims
 
-&gt; India's most trusted insurance dispute resolution platform. We help policyholders recover rightful claims through expert legal professionals. 500+ cases assisted, ₹20+ Crores recovered.
+> India's most trusted insurance dispute resolution platform. We help policyholders recover rightful claims through expert legal professionals. 500+ cases assisted, ₹20+ Crores recovered.
 
 ## Services
 
-- [Claim Rejection Appeals](https://tatkalclaims.com/services/)
-- [Claim Delay Resolution](https://tatkalclaims.com/services/)
-- [Health Insurance Disputes](https://tatkalclaims.com/services/)
-- [Motor Insurance Claims](https://tatkalclaims.com/services/)
-- [Mis-selling Complaints](https://tatkalclaims.com/services/)
-- [Short Settlement Issues](https://tatkalclaims.com/services/)
+- [Claim Rejection Appeals](https://tatkalclaims.com/services/claim-rejection/)
+- [Claim Delay Resolution](https://tatkalclaims.com/services/claim-delay/)
+- [Health Insurance Disputes](https://tatkalclaims.com/services/health-insurance-disputes/)
+- [Motor Insurance Claims](https://tatkalclaims.com/services/motor-insurance-claims/)
+- [Mis-selling Complaints](https://tatkalclaims.com/services/mis-selling-complaints/)
+- [Short Settlement Issues](https://tatkalclaims.com/services/short-settlement/)
 
 ## Contact
 
