@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { getAllPosts } from "@/lib/blog";
+import blogsData from "@/data/blogs.json";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://tatkalclaims.com";
@@ -17,9 +17,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/terms-and-conditions/`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.3 },
   ];
 
-  // Blog posts
-  const posts = getAllPosts();
-  const blogPages = posts.map((post) => ({
+  // Blog posts from data/blogs.json
+  const blogPages = blogsData.posts.map((post: { slug: string; date: string }) => ({
     url: `${baseUrl}/blog/${post.slug}/`,
     lastModified: new Date(post.date),
     changeFrequency: "monthly" as const,
