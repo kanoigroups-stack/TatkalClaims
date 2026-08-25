@@ -22,8 +22,8 @@ const reviewSchema = {
     "@type": "AggregateRating",
     ratingValue: "4.6",
     bestRating: "5",
-    ratingCount: "500",
-    reviewCount: "500",
+    ratingCount: "250",
+    reviewCount: "250",
   },
 };
 
