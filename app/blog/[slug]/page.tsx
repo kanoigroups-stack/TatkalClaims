@@ -137,19 +137,19 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.tatkalclaims.com/",
+        item: "https://tatkalclaims.com/",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Knowledge Center",
-        item: "https://www.tatkalclaims.com/blog/",
+        item: "https://tatkalclaims.com/blog/",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: post.title,
-        item: `https://www.tatkalclaims.com/blog/${post.slug}/`,
+        item: `https://tatkalclaims.com/blog/${post.slug}/`,
       },
     ],
   };
@@ -168,14 +168,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     author: {
       "@type": "Organization",
       name: post.author,
-      url: "https://www.tatkalclaims.com",
+      url: "https://tatkalclaims.com",
     },
     publisher: {
       "@type": "Organization",
       name: "Tatkal Claims",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.tatkalclaims.com/logo.png",
+        url: "https://tatkalclaims.com/logo.png",
         width: 512,
         height: 512,
       },
@@ -184,7 +184,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     dateModified: post.date,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://www.tatkalclaims.com/blog/${post.slug}/`,
+      "@id": `https://tatkalclaims.com/blog/${post.slug}/`,
     },
     keywords: [post.category, "insurance claim", "dispute resolution", "india"],
     articleSection: post.category,
