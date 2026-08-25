@@ -354,7 +354,7 @@ export default function AboutPage() {
       {/* Team */}
       <SectionWrapper className="bg-white">
         <SectionHeader
-          title="Meet Our Experts"
+          title="Our Experts"
           subtitle="A multidisciplinary team built to win insurance disputes"
         />
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
