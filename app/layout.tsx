@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     } 
   },
   verification: {
-    google: "G-M3ZBJ1B7V8",
+    google: "E_8RoQ3KF2Dkbkvh6PxfvZmhi6w82v3NeynVcSRSY2c",
   },
   category: "legal services",
 };
