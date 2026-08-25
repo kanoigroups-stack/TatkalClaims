@@ -46,23 +46,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
+          {/* Single Quick Links Column - spans 2 cols on desktop */}
+          <div className="lg:col-span-2">
             <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-3">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <li>
                 <Link href="/" className="text-slate-400 hover:text-white transition-colors text-sm">
                   Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog/" className="text-slate-400 hover:text-white transition-colors text-sm">
-                  Knowledge Center
-                </Link>
-              </li>
-              <li>
-                <Link href="/partner-with-us/" className="text-slate-400 hover:text-white transition-colors text-sm">
-                  Partner With Us
                 </Link>
               </li>
               <li>
@@ -70,13 +60,11 @@ export default function Footer() {
                   Get Free Evaluation
                 </a>
               </li>
-            </ul>
-          </div>
-
-          {/* Services, How it Works, Why Us, FAQs */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-3">
+              <li>
+                <Link href="/about/" className="text-slate-400 hover:text-white transition-colors text-sm">
+                  About Us
+                </Link>
+              </li>
               <li>
                 <Link href="/services/" className="text-slate-400 hover:text-white transition-colors text-sm">
                   Services
@@ -95,6 +83,16 @@ export default function Footer() {
               <li>
                 <Link href="/faqs/" className="text-slate-400 hover:text-white transition-colors text-sm">
                   FAQs
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog/" className="text-slate-400 hover:text-white transition-colors text-sm">
+                  Knowledge Centre
+                </Link>
+              </li>
+              <li>
+                <Link href="/partner-with-us/" className="text-slate-400 hover:text-white transition-colors text-sm">
+                  Partner With Us
                 </Link>
               </li>
             </ul>
@@ -121,13 +119,6 @@ export default function Footer() {
                 aria-label="Read our Terms and Conditions"
               >
                 Terms & Conditions
-              </Link>
-              <Link 
-                href="/partner-with-us/" 
-                className="text-slate-400 hover:text-white transition-colors"
-                aria-label="Partner With Us"
-              >
-                Partner With Us
               </Link>
             </div>
           </div>
