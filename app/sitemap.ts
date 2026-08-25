@@ -1,36 +1,30 @@
 import { MetadataRoute } from "next";
-import blogsData from "@/data/blogs.json";
-import { getAllServiceSlugs } from "@/lib/services";
+import { getAllPosts } from "@/lib/blog";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://tatkalclaims.com";
-  const now = new Date(); // Auto-updates on every Vercel deploy
-
+  
+  // Static pages
   const staticPages = [
-    { url: baseUrl, lastModified: now, changeFrequency: "daily" as const, priority: 1.0 },
-    { url: `${baseUrl}/services/`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.95 },
-    { url: `${baseUrl}/how-it-works/`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
-    { url: `${baseUrl}/why-us/`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.9 },
-    { url: `${baseUrl}/faqs/`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.85 },
-    { url: `${baseUrl}/blog/`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.9 },
-    { url: `${baseUrl}/partner-with-us/`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.8 },
-    { url: `${baseUrl}/privacy-policy/`, lastModified: now, changeFrequency: "yearly" as const, priority: 0.3 },
-    { url: `${baseUrl}/terms-and-conditions/`, lastModified: now, changeFrequency: "yearly" as const, priority: 0.3 },
+    { url: `${baseUrl}/`, lastModified: new Date(), changeFrequency: "daily" as const, priority: 1.0 },
+    { url: `${baseUrl}/about/`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.9 },
+    { url: `${baseUrl}/services/`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: `${baseUrl}/how-it-works/`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: `${baseUrl}/why-us/`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: `${baseUrl}/faqs/`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
+    { url: `${baseUrl}/partner-with-us/`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7 },
+    { url: `${baseUrl}/privacy-policy/`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.3 },
+    { url: `${baseUrl}/terms-and-conditions/`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.3 },
   ];
 
-  const servicePages = getAllServiceSlugs().map((slug) => ({
-    url: `${baseUrl}/services/${slug}/`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
-
-  const blogPosts = blogsData.posts.map((post) => ({
+  // Blog posts
+  const posts = getAllPosts();
+  const blogPages = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}/`,
     lastModified: new Date(post.date),
     changeFrequency: "monthly" as const,
-    priority: 0.7,
+    priority: 0.6,
   }));
 
-  return [...staticPages, ...servicePages, ...blogPosts];
+  return [...staticPages, ...blogPages];
 }
