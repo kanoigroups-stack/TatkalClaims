@@ -46,6 +46,116 @@ export function generateMetadata({
   };
 }
 
+type GeoAnswer = {
+  question: string;
+  answer: string;
+};
+
+const geoContent: Record<string, GeoAnswer[]> = {
+  "claim-rejection": [
+    {
+      question: "What should I do if my insurance claim is rejected?",
+      answer:
+        "First, obtain the insurer's written rejection or repudiation reason and identify the policy clause relied upon. Compare that reason with your policy wording and claim documents. If you believe the decision is incorrect, submit a written representation with supporting evidence and use the insurer's grievance process before considering further escalation.",
+    },
+    {
+      question: "Can I challenge a rejected insurance claim?",
+      answer:
+        "A rejected claim may be challengeable when the insurer has incorrectly applied the policy terms, overlooked relevant evidence, or relied on facts that can be disputed. The strength of a challenge depends on the policy wording, the rejection reason, and the documents supporting the claim.",
+    },
+    {
+      question: "What documents should I keep after a claim rejection?",
+      answer:
+        "Keep the policy schedule and wording, claim form, rejection or repudiation letter, medical or repair records where relevant, bills and receipts, photographs, correspondence with the insurer or TPA, and any other evidence submitted with the claim. Keeping a dated record of communications can also help when escalating a dispute.",
+    },
+  ],
+  "claim-delay": [
+    {
+      question: "What should I do if my insurance claim is delayed?",
+      answer:
+        "Start by recording the claim date, documents submitted, insurer communications, survey or investigation updates, and any outstanding requirements. Ask the insurer in writing for the current status and the specific reason for the delay. If the matter remains unresolved, use the insurer's formal grievance process and retain copies of every communication.",
+    },
+    {
+      question: "Why can an insurance claim take longer to settle?",
+      answer:
+        "Delays can occur when documents are incomplete, additional information is requested, an investigation or survey is pending, liability is disputed, or the insurer is waiting for another party's records. A written explanation of what is still outstanding can help identify whether the delay is justified or needs escalation.",
+    },
+    {
+      question: "How can I escalate a delayed insurance claim?",
+      answer:
+        "Begin with a written status request to the insurer or relevant claims team. If the response is unsatisfactory, use the insurer's grievance mechanism and keep the complaint reference number and supporting documents. Further escalation should depend on the type of policy, the insurer's response, and the applicable regulatory or dispute-resolution route.",
+    },
+  ],
+  "health-insurance-disputes": [
+    {
+      question: "What should I do if my health insurance claim is rejected?",
+      answer:
+        "Ask the insurer or TPA for the rejection reason in writing and obtain the relevant policy clause. Review the hospitalization records, bills, discharge summary, claim form, and policy terms against that reason. If you believe the decision is incorrect, submit a documented representation through the insurer's grievance process and keep copies of all records.",
+    },
+    {
+      question: "What should I do if a cashless health insurance claim is denied?",
+      answer:
+        "Ask the hospital or TPA for the reason for the cashless denial and request it in writing. Keep the medical records and policy documents, and ask the insurer what reimbursement or alternative claim process is available. A cashless denial does not by itself answer whether the underlying expenses are covered, so the policy terms and final claim decision should be reviewed separately.",
+    },
+    {
+      question: "Can I dispute a health insurer's interpretation of a policy exclusion?",
+      answer:
+        "Yes, you can raise a dispute if you believe an exclusion has been applied incorrectly. Compare the exact exclusion wording with the medical records and circumstances of the treatment, then submit a written representation explaining why you believe the clause does not apply. The policy wording and evidence are central to the assessment.",
+    },
+  ],
+  "motor-insurance-claims": [
+    {
+      question: "What should I do if my motor insurance claim is underpaid?",
+      answer:
+        "Ask the insurer for the settlement calculation and the surveyor's assessment, then compare the deductions with your policy terms and supporting repair or valuation documents. If you disagree with the assessment, document each disputed deduction and submit a written representation with evidence supporting the amount you believe is payable.",
+    },
+    {
+      question: "Can I challenge a motor insurance surveyor's assessment?",
+      answer:
+        "You can raise concerns about an assessment with the insurer and provide supporting evidence such as repair estimates, photographs, invoices, valuation information, or other relevant records. Whether the assessment changes depends on the policy, the evidence, and the circumstances of the loss.",
+    },
+    {
+      question: "What documents are useful in a motor insurance dispute?",
+      answer:
+        "Useful records can include the policy schedule, claim form, surveyor report, repair estimates and invoices, photographs of the damage, vehicle registration and other required documents, accident or police records where applicable, and all correspondence with the insurer or garage.",
+    },
+  ],
+  "mis-selling-complaints": [
+    {
+      question: "What is insurance mis-selling?",
+      answer:
+        "Insurance mis-selling can involve material information being misrepresented or omitted during the sale, important policy terms not being properly explained, or a product being presented in a way that does not match its actual features or suitability. The specific facts and evidence matter when assessing a complaint.",
+    },
+    {
+      question: "What evidence can support an insurance mis-selling complaint?",
+      answer:
+        "Keep sales messages, brochures, proposal forms, policy documents, recorded calls where lawfully available, emails or messages, payment records, and notes of promises or representations made during the sale. Compare those representations with the actual policy terms and identify the specific mismatch.",
+    },
+    {
+      question: "What should I do if I believe an insurance policy was mis-sold?",
+      answer:
+        "Document what you were told, collect the policy and sales evidence, and identify the specific representation or omission you dispute. Raise the complaint with the insurer in writing and retain the complaint reference and response. Further escalation should depend on the facts, the insurer's response, and the applicable dispute-resolution process.",
+    },
+  ],
+  "short-settlement": [
+    {
+      question: "What is an insurance claim short settlement?",
+      answer:
+        "A short settlement occurs when an insurer offers or pays less than the amount a policyholder believes is payable under the policy. The difference can arise from deductions, depreciation, exclusions, limits, valuation disagreements, or other policy terms. The settlement calculation should be reviewed against the actual policy wording and claim evidence.",
+    },
+    {
+      question: "Can I challenge a low insurance claim settlement?",
+      answer:
+        "You can dispute a settlement when you believe the insurer has applied an incorrect deduction, valuation, exclusion, or other policy provision. Ask for the settlement calculation and supporting assessment, identify each disputed item, and submit evidence showing why the amount should be reconsidered.",
+    },
+    {
+      question: "What documents should I collect for a short-settlement dispute?",
+      answer:
+        "Keep the policy wording and schedule, claim and settlement documents, surveyor or assessment reports, repair estimates or invoices, photographs, valuation evidence where relevant, and correspondence explaining the insurer's deductions. A clear item-by-item comparison can make the dispute easier to assess.",
+    },
+  ],
+};
+
 export default function ServiceDetailPage({
   params,
 }: {
@@ -56,6 +166,7 @@ export default function ServiceDetailPage({
 
   const related = getRelatedServices(service.relatedSlugs);
   const Icon = service.icon;
+  const answers = geoContent[service.slug] ?? [];
 
   return (
     <main className="min-h-screen bg-white pt-20">
@@ -116,6 +227,29 @@ export default function ServiceDetailPage({
           </div>
         </div>
       </section>
+
+      {/* Answer-oriented guidance for search and AI users */}
+      {answers.length > 0 && (
+        <SectionWrapper className="bg-slate-50">
+          <SectionHeader
+            title={`Quick Answers About ${service.title}`}
+            subtitle="Practical guidance for common insurance questions"
+          />
+          <div className="max-w-4xl mx-auto space-y-6">
+            {answers.map((item) => (
+              <article
+                key={item.question}
+                className="bg-white rounded-2xl border border-slate-200 p-6 md:p-8"
+              >
+                <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-3">
+                  {item.question}
+                </h2>
+                <p className="text-slate-600 leading-relaxed">{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </SectionWrapper>
+      )}
 
       {/* Features */}
       <SectionWrapper className="bg-white">
