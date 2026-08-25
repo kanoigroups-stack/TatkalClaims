@@ -138,13 +138,13 @@ const milestones = [
   },
   {
     year: "2021",
-    title: "100+ Cases Milestone",
-    desc: "Crossed 500 cases assisted across health, motor, and life insurance disputes.",
+    title: "100+ Cases Resolved",
+    desc: "Crossed 100 successful case resolutions across health, motor, and life insurance disputes.",
   },
   {
     year: "2022",
     title: "₹5 Crores Recovered",
-    desc: "Helped clients recover over ₹10 Crores in rightful insurance claims.",
+    desc: "Helped clients recover over ₹5 Crores in rightful insurance claims.",
   },
   {
     year: "2024",
@@ -154,7 +154,7 @@ const milestones = [
   {
     year: "2025",
     title: "₹20+ Crores Recovered",
-    desc: "Doubled recovery amount with an 82% success rate and 4.6/5 client rating.",
+    desc: "Crossed ₹20 Crores in total claim recovery with an 82% success rate and 4.6/5 client rating.",
   },
 ];
 
@@ -437,4 +437,4 @@ export default function AboutPage() {
       </section>
     </main>
   );
-}
+              }
