@@ -20,6 +20,7 @@
 ## Important Pages
 
 - [Homepage](https://tatkalclaims.com/)
+- [About Us](https://tatkalclaims.com/about/)
 - [Services](https://tatkalclaims.com/services/)
 - [How It Works](https://tatkalclaims.com/how-it-works/)
 - [Why Us](https://tatkalclaims.com/why-us/)
@@ -31,7 +32,7 @@
 
 ## Key Facts
 
-- Founded in Mumbai, India
+- Founded in Mumbai, India by Ankit L Kanoi
 - Serves all IRDAI-registered insurance companies
 - Free initial case evaluation
 - Success rate: 82%
