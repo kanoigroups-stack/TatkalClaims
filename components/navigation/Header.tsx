@@ -10,6 +10,7 @@ import { scrollToForm } from "@/utils/scroll";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const navLinks = [
+  { href: "/about/", label: "About Us" },
   { href: "/services/", label: "Services" },
   { href: "/how-it-works/", label: "How It Works" },
   { href: "/why-us/", label: "Why Us" },
@@ -28,7 +29,6 @@ export default function Header() {
   const isHomePage = pathname === "/" || pathname === "";
 
   useEffect(() => {
-    // Skip header drop-in if page loaded at an anchor (scrollY > 0)
     if (typeof window !== "undefined" && window.scrollY > 10) {
       setSkipAnimation(true);
     }
@@ -60,11 +60,6 @@ export default function Header() {
         initial={skipAnimation || prefersReducedMotion ? { y: 0 } : { y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        /* 
-          CRITICAL: Solid background only — NO backdrop-filter.
-          backdrop-blur creates GPU compositor corruption after anchor nav 
-          on both mobile and desktop Chrome/Safari.
-        */
         className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 ${
           isScrolled 
             ? "bg-white shadow-lg shadow-slate-900/5 border-b border-slate-100" 
