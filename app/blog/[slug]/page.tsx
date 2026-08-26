@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
-import blogsData from "@/data/blogs.json";
+import blogsData from "@/lib/blogs";
 import ReadingProgress from "@/components/blog/ReadingProgress";
 import { formatDate } from "@/utils/date";
 
