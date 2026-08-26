@@ -104,7 +104,7 @@ export default function Footer() {
       <div className="border-t border-slate-800">
         <div className="container-main px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <p className="text-sm text-slate-500">&copy; {year} Tatkal Claims. All rights reserved.</p>
+            <p className="text-sm text-slate-400">&copy; {year} Tatkal Claims. All rights reserved.</p>
             <div className="flex items-center gap-6 text-sm">
               <Link 
                 href="/privacy-policy/" 
