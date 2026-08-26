@@ -107,7 +107,7 @@ export default function TestimonialsSection() {
                   </div>
                 </div>
                 <div className="text-center md:text-left">
-                  <h4 className="text-xl font-bold text-slate-900">{testimonials[current].name}</h4>
+                  <h3 className="text-xl font-bold text-slate-900">{testimonials[current].name}</h3>
                   <p className="text-slate-500 text-sm">{testimonials[current].location}</p>
                   <div role="img" aria-label={`Rating: ${testimonials[current].rating} out of 5 stars`} className="flex items-center gap-1 mt-2 justify-center md:justify-start">
                     {[...Array(5)].map((_, i) => (
