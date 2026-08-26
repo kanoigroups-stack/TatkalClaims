@@ -12,7 +12,7 @@ const inter = Inter({
   subsets: ["latin"], 
   variable: "--font-inter", 
   display: "optional",
-  preload: true,
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -58,9 +58,9 @@ export const metadata: Metadata = {
     follow: true, 
     googleBot: { 
       index: true, 
-      follow: true, 
-      "max-video-preview": -1, 
-      "max-image-preview": "large", 
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
       "max-snippet": -1 
     } 
   },
