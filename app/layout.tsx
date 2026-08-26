@@ -11,7 +11,7 @@ import GATracker from "@/components/analytics/GATracker";
 const inter = Inter({ 
   subsets: ["latin"], 
   variable: "--font-inter", 
-  display: "swap",
+  display: "optional",
   preload: true,
 });
 
