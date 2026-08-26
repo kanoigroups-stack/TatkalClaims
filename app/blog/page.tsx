@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: "Knowledge Center | Tatkal Claims",
     description: "Expert insights on insurance claim rejection, delays, mis-selling, and dispute resolution.",
-    url: "https://www.tatkalclaims.com/blog/",
+    url: "https://tatkalclaims.com/blog/",
     type: "website",
   },
 };
@@ -24,13 +24,13 @@ export default function BlogListPage() {
     "@context": "https://schema.org",
     "@type": "Blog",
     name: "Tatkal Claims Knowledge Center",
-    url: "https://www.tatkalclaims.com/blog/",
+    url: "https://tatkalclaims.com/blog/",
     description: "Expert insights on insurance claim disputes and resolution.",
     blogPost: posts.map((post) => ({
       "@type": "BlogPosting",
       headline: post.title,
       description: post.excerpt,
-      url: `https://www.tatkalclaims.com/blog/${post.slug}/`,
+      url: `https://tatkalclaims.com/blog/${post.slug}/`,
       datePublished: post.date,
       author: {
         "@type": "Organization",
