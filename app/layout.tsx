@@ -159,7 +159,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 "@type": "WebSite",
                 "@id": "https://tatkalclaims.com/#website",
                 name: "Tatkal Claims",
-                url: "https://www.tatkalclaims.com",
+                url: "https://tatkalclaims.com",
                 potentialAction: {
                   "@type": "SearchAction",
                   target: "https://tatkalclaims.com/blog?q={search_term_string}",
