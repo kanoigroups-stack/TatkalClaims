@@ -1,6 +1,6 @@
 import { ArrowLeft, Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
-import blogsData from "@/data/blogs.json";
+import blogsData from "@/lib/blogs";
 import { formatDate } from "@/utils/date";
 
 export const metadata = {
