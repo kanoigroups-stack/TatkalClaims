@@ -336,7 +336,7 @@ export default function LeadCaptureForm() {
           )}
         </button>
 
-        <p className="text-xs text-center text-slate-400 mt-4">
+        <p className="text-xs text-center text-slate-600 mt-4">
           By submitting, you agree to our{" "}
           <Link 
             href="/privacy-policy/" 
