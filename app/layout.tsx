@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/navigation/Header";
@@ -11,14 +11,6 @@ import GATracker from "@/components/analytics/GATracker";
 const inter = Inter({ 
   subsets: ["latin"], 
   variable: "--font-inter", 
-  display: "swap",
-  preload: true,
-});
-
-const poppins = Poppins({ 
-  subsets: ["latin"], 
-  weight: ["400","500","600","700"], 
-  variable: "--font-poppins", 
   display: "swap",
   preload: true,
 });
@@ -80,15 +72,15 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { 
   width: "device-width", 
-  initialScale: 1, 
-  maximumScale: 5, 
+  initialScale: 1,
+  maximumScale: 5,
   themeColor: "#1E3A8A",
   colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${inter.variable} ${poppins.variable} scroll-smooth`}>
+    <html lang="en-IN" className={`${inter.variable} scroll-smooth`}>
       <head>
         {/* Favicon */}
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -105,12 +97,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Theme Color */}
         <meta name="theme-color" content="#1E3A8A" />
         <meta name="msapplication-TileColor" content="#1E3A8A" />
-        
-        {/* Preconnect to speed up font and image loading */}
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
         
         {/* Schema */}
         <script

@@ -1,8 +1,6 @@
-"use client";
-
-import { ArrowRight, ShieldCheck, Clock, Users, Award, ChevronRight } from "lucide-react";
+import { ShieldCheck, Clock, Users, Award, ChevronRight } from "lucide-react";
 import LeadCaptureForm from "../forms/LeadCaptureForm";
-import { scrollToForm } from "@/utils/scroll";
+import HeroPrimaryCTA from "./HeroPrimaryCTA";
 
 const trustBadges = [
   { icon: ShieldCheck, label: "100% Secure" },
@@ -41,15 +39,7 @@ export default function HeroSection() {
               Helping policyholders recover their rightful insurance claims through professional dispute resolution. From rejection to recovery, we handle it all.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <button 
-                type="button" 
-                onClick={scrollToForm} 
-                className="btn-primary text-base group"
-                aria-label="Submit your insurance complaint"
-              >
-                Submit Your Complaint
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-              </button>
+              <HeroPrimaryCTA />
               <a 
                 href="#process" 
                 className="btn-secondary text-base group"
