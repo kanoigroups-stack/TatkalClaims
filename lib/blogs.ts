@@ -124,11 +124,124 @@ The written rejection or repudiation letter is usually the starting point becaus
 Not necessarily. Many disputes should first go through the insurer's grievance process, and other grievance mechanisms may be available. The appropriate route depends on the claim, urgency, value, evidence, limitation periods, and whether another proceeding is already pending.`
 };
 
+const irdaiHealthClaimTimelines = {
+  slug: "irdai-30-day-claim-settlement-rule-health-insurance-rights",
+  title: "IRDAI Claim Settlement Time Limit: 1 Hour, 3 Hours & 15 Days",
+  excerpt:
+    "Know the current IRDAI health insurance claim settlement timelines: 1 hour for cashless pre-authorisation, 3 hours for discharge approval, and 15 days for non-cashless claims, plus what to do if your insurer delays.",
+  category: "News",
+  readTime: "7 min read",
+  author: "Ankit L Kanoi, Founder",
+  date: "2026-07-15",
+  image:
+    "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=400&fit=crop",
+  content: `IRDAI's current health insurance claim timelines are straightforward: insurers must decide cashless pre-authorisation requests within 1 hour, provide final cashless authorisation within 3 hours of receiving the hospital's discharge request, and settle claims other than cashless within 15 days.
+
+If your insurer exceeds the applicable timeline, preserve the submission timestamps, claim documents and correspondence and first raise a written grievance with the insurer. If the issue remains unresolved, further grievance channels including IRDAI's Bima Bharosa and, where eligible, the Insurance Ombudsman may be available.
+
+| Health-insurance stage | Current IRDAI timeline |
+|---|---:|
+| Cashless pre-authorisation | Within 1 hour |
+| Final cashless/discharge authorisation | Within 3 hours |
+| Non-cashless / reimbursement claim settlement | 15 days |
+| Action on a policyholder complaint | Around 14–15 days |
+
+## What Is the Current IRDAI Health Insurance Claim Settlement Time Limit?
+For health insurance, the applicable turnaround time depends on the type and stage of the claim. IRDAI's current Health Department guidance lists a 1-hour turnaround for cashless pre-authorisation, 3 hours for final cashless authorisation, and 15 days for claims other than cashless.
+
+These timelines should be read together with the policy terms and the facts of the individual claim. A regulatory turnaround time does not mean every claim must be paid; an insurer may still approve, partially approve, query or reject a claim for a valid reason. But the insurer should process and communicate its decision within the applicable framework.
+
+## The 1-Hour Rule for Cashless Pre-Authorisation
+When a network hospital submits a cashless pre-authorisation request, the insurer should decide the request within the applicable 1-hour turnaround time.
+
+If the request remains pending, ask the hospital's insurance or TPA desk for the exact submission time and acknowledgement. Keep screenshots, emails or other records showing when the request was sent. This evidence is useful if you later need to establish that the applicable turnaround time was exceeded.
+
+## The 3-Hour Rule for Final Cashless and Discharge Approval
+For final cashless authorisation, IRDAI's current health-insurance turnaround time is 3 hours. This is particularly important at discharge, when an avoidable approval delay can keep a patient waiting at the hospital even after treatment is complete.
+
+If discharge approval is delayed, ask the hospital to confirm when the final authorisation request was submitted and whether the insurer or TPA has raised a specific query. Preserve those records before escalating the matter.
+
+## The 15-Day Timeline for Reimbursement and Other Non-Cashless Claims
+IRDAI's current Health Department guidance lists 15 days as the turnaround time for claims other than cashless. This includes the category commonly described by policyholders as reimbursement claims.
+
+For a non-cashless health claim, keep evidence showing when the claim and supporting documents were submitted. If the insurer asks for additional information, respond promptly and keep the request and your response in writing. The insurer should not treat document queries or investigation as an unlimited extension of time.
+
+## Why Do Some Sources Still Mention a 30-Day Claim Settlement Rule?
+Older articles, regulatory material and search results may still refer to a 30-day health-insurance claim settlement timeline. That is also why policyholders continue to search for phrases such as "IRDAI 30-day claim settlement rule."
+
+For current health-insurance turnaround times, however, IRDAI's Health Department guidance lists 15 days for claims other than cashless, alongside the 1-hour and 3-hour cashless timelines. When checking a deadline, use the current IRDAI guidance applicable to the type of claim rather than relying only on an older article or search snippet.
+
+## What If the Insurer Asks for More Documents?
+A genuine document request should identify what information is needed to assess the claim. Respond as soon as reasonably possible and preserve the insurer's query, your reply, proof of submission and any acknowledgement.
+
+If the same documents are repeatedly requested, or the requests appear unrelated to the stated claim issue, ask the insurer to clarify in writing why the documents are required. A clear written record can become important in a grievance about delay.
+
+## What Should You Do If Your Insurer Misses the Deadline?
+Start with evidence rather than assumptions. Record the date and time of the cashless request or the date on which the non-cashless claim and documents were submitted. Then obtain the current claim status and any pending requirement from the insurer or TPA in writing.
+
+If the applicable timeline has passed without a satisfactory explanation or decision, raise a formal grievance with the insurer. State the policy number, claim number, submission date, applicable timeline, current status and the resolution you are seeking.
+
+## Step 1: Raise a Complaint With the Insurer
+The insurer's grievance mechanism or Grievance Redressal Officer should normally be your first formal escalation. Submit the complaint in writing and keep the acknowledgement or complaint reference number.
+
+IRDAI's grievance guidance expects insurers to address policyholder complaints within the applicable grievance turnaround period, generally around two weeks. Include the documents needed to establish the delay so the grievance is specific and verifiable.
+
+## Step 2: Escalate Through Bima Bharosa
+If the insurer does not resolve the grievance within the prescribed period or its response is unsatisfactory, you can use IRDAI's Bima Bharosa grievance platform to register and track the complaint.
+
+Bima Bharosa is a grievance registration and monitoring mechanism. It should not be treated as a guarantee that IRDAI will order payment of a disputed claim. The underlying claim still depends on the policy terms, evidence and applicable rules.
+
+## Step 3: Consider the Insurance Ombudsman
+Where the complaint is eligible, the Insurance Ombudsman may provide a further grievance-redressal route. Eligibility, monetary limits, filing timelines, territorial jurisdiction and whether the same dispute is pending before another forum should be checked before filing.
+
+If you intend to approach the Ombudsman, preserve the insurer grievance, the insurer's response or evidence of non-resolution, the policy and claim documents, and the records showing the alleged delay.
+
+## Can You Claim Interest for a Delayed Insurance Claim?
+Depending on the governing policyholder-protection rules and circumstances of the claim, delayed claim payments may attract interest at 2% above the applicable bank rate. Do not rely on a hard-coded bank-rate percentage from an older article because the applicable rate can change.
+
+Whether interest is payable, from what date it is calculated and which rule applies should be checked against the current regulatory framework and the facts of the individual claim.
+
+## What Evidence Should You Preserve?
+For a delayed health-insurance claim, preserve:
+- Policy schedule and policy wording
+- Claim number and claim acknowledgement
+- Cashless pre-authorisation or final-authorisation submission timestamps
+- Reimbursement/non-cashless claim submission acknowledgement
+- Hospital and TPA correspondence
+- Insurer document queries and your replies
+- Emails, SMS messages and complaint references
+- Grievance acknowledgement and insurer response
+- Any written reason given for the delay, partial approval or rejection
+
+A dated record is much more useful in a dispute than a reconstruction made weeks later.
+
+## Frequently Asked Questions
+### What is the IRDAI time limit for health insurance claim settlement?
+IRDAI's current Health Department guidance lists 1 hour for cashless pre-authorisation, 3 hours for final cashless authorisation, and 15 days for claims other than cashless.
+
+### Is the health insurance reimbursement claim settlement time 30 days?
+Current IRDAI Health Department guidance lists 15 days for claims other than cashless. Older sources may still contain references to a 30-day timeline, so check current IRDAI guidance when assessing a live claim.
+
+### How long can a cashless health insurance approval take?
+The current IRDAI turnaround time for cashless pre-authorisation is 1 hour. Final cashless authorisation has a 3-hour turnaround time.
+
+### What should I do if my health insurer delays my claim?
+Keep proof of when the request or claim was submitted, obtain the pending reason in writing and raise a formal grievance with the insurer if the applicable turnaround time has passed. If the grievance remains unresolved or the response is unsatisfactory, consider Bima Bharosa and, where eligible, the Insurance Ombudsman.
+
+### Does missing the timeline mean the insurer must automatically pay the claim?
+No. The regulatory turnaround time governs claim processing and decision-making; claim admissibility still depends on the policy terms and facts. A delay can be challenged, but it does not by itself convert an otherwise inadmissible claim into a payable claim.
+
+### Where should I complain first about a delayed health insurance claim?
+Start with the insurer's grievance mechanism or Grievance Redressal Officer. Keep the written complaint and acknowledgement. Further escalation may be available through Bima Bharosa and the Insurance Ombudsman, depending on the circumstances.`
+};
+
 const posts = rawBlogsData.posts
   .filter((post) => post.slug !== DUPLICATE_CLAIM_REJECTION_SLUG)
-  .map((post) =>
-    post.slug === claimRejectionGuide.slug ? claimRejectionGuide : post
-  );
+  .map((post) => {
+    if (post.slug === claimRejectionGuide.slug) return claimRejectionGuide;
+    if (post.slug === irdaiHealthClaimTimelines.slug) return irdaiHealthClaimTimelines;
+    return post;
+  });
 
 const blogsData = { ...rawBlogsData, posts };
 
