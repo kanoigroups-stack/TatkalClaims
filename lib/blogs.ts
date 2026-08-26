@@ -1,248 +1,176 @@
-import rawBlogsData from "@/data/blogs.json";
+import blogsBase from "@/lib/blogs-base";
 
-const DUPLICATE_CLAIM_REJECTION_SLUG =
-  "what-to-do-if-insurance-claim-is-rejected-complete-guide";
-
-const claimRejectionGuide = {
-  slug: "claim-rejection-guide",
-  title: "Insurance Claim Rejected? What to Do Next – Complete Guide for India",
+const misSellingGuide = {
+  slug: "mis-selling-guide",
+  title: "Mis-Sold an Insurance Policy? What to Do & How to Complain in India",
   excerpt:
-    "If your insurance claim has been rejected, learn what to do next: understand the rejection, collect evidence, complain to the insurer, use Bima Bharosa, approach the Insurance Ombudsman, and consider further remedies.",
-  category: "Claim Rejection",
+    "Mis-sold an insurance policy in India? Learn how to identify insurance mis-selling, collect evidence, complain to the insurer, escalate through Bima Bharosa and seek further remedies.",
+  category: "Mis-selling",
   readTime: "12 min read",
   author: "Ankit L Kanoi, Founder",
   date: "2026-08-26",
   image:
     "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=400&fit=crop",
-  content: `An insurance claim rejection does not always mean the matter is over. The right response depends on why the insurer rejected the claim, what your policy actually says, the evidence available, and whether the insurer followed the applicable grievance process.
+  content: `If you were sold an insurance policy based on misleading promises — for example, you were told it was a fixed deposit, promised benefits that do not match the policy, told you only had to pay premiums for a few years when the policy requires more, or important conditions were not properly explained — you may be dealing with insurance mis-selling.
 
-If your insurance claim is rejected, start by getting the rejection reason in writing, compare it with your policy terms, collect the complete claim record, and raise a written grievance with the insurer. If the response is delayed or unsatisfactory, you can use IRDAI's Bima Bharosa grievance platform and, where your complaint is eligible, approach the Insurance Ombudsman. Other legal remedies may also be available depending on the facts.
+If you believe your insurance policy was mis-sold, don't start by making a general allegation against the agent or insurer. Start by collecting evidence. Get your policy document, proposal form, benefit illustration, premium receipts and any emails, WhatsApp messages, brochures, recordings or other material showing what you were told when the policy was sold. Then compare those representations with what the policy actually provides.
 
-## What Should You Do Immediately After an Insurance Claim Is Rejected?
-- Get the insurer's rejection or repudiation letter in writing.
-- Identify the exact policy clause, exclusion, disclosure issue, document deficiency, or other reason relied on by the insurer.
-- Do not rely only on a phone call or verbal explanation; preserve written records.
-- Collect your policy schedule, wording, proposal form, claim form, bills, reports, correspondence, and any other evidence relevant to the rejection.
-- Prepare a factual written response explaining why you believe the rejection should be reconsidered.
-- Submit a grievance to the insurer's Grievance Redressal Officer and keep the acknowledgement or complaint number.
-- Escalate through the appropriate grievance mechanism if the insurer does not resolve the complaint satisfactorily.
+If there is a material difference, make a written mis-selling complaint to the insurer explaining exactly what was represented, what the policy actually says, and what resolution you are seeking.
 
-## First, Find Out Why Your Insurance Claim Was Rejected
-A strong appeal starts with the insurer's stated reason. Common disputes include alleged non-disclosure or misrepresentation, policy exclusions, waiting periods, policy lapse, late intimation, missing documents, questions about pre-existing conditions, treatment or expense exclusions, alleged fraud, and disagreements about whether the loss falls within the policy cover.
+## Was Your Insurance Policy Mis-Sold? Quick Checklist
+Possible warning signs include:
+- You were told an insurance policy was a fixed deposit or bank investment.
+- You were promised a guaranteed return that isn't reflected in the policy documents.
+- You were told premiums only needed to be paid for 2 or 3 years, but the policy has a longer premium-paying term.
+- The maturity value or benefits were materially different from what the salesperson represented.
+- Important exclusions, charges, surrender conditions or risks were not properly explained.
+- Your income, occupation, health information or financial details were entered incorrectly without your knowledge.
+- You were pressured into buying insurance to obtain a loan, locker, investment or another banking service.
+- You were told an insurance product was mandatory when it was not.
+- You were asked to sign blank or incomplete forms.
+- The policy you received is materially different from the product you understood you were purchasing.
 
-Do not assume that every rejection is automatically wrong. Some rejections are supported by clear policy terms. Others may depend on disputed facts, incomplete records, an incorrect interpretation of the policy, or whether the reason cited by the insurer is actually relevant to the claim.
+None of these automatically proves mis-selling. The evidence and circumstances surrounding the sale matter.
 
-## Is the Insurance Company's Rejection Valid?
-Check the rejection letter against the actual policy wording rather than only the insurer's summary. Ask four questions:
-- Which exact clause is the insurer relying on?
-- Does that clause apply to the facts of your claim?
-- Does the insurer have evidence supporting the reason for rejection?
-- Do you have documents or facts that contradict the insurer's conclusion?
+## What Is Insurance Mis-Selling?
+Insurance mis-selling generally refers to situations where an insurance product is sold through misleading representations, material information is concealed or incorrectly presented, or the policy sold is materially different from what the customer was led to believe.
 
-For disclosure-related disputes, review the proposal form and what was actually asked and answered when the policy was purchased. For health claims, compare medical records and policy definitions carefully. For motor claims, examine the surveyor's findings, policy exclusions, cause of loss, and supporting repair or accident records. For life claims, review the proposal, medical disclosures, claim investigation, and the stated basis of repudiation.
+A disappointing investment return by itself does not necessarily mean a policy was mis-sold. The important question is: what were you told when you agreed to buy the policy, and how does that compare with the actual contract?
 
-## Documents You Need to Challenge a Rejected Claim
-The exact documents depend on the type of insurance, but a useful claim-rejection file usually includes:
+For example, there is an important difference between "I expected this policy to earn more money" and "The salesperson represented this as a five-year fixed deposit with guaranteed maturity proceeds, but the document I received is a long-term life insurance policy with materially different benefits and surrender conditions." The second situation raises a much clearer mis-selling issue.
+
+## Common Examples of Insurance Mis-Selling in India
+### Insurance Sold as a Fixed Deposit
+One of the most common complaints involves an insurance product being presented as an FD, savings scheme or similar investment. If this happened, collect anything showing how the product was described to you, including messages, emails, handwritten calculations, brochures, bank correspondence, recordings where lawfully available, benefit illustrations, payment instructions and witnesses who were present during the sale.
+
+### Wrong Premium-Paying Term
+Another common dispute arises when a customer says, "I was told I only had to pay for three years," but the policy requires premiums for substantially longer. Compare the representation with the policy schedule and benefit illustration. If you have written or electronic evidence of the shorter period being promised, preserve it.
+
+### Misleading Return or Maturity Promises
+If specific returns or maturity amounts were represented, compare those statements with the insurer's official benefit illustration and policy documentation. Do not rely solely on your memory if documentary evidence is available.
+
+### Important Policy Conditions Were Not Explained
+A customer may discover later that the policy contains surrender conditions, exclusions, charges, waiting periods or other limitations that were materially different from what was represented during the sale. Non-disclosure alone does not automatically establish a successful complaint; the nature of the information, representations made, documentation and circumstances of the sale all matter.
+
+## What Should You Do Immediately After Discovering Mis-Selling?
+1. Do not destroy or alter documents.
+2. Download or save relevant messages and emails.
+3. Obtain the complete policy document.
+4. Obtain the proposal form if available.
+5. Find the benefit illustration or sales illustration.
+6. Collect premium-payment records.
+7. Write down what happened while you still remember the details.
+8. Identify who sold the policy, where and approximately when.
+9. Compare what was represented with the actual policy.
+10. Prepare a factual written complaint.
+
+A chronological account is much more persuasive than simply saying, "The agent cheated me." Explain exactly what was said, what you relied upon, what you subsequently discovered and what evidence supports your version.
+
+## Evidence That Can Help Prove Insurance Mis-Selling
+Useful records may include:
 - Policy schedule and complete policy wording
-- Proposal form and declarations, if available
-- Premium receipts and renewal records
-- Claim form and claim acknowledgement
-- Rejection or repudiation letter
-- Emails, letters, SMS messages, complaint numbers, and other insurer correspondence
-- Medical records, discharge summaries, diagnostic reports, and hospital bills for health claims
-- FIR, photographs, repair estimates, survey reports, driving documents, and related records for motor claims
-- Death certificate, medical records, nomination documents, and investigation correspondence for life claims
-- Any evidence that directly addresses the insurer's stated reason for rejection
+- Proposal form
+- Benefit illustration
+- Premium receipts and bank statements
+- Sales brochures
+- Emails, SMS and WhatsApp conversations
+- Call recordings where legally obtained and available
+- Welcome-call records
+- Medical or financial declarations
+- Written calculations provided during the sale
+- Complaints previously made to the bank, agent or insurer
+- Witnesses present during the sale
 
-Keep copies of everything you submit and record the date and method of submission.
+Also examine the proposal form carefully. If information appearing in the proposal was not supplied by you, or differs materially from what you disclosed, identify those discrepancies specifically in your complaint.
 
-## How to Appeal a Rejected Insurance Claim
-The most effective appeal is usually specific rather than emotional. Quote the rejection reason, identify the relevant policy language, explain the facts in chronological order, attach supporting evidence, and state clearly what resolution you are asking for.
+## Can You Cancel a Mis-Sold Policy During the Free-Look Period?
+If you recently received the policy, check whether you are still within the applicable free-look period. Current IRDAI product guidance provides a 30-day free-look period from receipt of the policy document for applicable individual policies, subject to the relevant rules and product terms.
 
-### Step 1: File a Grievance With the Insurance Company
-Approach the insurer's Grievance Redressal Officer or designated grievance channel first. IRDAI's Bima Bharosa guidance says complaints should first be raised with the insurance company, supported by the necessary documents and acknowledged in writing. IRDAI's published grievance guidance states that the insurer should resolve the complaint within 15 days of receipt.
+The precise refund calculation can include permitted deductions, so the free-look mechanism should not simply be described as an unconditional full refund. If you are still within the applicable free-look period and do not want the policy, acting promptly is important.
 
-Your grievance should include the policy number, claim number, rejection date, rejection reason, the policy clauses relevant to your case, supporting documents, and the remedy you want.
+## What If the Free-Look Period Has Already Expired?
+Expiry of the free-look period does not by itself determine whether the original sale involved misrepresentation or mis-selling. But it also does not mean you automatically have a right to cancel the policy years later.
 
-### Step 2: Escalate Through IRDAI's Bima Bharosa Grievance Platform
-If the insurer does not resolve the grievance within the prescribed period or you are dissatisfied with the response, IRDAI provides the Bima Bharosa platform for registering and monitoring insurance grievances. A complaint registered through Bima Bharosa flows to the insurer's system as well as IRDAI's repository and can be tracked using the generated token number.
+Identify what exactly you were promised, who made the promise, when it was made, what the policy actually provides, when you discovered the difference, why the discrepancy was not identified earlier and what evidence supports your version. The longer the period since purchase, the more important contemporaneous evidence may become.
 
-Bima Bharosa is a grievance and monitoring mechanism; it should not be described as a guarantee that IRDAI will order payment of a disputed claim.
+## How to File an Insurance Mis-Selling Complaint
+### Step 1: Complain to the Insurance Company
+Start with the insurer's grievance mechanism or Grievance Redressal Officer. Your complaint should clearly contain your name, policy number, date of purchase, identity of the salesperson or intermediary where known, what was represented to you, what the policy actually provides, when you discovered the discrepancy, supporting evidence, previous correspondence and the resolution you are seeking.
+
+Submit the complaint in writing and keep the acknowledgement or reference number. IRDAI's current grievance guidance says an insurance company should resolve a policyholder complaint within the applicable grievance turnaround period, generally 15 days from receipt.
+
+### Step 2: Escalate Through IRDAI's Bima Bharosa
+If the insurer does not resolve your grievance within the prescribed period or you are dissatisfied with its response, IRDAI provides the Bima Bharosa grievance platform. A complaint registered through Bima Bharosa flows to the insurer's system as well as IRDAI's repository and can be tracked using the generated token number.
+
+Bima Bharosa is a grievance-registration, tracking and regulatory-monitoring mechanism. Filing there does not automatically establish that mis-selling occurred or guarantee cancellation or refund of a policy.
 
 ### Step 3: Consider the Insurance Ombudsman
-The Insurance Ombudsman provides a cost-effective grievance redressal mechanism for eligible insurance complaints. Eligibility, monetary limits, timing requirements, jurisdiction, and whether the same dispute is pending elsewhere should be checked before filing.
+Depending on the nature of your complaint and eligibility requirements, the Insurance Ombudsman may provide another grievance-redressal route. Before filing, check the current Ombudsman rules regarding eligibility, jurisdiction, monetary limits, timelines and whether another proceeding involving the same dispute affects eligibility.
 
-IRDAI's Bima Bharosa guidance states that if a complaint is not attended to within the applicable period or the insurer's resolution is unsatisfactory, the policyholder may approach the Insurance Ombudsman in accordance with the Insurance Ombudsman Rules and procedures.
+## What If a Bank Mis-Sold the Insurance Policy?
+Bank-linked insurance mis-selling deserves particular attention because customers may believe they are purchasing a bank deposit or investment rather than an insurance product.
 
-### Step 4: Consider Consumer or Other Legal Remedies Where Appropriate
-Depending on the facts, claim value, type of dispute, limitation periods, and proceedings already taken, a policyholder may have remedies outside the insurer/IRDAI/Ombudsman grievance process. These can include proceedings before the appropriate consumer commission or other legal forums.
+Write down exactly what happened. Identify the bank branch, employee if known, transaction date, amount, policy issued and representations made. Preserve both the banking records and insurance records. Depending on the facts, it may also be appropriate to complain to the bank in addition to the insurer.
 
-Because jurisdiction and procedure depend on the individual case and current law, do not choose a forum only from a generic online checklist. For a significant or complex claim, obtain case-specific professional advice before starting proceedings.
+## What If You Were Told the Policy Had Guaranteed Returns?
+First determine what was actually guaranteed. Insurance products can contain guaranteed and non-guaranteed components depending on the product. Therefore, do not assume that use of the word "guaranteed" itself proves wrongdoing.
 
-## What If a Health Insurance Claim Is Rejected?
-Health claim disputes commonly involve pre-existing disease allegations, waiting periods, exclusions, non-disclosure, medical necessity, room-rent or treatment restrictions, documentation, and disagreements about whether the treatment is covered.
+Compare what the salesperson promised with what the insurer's official benefit illustration and policy documents state. If you were given handwritten or electronic projections, preserve them.
 
-Start by comparing the rejection letter with the policy definitions and exclusions, then review the proposal form, medical records, discharge summary, bills, and insurer queries. If the insurer alleges non-disclosure, identify exactly what information it says should have been disclosed and whether that information was asked for and available when the policy was purchased.
+## What If the Agent Filled the Proposal Form?
+Obtain a copy and read it carefully. Look for information concerning income, occupation, existing insurance, medical history, nominee information, contact details, financial circumstances and answers to declarations.
 
-## What If a Life Insurance Claim Is Rejected?
-Life claim repudiations may involve alleged non-disclosure, medical history, occupation, income, policy status, or investigation findings. Obtain the written repudiation basis and review it against the proposal form, policy records, medical evidence, premium history, and any investigation material made available to you.
+If information is incorrect, identify exactly which answers you dispute and what information you say you actually supplied. Do not simply state that the form was filled by the agent; explain the specific discrepancy and provide supporting evidence where possible.
 
-## What If a Motor Insurance Claim Is Rejected?
-Motor claim disputes can involve policy exclusions, driving licence issues, vehicle use, delay in intimation, survey findings, modifications, cause of damage, or allegations that the loss is consequential rather than accidental. Preserve photographs, FIR or police records where applicable, repair estimates, survey communications, driving and registration documents, and all correspondence with the insurer.
+## Can You Get Your Premium Back After Insurance Mis-Selling?
+Possibly, depending on the facts and the remedy available — but a refund should never be presented as guaranteed.
 
-## Common Mistakes to Avoid After Claim Rejection
-- Accepting a verbal rejection without obtaining the written reason
-- Appealing without reading the policy clause relied on by the insurer
-- Sending incomplete or inconsistent documents
-- Making allegations that are not supported by evidence
-- Missing grievance, Ombudsman, limitation, or other procedural timelines
-- Starting multiple proceedings without checking whether one forum affects eligibility in another
-- Assuming that filing a complaint guarantees that the claim will be paid
+The outcome can depend on evidence of misrepresentation, policy terms, documentation signed during the sale, benefit illustrations, welcome or verification calls, how long the policy has existed, premiums already paid, benefits already received, insurer investigation, applicable regulatory provisions and the forum hearing the dispute.
 
-## How Tatkal Claims Can Help With a Rejected Insurance Claim
-Tatkal Claims assists policyholders with insurance claim disputes by reviewing the rejection reason, policy wording, claim documents, correspondence, and available escalation options. The objective is to identify the real dispute, organise the evidence, and choose an appropriate next step rather than sending a generic complaint.
+Be cautious of anyone who promises that simply filing an IRDAI or Ombudsman complaint guarantees recovery of all premiums.
 
-Every case depends on its own policy terms and facts, and no outcome can be guaranteed. If your claim has been rejected and you want an assessment of the documents and rejection reason, you can request a free case evaluation through Tatkal Claims.
+## Common Mistakes When Filing a Mis-Selling Complaint
+Avoid weakening a potentially valid complaint by making broad allegations without explaining the misrepresentation, deleting messages or emails, failing to obtain the proposal form, ignoring the benefit illustration, making claims you cannot support, giving inconsistent versions of what happened, waiting unnecessarily before complaining, filing multiple proceedings without understanding how they interact, or assuming every disappointing policy is necessarily mis-sold.
 
-## Frequently Asked Questions
-### Can an insurance claim rejection be challenged?
-Yes. A rejection can be challenged when there is a factual, contractual, procedural, or evidentiary basis to dispute the insurer's decision. Whether the challenge succeeds depends on the policy wording and facts of the individual claim.
+A strong complaint is specific, chronological and evidence-based.
 
-### Where should I complain first after an insurance claim is rejected?
-Start with the insurer's grievance mechanism or Grievance Redressal Officer. Keep the complaint acknowledgement and all supporting documents. If the response is delayed or unsatisfactory, consider the escalation channels available through Bima Bharosa and, if eligible, the Insurance Ombudsman.
+## How Tatkal Claims Can Help With Insurance Mis-Selling
+Tatkal Claims assists policyholders in reviewing insurance disputes, including alleged mis-selling. The first objective should be to determine what actually happened — not to promise a refund before reviewing the documents.
 
-### Does IRDAI directly settle rejected insurance claims?
-IRDAI provides and oversees the grievance framework and Bima Bharosa enables complaints to be registered, monitored, and escalated for regulatory review where appropriate. It should not be treated as a promise that IRDAI will adjudicate every contractual dispute or order a claim payment.
+A review may include the policy documents, proposal form, benefit illustration, sales communications, bank records, premium history, grievance correspondence, insurer's response and evidence supporting the alleged representation. Based on those records, the issue can be identified more precisely and appropriate grievance options considered.
 
-### Is the Insurance Ombudsman free?
-The Insurance Ombudsman is intended as a cost-effective grievance redressal mechanism for eligible complaints. Check the current Council for Insurance Ombudsmen procedure for eligibility, monetary limits, filing requirements, and applicable timelines before filing.
-
-### What is the most important document after a claim rejection?
-The written rejection or repudiation letter is usually the starting point because it identifies the insurer's stated reason. The policy wording and evidence relevant to that reason are then essential for assessing whether the decision can be challenged.
-
-### Should I immediately go to court after a claim rejection?
-Not necessarily. Many disputes should first go through the insurer's grievance process, and other grievance mechanisms may be available. The appropriate route depends on the claim, urgency, value, evidence, limitation periods, and whether another proceeding is already pending.`
-};
-
-const irdaiHealthClaimTimelines = {
-  slug: "irdai-30-day-claim-settlement-rule-health-insurance-rights",
-  title: "IRDAI Claim Settlement Time Limit: 1 Hour, 3 Hours & 15 Days",
-  excerpt:
-    "Know the current IRDAI health insurance claim settlement timelines: 1 hour for cashless pre-authorisation, 3 hours for discharge approval, and 15 days for non-cashless claims, plus what to do if your insurer delays.",
-  category: "News",
-  readTime: "7 min read",
-  author: "Ankit L Kanoi, Founder",
-  date: "2026-07-15",
-  image:
-    "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=400&fit=crop",
-  content: `IRDAI's current health insurance claim timelines are straightforward: insurers must decide cashless pre-authorisation requests within 1 hour, provide final cashless authorisation within 3 hours of receiving the hospital's discharge request, and settle claims other than cashless within 15 days.
-
-If your insurer exceeds the applicable timeline, preserve the submission timestamps, claim documents and correspondence and first raise a written grievance with the insurer. If the issue remains unresolved, further grievance channels including IRDAI's Bima Bharosa and, where eligible, the Insurance Ombudsman may be available.
-
-| Health-insurance stage | Current IRDAI timeline |
-|---|---:|
-| Cashless pre-authorisation | Within 1 hour |
-| Final cashless/discharge authorisation | Within 3 hours |
-| Non-cashless / reimbursement claim settlement | 15 days |
-| Action on a policyholder complaint | Around 14–15 days |
-
-## What Is the Current IRDAI Health Insurance Claim Settlement Time Limit?
-For health insurance, the applicable turnaround time depends on the type and stage of the claim. IRDAI's current Health Department guidance lists a 1-hour turnaround for cashless pre-authorisation, 3 hours for final cashless authorisation, and 15 days for claims other than cashless.
-
-These timelines should be read together with the policy terms and the facts of the individual claim. A regulatory turnaround time does not mean every claim must be paid; an insurer may still approve, partially approve, query or reject a claim for a valid reason. But the insurer should process and communicate its decision within the applicable framework.
-
-## The 1-Hour Rule for Cashless Pre-Authorisation
-When a network hospital submits a cashless pre-authorisation request, the insurer should decide the request within the applicable 1-hour turnaround time.
-
-If the request remains pending, ask the hospital's insurance or TPA desk for the exact submission time and acknowledgement. Keep screenshots, emails or other records showing when the request was sent. This evidence is useful if you later need to establish that the applicable turnaround time was exceeded.
-
-## The 3-Hour Rule for Final Cashless and Discharge Approval
-For final cashless authorisation, IRDAI's current health-insurance turnaround time is 3 hours. This is particularly important at discharge, when an avoidable approval delay can keep a patient waiting at the hospital even after treatment is complete.
-
-If discharge approval is delayed, ask the hospital to confirm when the final authorisation request was submitted and whether the insurer or TPA has raised a specific query. Preserve those records before escalating the matter.
-
-## The 15-Day Timeline for Reimbursement and Other Non-Cashless Claims
-IRDAI's current Health Department guidance lists 15 days as the turnaround time for claims other than cashless. This includes the category commonly described by policyholders as reimbursement claims.
-
-For a non-cashless health claim, keep evidence showing when the claim and supporting documents were submitted. If the insurer asks for additional information, respond promptly and keep the request and your response in writing. The insurer should not treat document queries or investigation as an unlimited extension of time.
-
-## Why Do Some Sources Still Mention a 30-Day Claim Settlement Rule?
-Older articles, regulatory material and search results may still refer to a 30-day health-insurance claim settlement timeline. That is also why policyholders continue to search for phrases such as "IRDAI 30-day claim settlement rule."
-
-For current health-insurance turnaround times, however, IRDAI's Health Department guidance lists 15 days for claims other than cashless, alongside the 1-hour and 3-hour cashless timelines. When checking a deadline, use the current IRDAI guidance applicable to the type of claim rather than relying only on an older article or search snippet.
-
-## What If the Insurer Asks for More Documents?
-A genuine document request should identify what information is needed to assess the claim. Respond as soon as reasonably possible and preserve the insurer's query, your reply, proof of submission and any acknowledgement.
-
-If the same documents are repeatedly requested, or the requests appear unrelated to the stated claim issue, ask the insurer to clarify in writing why the documents are required. A clear written record can become important in a grievance about delay.
-
-## What Should You Do If Your Insurer Misses the Deadline?
-Start with evidence rather than assumptions. Record the date and time of the cashless request or the date on which the non-cashless claim and documents were submitted. Then obtain the current claim status and any pending requirement from the insurer or TPA in writing.
-
-If the applicable timeline has passed without a satisfactory explanation or decision, raise a formal grievance with the insurer. State the policy number, claim number, submission date, applicable timeline, current status and the resolution you are seeking.
-
-## Step 1: Raise a Complaint With the Insurer
-The insurer's grievance mechanism or Grievance Redressal Officer should normally be your first formal escalation. Submit the complaint in writing and keep the acknowledgement or complaint reference number.
-
-IRDAI's grievance guidance expects insurers to address policyholder complaints within the applicable grievance turnaround period, generally around two weeks. Include the documents needed to establish the delay so the grievance is specific and verifiable.
-
-## Step 2: Escalate Through Bima Bharosa
-If the insurer does not resolve the grievance within the prescribed period or its response is unsatisfactory, you can use IRDAI's Bima Bharosa grievance platform to register and track the complaint.
-
-Bima Bharosa is a grievance registration and monitoring mechanism. It should not be treated as a guarantee that IRDAI will order payment of a disputed claim. The underlying claim still depends on the policy terms, evidence and applicable rules.
-
-## Step 3: Consider the Insurance Ombudsman
-Where the complaint is eligible, the Insurance Ombudsman may provide a further grievance-redressal route. Eligibility, monetary limits, filing timelines, territorial jurisdiction and whether the same dispute is pending before another forum should be checked before filing.
-
-If you intend to approach the Ombudsman, preserve the insurer grievance, the insurer's response or evidence of non-resolution, the policy and claim documents, and the records showing the alleged delay.
-
-## Can You Claim Interest for a Delayed Insurance Claim?
-Depending on the governing policyholder-protection rules and circumstances of the claim, delayed claim payments may attract interest at 2% above the applicable bank rate. Do not rely on a hard-coded bank-rate percentage from an older article because the applicable rate can change.
-
-Whether interest is payable, from what date it is calculated and which rule applies should be checked against the current regulatory framework and the facts of the individual claim.
-
-## What Evidence Should You Preserve?
-For a delayed health-insurance claim, preserve:
-- Policy schedule and policy wording
-- Claim number and claim acknowledgement
-- Cashless pre-authorisation or final-authorisation submission timestamps
-- Reimbursement/non-cashless claim submission acknowledgement
-- Hospital and TPA correspondence
-- Insurer document queries and your replies
-- Emails, SMS messages and complaint references
-- Grievance acknowledgement and insurer response
-- Any written reason given for the delay, partial approval or rejection
-
-A dated record is much more useful in a dispute than a reconstruction made weeks later.
+No particular result can be guaranteed because every mis-selling complaint depends on its facts, evidence, policy documents and applicable rules.
 
 ## Frequently Asked Questions
-### What is the IRDAI time limit for health insurance claim settlement?
-IRDAI's current Health Department guidance lists 1 hour for cashless pre-authorisation, 3 hours for final cashless authorisation, and 15 days for claims other than cashless.
+### What should I do if I was mis-sold an insurance policy?
+Collect the policy, proposal form, benefit illustration, payment records and evidence of what was represented during the sale. Compare those representations with the actual policy and make a written grievance to the insurer identifying the discrepancies.
 
-### Is the health insurance reimbursement claim settlement time 30 days?
-Current IRDAI Health Department guidance lists 15 days for claims other than cashless. Older sources may still contain references to a 30-day timeline, so check current IRDAI guidance when assessing a live claim.
+### Is insurance mis-selling illegal in India?
+Insurance sales and conduct are subject to regulatory requirements, and misleading or improper sales practices can raise regulatory and other legal issues. Whether a particular transaction amounts to actionable mis-selling depends on the facts and evidence.
 
-### How long can a cashless health insurance approval take?
-The current IRDAI turnaround time for cashless pre-authorisation is 1 hour. Final cashless authorisation has a 3-hour turnaround time.
+### Can I complain to IRDAI about insurance mis-selling?
+Yes. IRDAI's Bima Bharosa system allows policyholders to register and track grievances involving insurers and relevant insurance entities. Policyholders should first approach the insurer's grievance mechanism.
 
-### What should I do if my health insurer delays my claim?
-Keep proof of when the request or claim was submitted, obtain the pending reason in writing and raise a formal grievance with the insurer if the applicable turnaround time has passed. If the grievance remains unresolved or the response is unsatisfactory, consider Bima Bharosa and, where eligible, the Insurance Ombudsman.
+### How long does an insurer have to respond to my complaint?
+IRDAI's current grievance guidance generally provides a 15-day period for the insurer to address a policyholder complaint.
 
-### Does missing the timeline mean the insurer must automatically pay the claim?
-No. The regulatory turnaround time governs claim processing and decision-making; claim admissibility still depends on the policy terms and facts. A delay can be challenged, but it does not by itself convert an otherwise inadmissible claim into a payable claim.
+### Can I cancel a policy after the free-look period?
+Expiry of the free-look period does not itself determine whether the policy was mis-sold. However, cancellation or refund after that period is not automatic. The available remedy depends on the circumstances, policy, evidence and applicable rules.
 
-### Where should I complain first about a delayed health insurance claim?
-Start with the insurer's grievance mechanism or Grievance Redressal Officer. Keep the written complaint and acknowledgement. Further escalation may be available through Bima Bharosa and the Insurance Ombudsman, depending on the circumstances.`
+### What if my bank told me the insurance policy was an FD?
+Preserve the bank and insurance records and any evidence showing how the product was represented. Make a detailed complaint identifying the branch, salesperson where known, transaction, representation made and how it differs from the policy actually issued.
+
+### What evidence is best for proving insurance mis-selling?
+Contemporaneous evidence is particularly useful: emails, messages, benefit illustrations, proposal forms, sales documents, payment records and other material showing what was represented when the policy was purchased.
+
+### Will the Insurance Ombudsman order a refund?
+Not automatically. The Ombudsman considers eligible complaints under the applicable rules and on their facts and evidence. Do not treat filing a complaint as a guaranteed refund.`
 };
 
-const posts = rawBlogsData.posts
-  .filter((post) => post.slug !== DUPLICATE_CLAIM_REJECTION_SLUG)
-  .map((post) => {
-    if (post.slug === claimRejectionGuide.slug) return claimRejectionGuide;
-    if (post.slug === irdaiHealthClaimTimelines.slug) return irdaiHealthClaimTimelines;
-    return post;
-  });
+const posts = blogsBase.posts.map((post) =>
+  post.slug === misSellingGuide.slug ? misSellingGuide : post
+);
 
-const blogsData = { ...rawBlogsData, posts };
+const blogsData = { ...blogsBase, posts };
 
 export default blogsData;
