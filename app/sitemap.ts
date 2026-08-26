@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import blogsData from "@/data/blogs.json";
+import blogsData from "@/lib/blogs";
 import { getAllServiceSlugs } from "@/lib/services";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Blog posts from data/blogs.json
+  // Blog posts from the consolidated blog dataset
   const blogPages = blogsData.posts.map((post: { slug: string; date: string }) => ({
     url: `${baseUrl}/blog/${post.slug}/`,
     lastModified: new Date(post.date),
