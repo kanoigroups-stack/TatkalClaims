@@ -166,7 +166,7 @@ export default function LeadCaptureForm() {
     <div className="bg-white rounded-2xl p-6 md:p-8 shadow-float border border-slate-100 relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-800 via-primary-600 to-accent-500" />
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-slate-900 mb-1">Get Free Case Evaluation</h3>
+        <h2 className="text-xl font-bold text-slate-900 mb-1">Get Free Case Evaluation</h2>
         <p className="text-sm text-slate-500">Fill in your details and our experts will reach out</p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
