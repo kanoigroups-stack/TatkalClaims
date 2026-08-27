@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "sourceMainCommit": "b98fa7cdb493686d6102dfdf54692bfd0562a7ec",
+  "summary": {
+    "legacyArticles": 57,
+    "sanityArticles": 57,
+    "archiveOrderParity": true,
+    "metadataParity": true,
+    "structuredDataParity": true,
+    "sitemapParity": true,
+    "redirectParity": true,
+    "rendererCoverage": true,
+    "protectedArticles": 3,
+    "knownWarnings": 3,
+    "manualReviewRequired": 3,
+    "automatedGate": "PASS"
+  },
+  "observedPortableText": {
+    "types": [
+      "articleTable",
+      "block"
+    ],
+    "styles": [
+      "blockquote",
+      "h2",
+      "h3",
+      "hr",
+      "normal"
+    ],
+    "listItems": [
+      "bullet",
+      "number"
+    ],
+    "marks": [
+      "link",
+      "strong"
+    ],
+    "missingTypes": [],
+    "missingStyles": [],
+    "missingListItems": [],
+    "missingMarks": []
+  },
+  "knownWarnings": [
+    {
+      "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+      "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
+      "line": 21,
+      "message": "Markdown markers inside table cells were preserved literally."
+    },
+    {
+      "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+      "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
+      "line": 33,
+      "message": "Markdown markers inside table cells were preserved literally."
+    },
+    {
+      "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+      "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
+      "line": 27,
+      "message": "Markdown markers inside table cells were preserved literally."
+    }
+  ],
+  "representativeReview": [
+    {
+      "slug": "claim-rejection-guide",
+      "title": "Insurance Claim Rejected? What to Do Next – Complete Guide for India",
+      "date": "2026-08-26",
+      "category": "Claim Rejection",
+      "legacyOrder": 0,
+      "bodyBlocks": 78,
+      "tables": 0,
+      "warnings": [],
+      "stagingPath": "/cms-staging/blog/claim-rejection-guide/",
+      "publicPath": "/blog/claim-rejection-guide/"
+    },
+    {
+      "slug": "mis-selling-guide",
+      "title": "Mis-Sold an Insurance Policy? What to Do & How to Complain in India",
+      "date": "2026-08-26",
+      "category": "Mis-selling",
+      "legacyOrder": 2,
+      "bodyBlocks": 108,
+      "tables": 0,
+      "warnings": [],
+      "stagingPath": "/cms-staging/blog/mis-selling-guide/",
+      "publicPath": "/blog/mis-selling-guide/"
+    },
+    {
+      "slug": "irdai-30-day-claim-settlement-rule-health-insurance-rights",
+      "title": "IRDAI Claim Settlement Time Limit: 1 Hour, 3 Hours & 15 Days",
+      "date": "2026-07-15",
+      "category": "News",
+      "legacyOrder": 15,
+      "bodyBlocks": 61,
+      "tables": 1,
+      "warnings": [],
+      "stagingPath": "/cms-staging/blog/irdai-30-day-claim-settlement-rule-health-insurance-rights/",
+      "publicPath": "/blog/irdai-30-day-claim-settlement-rule-health-insurance-rights/"
+    },
+    {
+      "slug": "borrowed-car-accident-insurance-claim-delhi-hc",
+      "title": "Borrowed a Car and Died in Crash? Family Can't Seek Owner's Insurance Claim, Says Delhi HC",
+      "date": "2026-08-27",
+      "category": "Claim Rejection",
+      "legacyOrder": 56,
+      "bodyBlocks": 54,
+      "tables": 0,
+      "warnings": [],
+      "stagingPath": "/cms-staging/blog/borrowed-car-accident-insurance-claim-delhi-hc/",
+      "publicPath": "/blog/borrowed-car-accident-insurance-claim-delhi-hc/"
+    },
+    {
+      "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
+      "title": "E20 Ethanol-Blended Petrol & Insurance Claims: What the Government Clarification Really Means for Your Policy",
+      "date": "2026-06-25",
+      "category": "News",
+      "legacyOrder": 4,
+      "bodyBlocks": 54,
+      "tables": 1,
+      "warnings": [
+        {
+          "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+          "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
+          "line": 21,
+          "message": "Markdown markers inside table cells were preserved literally."
+        }
+      ],
+      "stagingPath": "/cms-staging/blog/e20-ethanol-petrol-insurance-claim-rejection-india/",
+      "publicPath": "/blog/e20-ethanol-petrol-insurance-claim-rejection-india/"
+    },
+    {
+      "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
+      "title": "Manipal Cigna Denied a Brain Tumour Surgery Claim, Then Changed Its Excuse. A Delhi Man Fought Back and Won Rs 2.33 Lakh.",
+      "date": "2026-08-08",
+      "category": "Claim Rejection",
+      "legacyOrder": 36,
+      "bodyBlocks": 62,
+      "tables": 1,
+      "warnings": [
+        {
+          "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+          "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
+          "line": 33,
+          "message": "Markdown markers inside table cells were preserved literally."
+        }
+      ],
+      "stagingPath": "/cms-staging/blog/manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh/",
+      "publicPath": "/blog/manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh/"
+    },
+    {
+      "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
+      "title": "His Car Was Stolen After He Parked It Under a Tree. The Insurer Said 'You Didn't Take Care.' He Won Rs 2.26 Lakh.",
+      "date": "2026-08-09",
+      "category": "Claim Rejection",
+      "legacyOrder": 37,
+      "bodyBlocks": 48,
+      "tables": 1,
+      "warnings": [
+        {
+          "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+          "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
+          "line": 27,
+          "message": "Markdown markers inside table cells were preserved literally."
+        }
+      ],
+      "stagingPath": "/cms-staging/blog/car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh/",
+      "publicPath": "/blog/car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh/"
+    },
+    {
+      "slug": "best-online-car-insurance-companies-india-claim-settlement-ratio",
+      "title": "Best Online Car Insurance Companies in India with a Good Claim Settlement Ratio",
+      "date": "2026-08-22",
+      "category": "News",
+      "legacyOrder": 52,
+      "bodyBlocks": 54,
+      "tables": 1,
+      "warnings": [],
+      "stagingPath": "/cms-staging/blog/best-online-car-insurance-companies-india-claim-settlement-ratio/",
+      "publicPath": "/blog/best-online-car-insurance-companies-india-claim-settlement-ratio/"
+    }
+  ]
+}
