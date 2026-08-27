@@ -11,6 +11,8 @@ export const portableText = defineType({
         { title: "Normal", value: "normal" },
         { title: "H2", value: "h2" },
         { title: "H3", value: "h3" },
+        { title: "Blockquote", value: "blockquote" },
+        { title: "Divider", value: "hr" },
       ],
       lists: [
         { title: "Bullet", value: "bullet" },
