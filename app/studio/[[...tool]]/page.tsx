@@ -1,8 +1,9 @@
-"use client";
-
-import { NextStudio } from "next-sanity/studio";
-import config from "@/sanity.config";
 import { isSanityConfigured } from "@/sanity/env";
+import { Studio } from "./Studio";
+
+export const dynamic = "force-static";
+
+export { metadata, viewport } from "next-sanity/studio";
 
 export default function StudioPage() {
   if (!isSanityConfigured) {
@@ -21,9 +22,5 @@ export default function StudioPage() {
     );
   }
 
-  return (
-    <div className="fixed inset-0 z-[100] bg-white">
-      <NextStudio config={config} />
-    </div>
-  );
+  return <Studio />;
 }
