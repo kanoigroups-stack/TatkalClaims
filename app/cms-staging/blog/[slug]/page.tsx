@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
+import ReadingProgress from "@/components/blog/ReadingProgress";
 import PortableArticleBody from "@/components/blog/PortableArticleBody";
 import { getAllPosts, getPostBySlug } from "@/lib/content";
 import {
@@ -45,6 +46,8 @@ export default async function CmsStagingArticlePage({
 
   return (
     <main className="min-h-screen bg-white pt-20">
+      <ReadingProgress />
+
       <div className="border-b border-amber-300 bg-amber-50">
         <div className="container-main px-4 py-3 text-sm text-amber-950">
           <strong>Phase 6 staging:</strong> Sanity body inside the current production
