@@ -70,7 +70,7 @@ export default async function CmsStagingBlogPage() {
                     <span className="flex items-center gap-1 text-xs text-slate-500">
                       <User className="w-3 h-3" aria-hidden="true" />{post.author}
                     </span>
-                    <span className="text-primary-700 font-semibold text-sm">Review →</span>
+                    <span className="text-primary-700 font-semibold text-sm group-hover:gap-2 gap-1 transition-all inline-flex items-center">Read More <span aria-hidden="true">→</span></span>
                   </div>
                 </div>
               </Link>
