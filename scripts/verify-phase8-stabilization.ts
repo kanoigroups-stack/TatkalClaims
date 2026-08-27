@@ -17,6 +17,7 @@ async function main() {
     imageSchema,
     envExample,
     middleware,
+    sitemap,
   ] = await Promise.all([
     readFile("lib/content/sanity-preview.ts", "utf8"),
     readFile("lib/content/sanity.ts", "utf8"),
@@ -27,6 +28,7 @@ async function main() {
     readFile("sanity/schemaTypes/objects/articleImage.ts", "utf8"),
     readFile(".env.example", "utf8"),
     readFile("middleware.ts", "utf8"),
+    readFile("app/sitemap.ts", "utf8"),
   ]);
 
   assert(
@@ -111,6 +113,11 @@ async function main() {
       middleware.includes("CMS_PREVIEW_PASSWORD") &&
       middleware.includes('"WWW-Authenticate"'),
     "CMS draft preview route is not protected by authentication"
+  );
+
+  assert(
+    sitemap.includes(".filter((post) => !post.seo?.noIndex)"),
+    "Noindex articles are not excluded from the sitemap"
   );
 
   const mock: ContentPost = {
@@ -212,6 +219,7 @@ async function main() {
       usableImageValidationPresent: true,
       seoDefaultParity: true,
       seoOverridesActive: true,
+      noIndexSitemapExclusion: true,
       legacyRollbackFilesPresent: rollbackFiles.length,
       exactStaticChecks: true,
     },
