@@ -51,6 +51,7 @@ async function main() {
 
   const ids = documents.map((doc) => doc._id);
   assert(new Set(ids).size === ids.length, "Duplicate document IDs in migration NDJSON");
+  assert(ids.every((id) => !id.includes(".")), "Refusing import: public migration document IDs must not contain periods");
 
   for (const document of documents) {
     assert(document._id, "Document missing _id");

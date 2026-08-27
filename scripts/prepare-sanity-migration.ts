@@ -91,7 +91,7 @@ function documentId(prefix: string, value: string) {
   const readable = slugify(value);
   const suffix = hash(value).slice(0, 10);
   const maxReadable = Math.max(1, 110 - prefix.length - suffix.length);
-  return prefix + "." + readable.slice(0, maxReadable) + "." + suffix;
+  return prefix + "-" + readable.slice(0, maxReadable) + "-" + suffix;
 }
 
 function parseReadTime(value: string, slug: string) {
@@ -584,6 +584,7 @@ async function main() {
   const documents = [...authorDocs, ...categoryDocs, ...articleDocs];
   const ids = documents.map((doc) => String(doc._id));
   assert(new Set(ids).size === ids.length, "Generated Sanity document ID collision");
+  assert(ids.every((id) => !id.includes(".")), "Generated Sanity document IDs must remain on the public root path (no periods)");
 
   const validRefs = new Set(
     [...authorDocs, ...categoryDocs].map((doc) => String(doc._id))
@@ -600,7 +601,7 @@ async function main() {
   }, {});
 
   const report = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     source: {
       baselineExport: BASELINE_EXPORT,
       baselineManifest: BASELINE_MANIFEST,
@@ -608,6 +609,8 @@ async function main() {
     },
     policy: {
       articleCountGate: EXPECTED_ARTICLES,
+      documentIds:
+        "Deterministic root-path IDs use hyphens only; periods are forbidden because Sanity treats sub-path IDs as private even in public datasets.",
       contentType:
         'Legacy category "News" maps to "news"; every other legacy category maps to the neutral "explainer" placeholder pending editorial review.',
       topics:
