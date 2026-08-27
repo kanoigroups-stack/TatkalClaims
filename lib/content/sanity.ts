@@ -1,5 +1,9 @@
 import { createClient } from "next-sanity";
-import { apiVersion, dataset, projectId } from "@/sanity/env";
+import {
+  apiVersion,
+  productionDataset,
+  projectId,
+} from "@/sanity/env";
 import type { ArticleImage, ContentPost } from "./types";
 
 type SanityImageProjection = {
@@ -32,11 +36,13 @@ type SanityPostProjection = {
   relatedSlugs?: string[];
 };
 
+const PUBLIC_REVALIDATE_SECONDS = 60;
+
 const client = createClient({
   projectId,
-  dataset,
+  dataset: productionDataset,
   apiVersion,
-  useCdn: false,
+  useCdn: true,
 });
 
 const articleProjection = [
@@ -133,7 +139,11 @@ export async function getSanityPosts(): Promise<ContentPost[]> {
   const query =
     '*[_type == "article"] | order(coalesce(legacyOrder, 999999) asc, publishedAt desc) ' +
     articleProjection;
-  const posts = await client.fetch<SanityPostProjection[]>(query);
+  const posts = await client.fetch<SanityPostProjection[]>(
+    query,
+    {},
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+  );
   return posts.map(mapSanityPost);
 }
 
@@ -142,6 +152,10 @@ export async function getSanityPostBySlug(
 ): Promise<ContentPost | null> {
   const query =
     '*[_type == "article" && slug.current == $slug][0] ' + articleProjection;
-  const post = await client.fetch<SanityPostProjection | null>(query, { slug });
+  const post = await client.fetch<SanityPostProjection | null>(
+    query,
+    { slug },
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+  );
   return post ? mapSanityPost(post) : null;
 }
