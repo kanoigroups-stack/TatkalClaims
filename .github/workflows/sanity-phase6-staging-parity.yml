@@ -73,6 +73,23 @@ jobs:
       - name: Verify Phase 6 staging, SEO and renderer parity
         run: npx --yes tsx@4.19.2 scripts/verify-phase6-staging-parity.ts
 
+      - name: Verify reviewed table warnings and cutover blockers
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-staging-parity.ts
+
+      - name: Enforce consolidated Phase 6 gate
+        run: |
+          node - <<'NODE'
+          const fs = require('fs')
+          const report = JSON.parse(fs.readFileSync('migration/sanity/staging-parity-report.json', 'utf8'))
+          if (!report.parity.seoDataExact) throw new Error('SEO/data parity failed')
+          if (!report.renderer.rendererCoverageExact) throw new Error('Renderer coverage failed')
+          if (!report.parserReview.tableWarningReviewPassed) throw new Error('Reviewed table warning gate failed')
+          if (!report.ordering.archiveOrderParity) throw new Error('Archive order parity failed')
+          if (report.ordering.moreArticlesMismatchCount !== 0) throw new Error('More Articles parity failed')
+          if (!report.cutover.ready) throw new Error('Phase 6 cutover gate remains blocked: ' + report.cutover.blockers.join(', '))
+          console.log(JSON.stringify({cutoverReady: true, blockers: []}, null, 2))
+          NODE
+
       - name: Build Next.js application
         run: npm run build
 
@@ -80,7 +97,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add migration/sanity/dry-run.ndjson migration/sanity/report.json migration/phase6/staging-parity-report.json
+          git add migration/sanity/dry-run.ndjson migration/sanity/report.json migration/phase6/staging-parity-report.json migration/sanity/staging-parity-report.json
           if git diff --cached --quiet; then
             echo "Phase 6 outputs are unchanged."
           else
