@@ -93,6 +93,16 @@ jobs:
       - name: Build Next.js application
         run: npm run build
 
+      - name: Upload consolidated Phase 6 reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase6-staging-parity
+          path: |
+            migration/phase6/staging-parity-report.json
+            migration/sanity/staging-parity-report.json
+            migration/sanity/report.json
+          if-no-files-found: error
+
       - name: Commit deterministic Phase 6 outputs
         run: |
           git config user.name "github-actions[bot]"
