@@ -1,0 +1,55 @@
+name: Freeze blog migration baseline
+
+on:
+  push:
+    branches:
+      - cms/blog-baseline
+    paths:
+      - data/blogs.json
+      - lib/blogs-base.ts
+      - lib/blogs.ts
+      - next.config.js
+      - scripts/export-blog-baseline.ts
+      - .github/workflows/blog-baseline.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out baseline branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate and validate effective blog baseline
+        env:
+          BASELINE_SOURCE_COMMIT: 864436218168dc67293a9be210ee3c0b072afc10
+        run: npx --yes tsx@4.19.2 scripts/export-blog-baseline.ts
+
+      - name: Commit immutable baseline export
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add migration/baseline/effective-blogs.json migration/baseline/manifest.json
+          if git diff --cached --quiet; then
+            echo "Baseline export is unchanged."
+          else
+            git commit -m "cms: freeze effective blog migration baseline"
+            git push origin HEAD:cms/blog-baseline
+          fi
+
+      - name: Upload baseline artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: blog-migration-baseline
+          path: migration/baseline/
+          if-no-files-found: error
