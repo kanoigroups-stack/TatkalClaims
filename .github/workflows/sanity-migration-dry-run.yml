@@ -31,6 +31,12 @@ jobs:
       - name: Prepare and validate Sanity migration dry run
         run: npx --yes tsx@4.19.2 scripts/prepare-sanity-migration.ts
 
+      - name: Install application dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build Next.js application
+        run: npm run build
+
       - name: Commit deterministic dry-run output
         run: |
           git config user.name "github-actions[bot]"
