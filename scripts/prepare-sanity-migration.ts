@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";\n\n// Deterministic migration parser: source changes must fail baseline hash validation.
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+
+// Deterministic migration parser: source changes must fail baseline hash validation.
 
 type LegacyPost = {
   slug: string;
