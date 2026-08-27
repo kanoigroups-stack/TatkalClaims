@@ -50,8 +50,8 @@ export default async function CmsStagingArticlePage({
 
       <div className="border-b border-amber-300 bg-amber-50">
         <div className="container-main px-4 py-3 text-sm text-amber-950">
-          <strong>Phase 6 staging:</strong> Sanity body inside the current production
-          article shell. Noindex. Target public URL: {getPublicArticlePath(post)}
+          <strong>CMS published parity:</strong> published Sanity production data inside
+          the current article shell. Noindex. Target public URL: {getPublicArticlePath(post)}
         </div>
       </div>
 
