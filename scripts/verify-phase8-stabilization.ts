@@ -75,6 +75,11 @@ async function main() {
     "CMS preview routes are not using authenticated draft readers"
   );
   assert(
+    previewArticle.includes("generateMetadata") &&
+      previewArticle.includes("buildArticleMetadata(post, { noIndex: true })"),
+    "Draft article preview does not render protected draft SEO metadata"
+  );
+  assert(
     !previewIndex.includes('getAllPosts("sanity")'),
     "CMS preview index still uses the published-only adapter"
   );
@@ -214,6 +219,7 @@ async function main() {
       previewUsesAuthenticatedDraftPerspective: true,
       previewTokenServerOnly: true,
       previewRouteAuthenticationRequired: true,
+      draftSeoMetadataPreview: true,
       publicSanityCachingPreserved: true,
       migratedSlugLockPresent: true,
       usableImageValidationPresent: true,
