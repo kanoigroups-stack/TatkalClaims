@@ -1,10 +1,12 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
-import ReadingProgress from "@/components/blog/ReadingProgress";
 import PortableArticleBody from "@/components/blog/PortableArticleBody";
 import { getAllPosts, getPostBySlug } from "@/lib/content";
+import {
+  buildArticleMetadata,
+  getPublicArticlePath,
+} from "@/lib/content/seo";
 import { formatDate } from "@/utils/date";
 
 export const dynamic = "force-dynamic";
@@ -13,9 +15,8 @@ export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
-}): Promise<Metadata> {
+}) {
   const post = await getPostBySlug(params.slug, "sanity");
-
   if (!post) {
     return {
       title: "Article Not Found",
@@ -23,39 +24,7 @@ export async function generateMetadata({
     };
   }
 
-  return {
-    title: post.title,
-    description: post.excerpt,
-    alternates: {
-      canonical: "/blog/" + post.slug + "/",
-    },
-    robots: {
-      index: false,
-      follow: false,
-      nocache: true,
-    },
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      images: [{
-        url: post.image.url,
-        width: 800,
-        height: 400,
-        alt: post.title,
-      }],
-      type: "article",
-      publishedTime: post.date,
-      modifiedTime: post.date,
-      authors: [post.author],
-      tags: [post.category, "insurance", "claim dispute", "india"],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
-      images: [post.image.url],
-    },
-  };
+  return buildArticleMetadata(post, { noIndex: true });
 }
 
 export default async function CmsStagingArticlePage({
@@ -68,9 +37,7 @@ export default async function CmsStagingArticlePage({
     getAllPosts("sanity"),
   ]);
 
-  if (!post) {
-    notFound();
-  }
+  if (!post) notFound();
 
   const relatedPosts = posts
     .filter((candidate) => candidate.slug !== post.slug)
@@ -78,11 +45,10 @@ export default async function CmsStagingArticlePage({
 
   return (
     <main className="min-h-screen bg-white pt-20">
-      <ReadingProgress />
-
       <div className="border-b border-amber-300 bg-amber-50">
         <div className="container-main px-4 py-3 text-sm text-amber-950">
-          <strong>CMS staging parity:</strong> noindex · Sanity migration dataset · target URL /blog/{post.slug}/
+          <strong>Phase 6 staging:</strong> Sanity body inside the current production
+          article shell. Noindex. Target public URL: {getPublicArticlePath(post)}
         </div>
       </div>
 
@@ -149,7 +115,7 @@ export default async function CmsStagingArticlePage({
             {relatedPosts.map((relatedPost) => (
               <Link
                 key={relatedPost.slug}
-                href={"/cms-staging/blog/" + relatedPost.slug + "/"}
+                href={`/cms-staging/blog/${relatedPost.slug}/`}
                 className="group p-4 bg-slate-50 rounded-xl hover:bg-primary-50 transition-colors border border-slate-100"
               >
                 <span className="text-xs font-semibold text-primary-700">{relatedPost.category}</span>

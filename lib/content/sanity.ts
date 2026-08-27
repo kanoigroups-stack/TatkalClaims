@@ -24,6 +24,7 @@ type SanityPostProjection = {
   publishedAt: string;
   updatedAt?: string;
   readingTimeMinutes?: number;
+  legacyOrder?: number;
   body?: unknown[];
   featured?: boolean;
   cornerstone?: boolean;
@@ -66,6 +67,7 @@ const articleProjection = [
   "  publishedAt,",
   "  updatedAt,",
   "  readingTimeMinutes,",
+  "  legacyOrder,",
   "  body,",
   "  featured,",
   "  cornerstone,",
@@ -114,6 +116,7 @@ function mapSanityPost(post: SanityPostProjection): ContentPost {
       ? String(post.readingTimeMinutes) + " min read"
       : "Read time unavailable",
     readingTimeMinutes: post.readingTimeMinutes,
+    legacyOrder: post.legacyOrder,
     image,
     socialImage: normalizeImage(post.socialImage, post.title),
     contentType: post.contentType,
@@ -127,7 +130,9 @@ function mapSanityPost(post: SanityPostProjection): ContentPost {
 }
 
 export async function getSanityPosts(): Promise<ContentPost[]> {
-  const query = '*[_type == "article"] | order(publishedAt desc) ' + articleProjection;
+  const query =
+    '*[_type == "article"] | order(coalesce(legacyOrder, 999999) asc, publishedAt desc) ' +
+    articleProjection;
   const posts = await client.fetch<SanityPostProjection[]>(query);
   return posts.map(mapSanityPost);
 }

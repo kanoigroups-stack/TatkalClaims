@@ -1,0 +1,89 @@
+name: Phase 6 Sanity staging parity
+
+on:
+  push:
+    branches:
+      - cms/sanity-staging-parity
+    paths:
+      - sanity/schemaTypes/documents/article.ts
+      - scripts/prepare-sanity-migration.ts
+      - scripts/verify-phase6-staging-parity.ts
+      - lib/content/**
+      - components/blog/PortableArticleBody.tsx
+      - app/cms-staging/**
+      - .github/workflows/sanity-phase6-staging-parity.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sanity-phase6-staging-parity
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288
+      NEXT_PUBLIC_SANITY_DATASET: migration
+      NEXT_PUBLIC_SANITY_API_VERSION: 2026-08-27
+      SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
+
+    steps:
+      - name: Check out parity branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Regenerate migration payload with legacy order
+        run: npx --yes tsx@4.19.2 scripts/prepare-sanity-migration.ts
+
+      - name: Validate migration-order payload
+        run: |
+          node - <<'NODE'
+          const fs = require('fs')
+          const docs = fs.readFileSync('migration/sanity/dry-run.ndjson','utf8')
+            .trim().split(/\r?\n/).filter(Boolean).map(JSON.parse)
+          const articles = docs.filter(d => d._type === 'article')
+          if (docs.length !== 65) throw new Error('Expected 65 migration documents')
+          if (articles.length !== 57) throw new Error('Expected 57 migration articles')
+          articles.forEach((article, index) => {
+            if (article.legacyOrder !== index) {
+              throw new Error('legacyOrder mismatch at ' + article.slug.current)
+            }
+          })
+          console.log(JSON.stringify({documents: docs.length, articles: articles.length, legacyOrder: '0..56'}, null, 2))
+          NODE
+
+      - name: Update Sanity migration dataset only
+        run: npx --yes tsx@4.19.2 scripts/import-sanity-migration.ts --confirm-import
+
+      - name: Re-verify exact migration dataset parity
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-migration.ts
+
+      - name: Verify Phase 6 staging, SEO and renderer parity
+        run: npx --yes tsx@4.19.2 scripts/verify-phase6-staging-parity.ts
+
+      - name: Build Next.js application
+        run: npm run build
+
+      - name: Commit deterministic Phase 6 outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add migration/sanity/dry-run.ndjson migration/sanity/report.json migration/phase6/staging-parity-report.json
+          if git diff --cached --quiet; then
+            echo "Phase 6 outputs are unchanged."
+          else
+            git commit -m "cms: record Phase 6 staging parity"
+            git push origin HEAD:cms/sanity-staging-parity
+          fi

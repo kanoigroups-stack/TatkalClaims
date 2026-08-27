@@ -526,7 +526,7 @@ async function main() {
   const warnings: Warning[] = [];
   const articleReports: any[] = [];
 
-  const articleDocs = posts.map((post) => {
+  const articleDocs = posts.map((post, legacyOrder) => {
     const parsed = parseBody(post);
     warnings.push(...parsed.warnings);
 
@@ -554,6 +554,7 @@ async function main() {
       },
       publishedAt: publishedAt(post.date, post.slug),
       readingTimeMinutes: parseReadTime(post.readTime, post.slug),
+      legacyOrder,
       body: parsed.blocks,
       featured: false,
       cornerstone: false,
@@ -567,6 +568,7 @@ async function main() {
       sourceContentSha256: hash(post.content),
       bodySha256: hash(JSON.stringify(document.body)),
       contentType: document.contentType,
+      legacyOrder,
       ...parsed.stats,
       warnings: parsed.warnings,
     });
@@ -623,6 +625,8 @@ async function main() {
         'Migrated articles default to "none" so migration cannot accidentally introduce ads.',
       relatedArticles:
         "No related-article relationships are inferred during migration.",
+      legacyOrder:
+        "Articles preserve the current effective legacy sequence using a zero-based internal migration order. This is a parity field, not an editorial ranking.",
       parsing:
         "H2, H3, blockquotes, dividers, bullets, numbered lists, inline strong, Markdown links and valid pipe tables are parsed. Unsupported or malformed syntax is preserved and reported.",
     },
