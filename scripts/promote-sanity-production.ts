@@ -124,18 +124,36 @@ async function main() {
     )
   );
 
+  const beforeUserDocs = beforeDocs.filter(
+    (doc) => !doc._id.startsWith("_.") && !doc._type.startsWith("system.")
+  );
+  const beforeSystemDocs = beforeDocs.filter(
+    (doc) => doc._id.startsWith("_.") || doc._type.startsWith("system.")
+  );
+
   const beforeManagedSet = new Set(beforeManagedIds);
   const beforeExpectedDocuments =
     beforeManagedIds.length === REQUIRED_DOCUMENTS &&
     expectedIds.every((id) => beforeManagedSet.has(id)) &&
     beforeManagedIds.every((id) => expectedIdSet.has(id));
 
+  console.log(
+    JSON.stringify(
+      {
+        productionUserDocuments: beforeUserDocs.length,
+        productionSystemDocuments: beforeSystemDocs.length,
+      },
+      null,
+      2
+    )
+  );
+
   let existingExactMatch = false;
 
-  if (beforeAllCount !== 0) {
+  if (beforeUserDocs.length !== 0) {
     assert(
-      beforeAllCount === REQUIRED_DOCUMENTS && beforeExpectedDocuments,
-      "Production dataset is not empty and is not the exact managed 65-document payload. Refusing overwrite."
+      beforeUserDocs.length === REQUIRED_DOCUMENTS && beforeExpectedDocuments,
+      "Production dataset contains user documents that are not the exact managed 65-document payload. Refusing overwrite."
     );
 
     const actual = await client.getDocuments(expectedIds);
@@ -189,11 +207,18 @@ async function main() {
     }
   }
 
-  const [actualIds, articleSlugs, totalCount] = await Promise.all([
+  const [actualIds, articleSlugs, finalDocs] = await Promise.all([
     client.fetch<string[]>('*[_type in $types]._id', { types: ALLOWED_TYPES }),
     client.fetch<string[]>('*[_type == "article"].slug.current'),
-    client.fetch<number>("count(*)"),
+    client.fetch<Array<{_id:string;_type:string}>>('*[]{_id,_type}'),
   ]);
+
+  const finalUserDocs = finalDocs.filter(
+    (doc) => !doc._id.startsWith("_.") && !doc._type.startsWith("system.")
+  );
+  const finalSystemDocs = finalDocs.filter(
+    (doc) => doc._id.startsWith("_.") || doc._type.startsWith("system.")
+  );
 
   const actualIdSet = new Set(actualIds);
   const unexpectedIds = actualIds.filter((id) => !expectedIdSet.has(id));
@@ -224,7 +249,7 @@ async function main() {
   ]);
 
   const exactMatch =
-    totalCount === REQUIRED_DOCUMENTS &&
+    finalUserDocs.length === REQUIRED_DOCUMENTS &&
     actualIds.length === REQUIRED_DOCUMENTS &&
     articleSlugs.length === REQUIRED_ARTICLES &&
     missingIds.length === 0 &&
@@ -244,12 +269,16 @@ async function main() {
     dataset,
     preflight: {
       beforeAllCount,
+      beforeUserDocuments: beforeUserDocs.length,
+      beforeSystemDocuments: beforeSystemDocs.length,
       beforeManagedDocuments: beforeManagedIds.length,
       existingExactMatch,
     },
     summary: {
       expectedDocuments: REQUIRED_DOCUMENTS,
       actualDocuments: actualIds.length,
+      userDocuments: finalUserDocs.length,
+      systemDocumentsIgnored: finalSystemDocs.length,
       expectedArticles: REQUIRED_ARTICLES,
       actualArticles: articleSlugs.length,
       anonymousDocuments,
