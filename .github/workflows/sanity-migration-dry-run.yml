@@ -1,0 +1,51 @@
+name: Sanity migration dry run
+
+on:
+  push:
+    branches:
+      - cms/sanity-migration-tooling
+    paths:
+      - migration/baseline/**
+      - scripts/prepare-sanity-migration.ts
+      - scripts/import-sanity-migration.ts
+      - .github/workflows/sanity-migration-dry-run.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out migration tooling branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Prepare and validate Sanity migration dry run
+        run: npx --yes tsx@4.19.2 scripts/prepare-sanity-migration.ts
+
+      - name: Commit deterministic dry-run output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add migration/sanity/dry-run.ndjson migration/sanity/report.json
+          if git diff --cached --quiet; then
+            echo "Migration dry-run output is unchanged."
+          else
+            git commit -m "cms: generate Sanity migration dry run"
+            git push origin HEAD:cms/sanity-migration-tooling
+          fi
+
+      - name: Upload dry-run artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-migration-dry-run
+          path: migration/sanity/
+          if-no-files-found: error
