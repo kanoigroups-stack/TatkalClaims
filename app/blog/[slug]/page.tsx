@@ -1,194 +1,66 @@
 import { notFound } from "next/navigation";
 import { Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
-import blogsData from "@/lib/blogs";
 import ReadingProgress from "@/components/blog/ReadingProgress";
+import LegacyArticleBody from "@/components/blog/LegacyArticleBody";
+import PortableArticleBody from "@/components/blog/PortableArticleBody";
+import { getAllPosts, getPostBySlug } from "@/lib/content";
+import { getLiveContentSource } from "@/lib/content/live";
+import {
+  buildArticleMetadata,
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+} from "@/lib/content/seo";
 import { formatDate } from "@/utils/date";
 
-export function generateStaticParams() {
-  return blogsData.posts.map((post) => ({
+export const revalidate = 60;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const posts = await getAllPosts(getLiveContentSource());
+
+  return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = blogsData.posts.find((p) => p.slug === params.slug);
-  if (!post) return { 
-    title: "Article Not Found",
-    robots: { index: false, follow: false },
-  };
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const post = await getPostBySlug(params.slug, getLiveContentSource());
 
-  return {
-    title: post.title,
-    description: post.excerpt,
-    alternates: {
-      canonical: `/blog/${post.slug}/`,
-    },
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      images: [{
-        url: post.image,
-        width: 800,
-        height: 400,
-        alt: post.title,
-      }],
-      type: "article",
-      publishedTime: post.date,
-      modifiedTime: post.date,
-      authors: [post.author],
-      tags: [post.category, "insurance", "claim dispute", "india"],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
-      images: [post.image],
-    },
-  };
-}
-
-function renderContent(content: string) {
-  const lines = content.split("\n");
-  const elements: JSX.Element[] = [];
-  let key = 0;
-  let inList = false;
-  let listItems: JSX.Element[] = [];
-
-  const flushList = () => {
-    if (inList && listItems.length > 0) {
-      elements.push(
-        <ul key={`list-${key++}`} className="list-disc list-inside space-y-2 mb-4 text-slate-700">
-          {listItems}
-        </ul>
-      );
-      listItems = [];
-      inList = false;
-    }
-  };
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
-
-    if (!line) {
-      flushList();
-      continue;
-    }
-
-    if (line.startsWith("## ")) {
-      flushList();
-      elements.push(
-        <h2 key={key++} className="text-2xl font-bold text-slate-900 mt-10 mb-4 scroll-mt-24">
-          {line.replace("## ", "")}
-        </h2>
-      );
-    }
-    else if (line.startsWith("### ")) {
-      flushList();
-      elements.push(
-        <h3 key={key++} className="text-xl font-semibold text-slate-900 mt-8 mb-3 scroll-mt-24">
-          {line.replace("### ", "")}
-        </h3>
-      );
-    }
-    else if (line.startsWith("- ")) {
-      inList = true;
-      listItems.push(
-        <li key={key++} className="leading-relaxed ml-2">
-          {line.replace("- ", "")}
-        </li>
-      );
-    }
-    else if (/^\*\*(.+)\*\*$/.test(line)) {
-      flushList();
-      const text = line.replace(/^\*\*|\*\*$/g, "");
-      elements.push(
-        <p key={key++} className="text-slate-900 font-bold leading-relaxed mb-4">
-          {text}
-        </p>
-      );
-    }
-    else {
-      flushList();
-      elements.push(
-        <p key={key++} className="text-slate-700 leading-relaxed mb-4">
-          {line}
-        </p>
-      );
-    }
+  if (!post) {
+    return {
+      title: "Article Not Found",
+      robots: { index: false, follow: false },
+    };
   }
 
-  flushList();
-  return elements;
+  return buildArticleMetadata(post);
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = blogsData.posts.find((p) => p.slug === params.slug);
+export default async function BlogPostPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const source = getLiveContentSource();
+  const [post, posts] = await Promise.all([
+    getPostBySlug(params.slug, source),
+    getAllPosts(source),
+  ]);
 
   if (!post) {
     notFound();
   }
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://tatkalclaims.com/",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Knowledge Center",
-        item: "https://tatkalclaims.com/blog/",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: post.title,
-        item: `https://tatkalclaims.com/blog/${post.slug}/`,
-      },
-    ],
-  };
-
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.excerpt,
-    image: {
-      "@type": "ImageObject",
-      url: post.image,
-      width: 800,
-      height: 400,
-    },
-    author: {
-      "@type": "Organization",
-      name: post.author,
-      url: "https://tatkalclaims.com",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Tatkal Claims",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://tatkalclaims.com/logo.png",
-        width: 512,
-        height: 512,
-      },
-    },
-    datePublished: post.date,
-    dateModified: post.date,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `https://tatkalclaims.com/blog/${post.slug}/`,
-    },
-    keywords: [post.category, "insurance claim", "dispute resolution", "india"],
-    articleSection: post.category,
-  };
+  const breadcrumbSchema = buildBreadcrumbSchema(post);
+  const articleSchema = buildArticleSchema(post);
+  const relatedPosts = posts
+    .filter((candidate) => candidate.slug !== post.slug)
+    .slice(0, 2);
 
   return (
     <main className="min-h-screen bg-white pt-20">
@@ -218,10 +90,10 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       </div>
 
       <div className="relative h-64 md:h-96 overflow-hidden bg-slate-900">
-        <img 
-          src={post.image} 
-          alt={post.title} 
-          className="w-full h-full object-cover" 
+        <img
+          src={post.image.url}
+          alt={post.image.alt}
+          className="w-full h-full object-cover"
           loading="eager"
           fetchPriority="high"
         />
@@ -247,7 +119,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         <article className="max-w-3xl mx-auto">
           <div className="prose prose-lg max-w-none">
-            {renderContent(post.content)}
+            {post.bodyFormat === "portableText" ? (
+              <PortableArticleBody value={post.body} />
+            ) : (
+              <LegacyArticleBody content={post.legacyContent || ""} />
+            )}
           </div>
         </article>
 
@@ -263,21 +139,18 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="max-w-3xl mx-auto mt-16">
           <h3 className="text-xl font-bold text-slate-900 mb-6">More Articles</h3>
           <div className="grid sm:grid-cols-2 gap-4">
-            {blogsData.posts
-              .filter((p) => p.slug !== post.slug)
-              .slice(0, 2)
-              .map((relatedPost) => (
-                <Link
-                  key={relatedPost.slug}
-                  href={`/blog/${relatedPost.slug}/`}
-                  className="group p-4 bg-slate-50 rounded-xl hover:bg-primary-50 transition-colors border border-slate-100"
-                >
-                  <span className="text-xs font-semibold text-primary-700">{relatedPost.category}</span>
-                  <h4 className="text-sm font-bold text-slate-900 mt-1 group-hover:text-primary-700 transition-colors line-clamp-2">
-                    {relatedPost.title}
-                  </h4>
-                </Link>
-              ))}
+            {relatedPosts.map((relatedPost) => (
+              <Link
+                key={relatedPost.slug}
+                href={`/blog/${relatedPost.slug}/`}
+                className="group p-4 bg-slate-50 rounded-xl hover:bg-primary-50 transition-colors border border-slate-100"
+              >
+                <span className="text-xs font-semibold text-primary-700">{relatedPost.category}</span>
+                <h4 className="text-sm font-bold text-slate-900 mt-1 group-hover:text-primary-700 transition-colors line-clamp-2">
+                  {relatedPost.title}
+                </h4>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

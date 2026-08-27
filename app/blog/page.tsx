@@ -1,7 +1,10 @@
-import { ArrowLeft, Clock, User, Calendar } from "lucide-react";
+import { Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
-import blogsData from "@/lib/blogs";
+import { getAllPosts } from "@/lib/content";
+import { getLiveContentSource } from "@/lib/content/live";
 import { formatDate } from "@/utils/date";
+
+export const revalidate = 60;
 
 export const metadata = {
   title: "Knowledge Center",
@@ -17,8 +20,8 @@ export const metadata = {
   },
 };
 
-export default function BlogListPage() {
-  const posts = blogsData.posts;
+export default async function BlogListPage() {
+  const posts = await getAllPosts(getLiveContentSource());
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -36,7 +39,7 @@ export default function BlogListPage() {
         "@type": "Organization",
         name: post.author,
       },
-      image: post.image,
+      image: post.image.url,
     })),
   };
 
@@ -71,8 +74,8 @@ export default function BlogListPage() {
                 <Link href={`/blog/${post.slug}/`} className="block">
                   <div className="relative h-48 overflow-hidden bg-slate-100">
                     <img
-                      src={post.image}
-                      alt={post.title}
+                      src={post.image.url}
+                      alt={post.image.alt}
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
