@@ -10,6 +10,7 @@ on:
       - lib/content/**
       - sanity/**
       - .env.example
+      - middleware.ts
       - scripts/verify-phase8-stabilization.ts
       - scripts/verify-phase7-production-cutover.ts
       - .github/workflows/sanity-phase8-stabilization.yml
