@@ -304,7 +304,12 @@ async function main() {
     .sort();
 
   const migrationReport = JSON.parse(reportText);
-  const warnings = Array.isArray(migrationReport.warnings)
+  const warnings: Array<{
+    code: string;
+    slug: string;
+    line: number;
+    message: string;
+  }> = Array.isArray(migrationReport.warnings)
     ? migrationReport.warnings
     : [];
   const warningSlugs = warnings
@@ -332,7 +337,10 @@ async function main() {
 
   const tableWarningReviewPassed =
     parserWarningsMatchFrozenSet &&
-    tableWarningReview.every((item) => item.safeStrongOnly);
+    tableWarningReview.every(
+      (item: { slug: string; markedCellCount: number; safeStrongOnly: boolean }) =>
+        item.safeStrongOnly
+    );
 
   const protectedSlugsPresent = PROTECTED_SLUGS.every(
     (slug) => legacyBySlug.has(slug) && sanityBySlug.has(slug)
