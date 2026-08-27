@@ -1,0 +1,67 @@
+name: Repair Sanity migration public document IDs
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type exactly: REPAIR_57_PUBLIC_IDS'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanity-migration-public-id-repair
+  cancel-in-progress: false
+
+jobs:
+  repair-and-verify:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288
+      NEXT_PUBLIC_SANITY_DATASET: migration
+      NEXT_PUBLIC_SANITY_API_VERSION: 2026-08-27
+      SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate destructive test-dataset gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.confirmation }}" != "REPAIR_57_PUBLIC_IDS" ]; then
+            echo "Confirmation phrase does not match."
+            exit 1
+          fi
+          if [ -z "${SANITY_WRITE_TOKEN:-}" ]; then
+            echo "SANITY_WRITE_TOKEN is not configured."
+            exit 1
+          fi
+          echo "Repair is restricted to project ah5vm288 / dataset migration."
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Run guarded public-ID repair
+        run: npx --yes tsx@4.19.2 scripts/repair-sanity-public-ids.ts --confirm-public-id-repair
+
+      - name: Verify exact migration parity and anonymous visibility
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-migration.ts
+
+      - name: Upload repair verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-public-id-repair-verification
+          path: |
+            migration/sanity/public-id-repair-verification.json
+            migration/sanity/verification.json
+          if-no-files-found: warn

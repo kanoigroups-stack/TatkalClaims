@@ -1,0 +1,77 @@
+name: Regenerate Sanity public-ID migration payload
+
+on:
+  push:
+    branches:
+      - cms/sanity-public-id-repair
+    paths:
+      - scripts/prepare-sanity-migration.ts
+      - .github/workflows/sanity-public-id-dry-run.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sanity-public-id-dry-run
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repair branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Preserve private-ID rollback payload
+        run: |
+          cp migration/sanity/dry-run.ndjson migration/sanity/private-id-pre-repair.ndjson
+          cp migration/sanity/report.json migration/sanity/private-id-pre-repair-report.json
+
+      - name: Regenerate deterministic root-path payload
+        run: npx --yes tsx@4.19.2 scripts/prepare-sanity-migration.ts
+
+      - name: Validate public document IDs
+        run: |
+          node - <<'NODE'
+          const fs = require('fs')
+          const docs = fs.readFileSync('migration/sanity/dry-run.ndjson', 'utf8').trim().split(/\r?\n/).filter(Boolean).map(JSON.parse)
+          const oldDocs = fs.readFileSync('migration/sanity/private-id-pre-repair.ndjson', 'utf8').trim().split(/\r?\n/).filter(Boolean).map(JSON.parse)
+          if (docs.length !== 65) throw new Error('Expected 65 new documents')
+          if (docs.filter(d => d._type === 'article').length !== 57) throw new Error('Expected 57 new articles')
+          if (docs.some(d => d._id.includes('.'))) throw new Error('New payload contains private sub-path IDs')
+          if (oldDocs.length !== 65 || oldDocs.some(d => !d._id.includes('.'))) throw new Error('Rollback payload is not the expected 65 private-ID documents')
+          const ids = docs.map(d => d._id)
+          if (new Set(ids).size !== 65) throw new Error('Duplicate new document IDs')
+          console.log(JSON.stringify({newDocuments: docs.length,newArticles: 57,privateIdsInNewPayload: 0,rollbackDocuments: oldDocs.length}, null, 2))
+          NODE
+
+      - name: Commit deterministic repair payloads
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add migration/sanity/dry-run.ndjson migration/sanity/report.json migration/sanity/private-id-pre-repair.ndjson migration/sanity/private-id-pre-repair-report.json
+          if git diff --cached --quiet; then
+            echo "Public-ID payload is unchanged."
+          else
+            git commit -m "cms: regenerate Sanity migration with public document IDs"
+            git push origin HEAD:cms/sanity-public-id-repair
+          fi
+
+      - name: Upload repair dry-run artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-public-id-dry-run
+          path: |
+            migration/sanity/dry-run.ndjson
+            migration/sanity/report.json
+            migration/sanity/private-id-pre-repair.ndjson
+            migration/sanity/private-id-pre-repair-report.json
+          if-no-files-found: error

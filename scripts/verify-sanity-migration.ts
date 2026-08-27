@@ -79,6 +79,10 @@ async function main() {
     expectedArticles.length === REQUIRED_ARTICLES,
     "Dry-run article count changed"
   );
+  assert(
+    expectedDocuments.every((document) => !document._id.includes(".")),
+    "Dry-run contains private Sanity sub-path IDs; public migration IDs must not contain periods"
+  );
 
   const client = createClient({
     projectId,
@@ -138,6 +142,7 @@ async function main() {
     expectedDocuments.map((document) => document._id)
   );
   const actualIdSet = new Set(actualIds);
+  const privatePathIds = actualIds.filter((id) => id.includes("."));
 
   const unexpectedIds = actualIds.filter((id) => !expectedIdSet.has(id));
   const absentIds = Array.from(expectedIdSet).filter(
@@ -158,8 +163,23 @@ async function main() {
 
   const deprecatedSlugPresent = articleSlugs.includes(DEPRECATED_SLUG);
 
+  const anonymousClient = createClient({
+    projectId,
+    dataset,
+    apiVersion,
+    useCdn: false,
+    perspective: "published",
+  });
+  const [anonymousDocuments, anonymousArticles] = await Promise.all([
+    anonymousClient.fetch<number>(
+      'count(*[_type in $types])',
+      { types: allowedTypes }
+    ),
+    anonymousClient.fetch<number>('count(*[_type == "article"])'),
+  ]);
+
   const report = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     dataset,
     summary: {
       expectedDocuments: REQUIRED_DOCUMENTS,
@@ -172,6 +192,9 @@ async function main() {
       duplicateSlugs: new Set(duplicateSlugs).size,
       missingProtectedSlugs: missingProtectedSlugs.length,
       deprecatedSlugPresent,
+      privatePathIds: privatePathIds.length,
+      anonymousDocuments,
+      anonymousArticles,
       exactMatch:
         actualIds.length === REQUIRED_DOCUMENTS &&
         articleSlugs.length === REQUIRED_ARTICLES &&
@@ -181,6 +204,9 @@ async function main() {
         mismatches.length === 0 &&
         duplicateSlugs.length === 0 &&
         missingProtectedSlugs.length === 0 &&
+        privatePathIds.length === 0 &&
+        anonymousDocuments === REQUIRED_DOCUMENTS &&
+        anonymousArticles === REQUIRED_ARTICLES &&
         !deprecatedSlugPresent,
     },
     missingIds,
@@ -190,6 +216,7 @@ async function main() {
     duplicateSlugs: Array.from(new Set(duplicateSlugs)).sort(),
     missingProtectedSlugs,
     deprecatedSlugPresent,
+    privatePathIds,
   };
 
   await mkdir("migration/sanity", { recursive: true });
