@@ -36,7 +36,7 @@ type MarkDef = {
 type TextBlock = {
   _type: "block";
   _key: string;
-  style: "normal" | "h2" | "h3";
+  style: "normal" | "h2" | "h3" | "blockquote" | "hr";
   markDefs: MarkDef[];
   children: Span[];
   listItem?: "bullet" | "number";
@@ -205,7 +205,7 @@ function textBlock(args: {
   line: number;
   warnings: Warning[];
   seed: string;
-  style?: "normal" | "h2" | "h3";
+  style?: "normal" | "h2" | "h3" | "blockquote" | "hr";
   listItem?: "bullet" | "number";
 }): TextBlock {
   const inline = parseInline(
@@ -400,12 +400,38 @@ function parseBody(post: LegacyPost) {
       continue;
     }
 
+    if (/^>\s?/.test(value)) {
+      blocks.push(
+        textBlock({
+          text: value.replace(/^>\s?/, ""),
+          slug: post.slug,
+          line,
+          style: "blockquote",
+          warnings,
+          seed: post.slug + ":blockquote:" + line,
+        })
+      );
+      continue;
+    }
+
+    if (/^-{3,}$/.test(value)) {
+      blocks.push(
+        textBlock({
+          text: value,
+          slug: post.slug,
+          line,
+          style: "hr",
+          warnings,
+          seed: post.slug + ":hr:" + line,
+        })
+      );
+      continue;
+    }
+
     if (
       /^#\s+/.test(value) ||
       /^####+\s+/.test(value) ||
-      /^>\s?/.test(value) ||
-      /^\x60{3}/.test(value) ||
-      /^-{3,}$/.test(value)
+      /^\x60{3}/.test(value)
     ) {
       warnings.push({
         code: "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
@@ -593,7 +619,7 @@ async function main() {
       relatedArticles:
         "No related-article relationships are inferred during migration.",
       parsing:
-        "H2, H3, bullets, numbered lists, inline strong, Markdown links and valid pipe tables are parsed. Unsupported or malformed syntax is preserved and reported.",
+        "H2, H3, blockquotes, dividers, bullets, numbered lists, inline strong, Markdown links and valid pipe tables are parsed. Unsupported or malformed syntax is preserved and reported.",
     },
     summary: {
       articles: articleDocs.length,
