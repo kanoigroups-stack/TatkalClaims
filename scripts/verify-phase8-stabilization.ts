@@ -16,6 +16,7 @@ async function main() {
     articleSchema,
     imageSchema,
     envExample,
+    middleware,
   ] = await Promise.all([
     readFile("lib/content/sanity-preview.ts", "utf8"),
     readFile("lib/content/sanity.ts", "utf8"),
@@ -25,6 +26,7 @@ async function main() {
     readFile("sanity/schemaTypes/documents/article.ts", "utf8"),
     readFile("sanity/schemaTypes/objects/articleImage.ts", "utf8"),
     readFile(".env.example", "utf8"),
+    readFile("middleware.ts", "utf8"),
   ]);
 
   assert(
@@ -97,6 +99,18 @@ async function main() {
     envExample.includes("SANITY_PREVIEW_TOKEN=") &&
       !envExample.includes("NEXT_PUBLIC_SANITY_PREVIEW_TOKEN"),
     "Preview-token environment example is unsafe"
+  );
+  assert(
+    envExample.includes("CMS_PREVIEW_USERNAME=") &&
+      envExample.includes("CMS_PREVIEW_PASSWORD="),
+    "CMS preview route-auth environment variables are missing"
+  );
+  assert(
+    middleware.includes('matcher: ["/cms-preview/:path*"]') &&
+      middleware.includes("CMS_PREVIEW_USERNAME") &&
+      middleware.includes("CMS_PREVIEW_PASSWORD") &&
+      middleware.includes('"WWW-Authenticate"'),
+    "CMS draft preview route is not protected by authentication"
   );
 
   const mock: ContentPost = {
@@ -192,6 +206,7 @@ async function main() {
       previewUsesProductionDataset: true,
       previewUsesAuthenticatedDraftPerspective: true,
       previewTokenServerOnly: true,
+      previewRouteAuthenticationRequired: true,
       publicSanityCachingPreserved: true,
       migratedSlugLockPresent: true,
       usableImageValidationPresent: true,
