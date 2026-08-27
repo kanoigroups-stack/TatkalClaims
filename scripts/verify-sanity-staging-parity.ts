@@ -262,19 +262,19 @@ async function main() {
     inspectPortableBlocks(post.body, coverage);
   }
 
-  const unsupportedBodyTypes = [...coverage.bodyTypes]
+  const unsupportedBodyTypes = Array.from(coverage.bodyTypes)
     .filter((value) => !SUPPORTED_BODY_TYPES.has(value))
     .sort();
-  const unsupportedStyles = [...coverage.styles]
+  const unsupportedStyles = Array.from(coverage.styles)
     .filter((value) => !SUPPORTED_STYLES.has(value))
     .sort();
-  const unsupportedLists = [...coverage.lists]
+  const unsupportedLists = Array.from(coverage.lists)
     .filter((value) => !SUPPORTED_LISTS.has(value))
     .sort();
-  const unsupportedDecorators = [...coverage.decorators]
+  const unsupportedDecorators = Array.from(coverage.decorators)
     .filter((value) => !SUPPORTED_DECORATORS.has(value))
     .sort();
-  const unsupportedAnnotations = [...coverage.annotations]
+  const unsupportedAnnotations = Array.from(coverage.annotations)
     .filter((value) => !SUPPORTED_ANNOTATIONS.has(value))
     .sort();
 
@@ -354,11 +354,11 @@ async function main() {
       sanityFirstFive: sanityOrder.slice(0, 5),
     },
     renderer: {
-      actualBodyTypes: [...coverage.bodyTypes].sort(),
-      actualStyles: [...coverage.styles].sort(),
-      actualLists: [...coverage.lists].sort(),
-      actualDecorators: [...coverage.decorators].sort(),
-      actualAnnotations: [...coverage.annotations].sort(),
+      actualBodyTypes: Array.from(coverage.bodyTypes).sort(),
+      actualStyles: Array.from(coverage.styles).sort(),
+      actualLists: Array.from(coverage.lists).sort(),
+      actualDecorators: Array.from(coverage.decorators).sort(),
+      actualAnnotations: Array.from(coverage.annotations).sort(),
       unsupportedBodyTypes,
       unsupportedStyles,
       unsupportedLists,
