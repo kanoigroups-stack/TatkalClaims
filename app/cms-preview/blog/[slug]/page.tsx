@@ -3,9 +3,34 @@ import Link from "next/link";
 import { Calendar, Clock, User } from "lucide-react";
 import PortableArticleBody from "@/components/blog/PortableArticleBody";
 import { getPreviewSanityPostBySlug } from "@/lib/content/sanity-preview";
+import { buildArticleMetadata } from "@/lib/content/seo";
 import { formatDate } from "@/utils/date";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    const post = await getPreviewSanityPostBySlug(params.slug);
+
+    if (!post) {
+      return {
+        title: "Article Not Found",
+        robots: { index: false, follow: false },
+      };
+    }
+
+    return buildArticleMetadata(post, { noIndex: true });
+  } catch {
+    return {
+      title: "CMS Editorial Preview",
+      robots: { index: false, follow: false, nocache: true },
+    };
+  }
+}
 
 export default async function CmsPreviewArticlePage({
   params,
