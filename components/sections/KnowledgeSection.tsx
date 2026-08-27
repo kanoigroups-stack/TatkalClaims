@@ -4,13 +4,27 @@ import { motion } from "framer-motion";
 import { ArrowRight, Clock, User } from "lucide-react";
 import Link from "next/link";
 import SectionWrapper from "../ui/SectionWrapper";
-import blogsData from "@/data/blogs.json";
-import { formatDate } from "@/utils/date";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import Image from "next/image";
 
-export default function KnowledgeSection() {
-  const articles = blogsData.posts.slice(0, 3);
+type KnowledgeArticle = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  readTime: string;
+  author: string;
+  image: {
+    url: string;
+    alt: string;
+  };
+};
+
+export default function KnowledgeSection({
+  articles,
+}: {
+  articles: KnowledgeArticle[];
+}) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -20,8 +34,8 @@ export default function KnowledgeSection() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-slate-900">Knowledge Center</h2>
           <p className="text-lg md:text-xl text-slate-600">Expert insights to help you understand your rights and navigate insurance disputes</p>
         </div>
-        <Link 
-          href="/blog/" 
+        <Link
+          href="/blog/"
           className="btn-secondary mt-4 md:mt-0 group"
           aria-label="View all articles in knowledge center"
         >
@@ -44,8 +58,8 @@ export default function KnowledgeSection() {
             <Link href={`/blog/${article.slug}/`} className="block">
               <div className="relative h-48 overflow-hidden bg-slate-100">
                 <Image
-                  src={article.image}
-                  alt={article.title}
+                  src={article.image.url}
+                  alt={article.image.alt}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
