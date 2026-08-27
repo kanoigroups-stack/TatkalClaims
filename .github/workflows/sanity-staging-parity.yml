@@ -1,0 +1,66 @@
+name: Sanity staging parity
+
+on:
+  push:
+    branches:
+      - cms/sanity-staging-parity
+    paths:
+      - app/cms-staging/**
+      - scripts/verify-sanity-staging-parity.ts
+      - .github/workflows/sanity-staging-parity.yml
+      - lib/content/**
+      - components/blog/PortableArticleBody.tsx
+      - migration/sanity/report.json
+      - next.config.js
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288
+      NEXT_PUBLIC_SANITY_DATASET: migration
+      NEXT_PUBLIC_SANITY_API_VERSION: 2026-08-27
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Generate all-57 staging parity report
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-staging-parity.ts
+
+      - name: Build Next.js staging preview
+        run: npm run build
+
+      - name: Upload parity report
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-staging-parity-report
+          path: migration/sanity/staging-parity-report.json
+          if-no-files-found: error
+
+      - name: Enforce Phase 6 cutover gate
+        run: |
+          node - <<'NODE'
+          const fs = require('fs')
+          const report = JSON.parse(fs.readFileSync('migration/sanity/staging-parity-report.json', 'utf8'))
+          console.log('Cutover ready:', report.cutover.ready)
+          console.log('Blockers:', report.cutover.blockers)
+          if (!report.parity.seoDataExact) process.exit(1)
+          if (!report.renderer.rendererCoverageExact) process.exit(1)
+          if (!report.parserReview.parserWarningsMatchFrozenSet) process.exit(1)
+          if (!report.cutover.ready) {
+            console.log('Phase 6 correctly remains blocked pending explicit remediation approval.')
+          }
+          NODE
