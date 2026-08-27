@@ -4,6 +4,17 @@ export const articleImage = defineType({
   name: "articleImage",
   title: "Article image",
   type: "object",
+  validation: (Rule) =>
+    Rule.custom((value: any) => {
+      if (!value) return true;
+
+      const hasUploadedImage = Boolean(value?.image?.asset?._ref);
+      const hasExternalUrl = Boolean(value?.externalUrl);
+
+      return hasUploadedImage || hasExternalUrl
+        ? true
+        : "Add an uploaded image or an external image URL.";
+    }),
   fields: [
     defineField({
       name: "image",
@@ -16,12 +27,14 @@ export const articleImage = defineType({
       title: "External image URL",
       type: "url",
       description:
-        "Temporary migration support for existing remote images such as Unsplash.",
+        "Migration compatibility for existing remote images. New editorial images should normally be uploaded to Sanity.",
     }),
     defineField({
       name: "alt",
       title: "Alt text",
       type: "string",
+      description:
+        "Describe the image for accessibility and search. Do not leave this blank.",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
