@@ -4,9 +4,9 @@ import {
   productionDataset,
   projectId,
 } from "@/sanity/env";
-import type { ArticleImage, ContentPost } from "./types";
+import type { ArticleImage, ArticleSeo, ContentPost } from "./types";
 
-type SanityImageProjection = {
+export type SanityImageProjection = {
   externalUrl?: string;
   assetUrl?: string;
   alt?: string;
@@ -15,7 +15,7 @@ type SanityImageProjection = {
   displaySize?: "normal" | "wide" | "full";
 };
 
-type SanityPostProjection = {
+export type SanityPostProjection = {
   slug: string;
   title: string;
   excerpt: string;
@@ -25,6 +25,7 @@ type SanityPostProjection = {
   author?: string;
   featuredImage?: SanityImageProjection;
   socialImage?: SanityImageProjection;
+  seo?: ArticleSeo;
   publishedAt: string;
   updatedAt?: string;
   readingTimeMinutes?: number;
@@ -45,7 +46,7 @@ const client = createClient({
   useCdn: true,
 });
 
-const articleProjection = [
+export const SANITY_ARTICLE_PROJECTION = [
   "{",
   "  title,",
   '  "slug": slug.current,',
@@ -69,6 +70,16 @@ const articleProjection = [
   "    caption,",
   "    credit,",
   "    displaySize",
+  "  },",
+  "  seo {",
+  "    metaTitle,",
+  "    metaDescription,",
+  "    canonicalOverride,",
+  "    noIndex,",
+  "    noFollow,",
+  "    ogTitle,",
+  "    ogDescription,",
+  '    "ogImageUrl": ogImage.asset->url',
   "  },",
   "  publishedAt,",
   "  updatedAt,",
@@ -100,7 +111,7 @@ function normalizeImage(
   };
 }
 
-function mapSanityPost(post: SanityPostProjection): ContentPost {
+export function mapSanityPost(post: SanityPostProjection): ContentPost {
   const image = normalizeImage(post.featuredImage, post.title);
 
   if (!image) {
@@ -125,6 +136,7 @@ function mapSanityPost(post: SanityPostProjection): ContentPost {
     legacyOrder: post.legacyOrder,
     image,
     socialImage: normalizeImage(post.socialImage, post.title),
+    seo: post.seo,
     contentType: post.contentType,
     featured: Boolean(post.featured),
     cornerstone: Boolean(post.cornerstone),
@@ -138,7 +150,7 @@ function mapSanityPost(post: SanityPostProjection): ContentPost {
 export async function getSanityPosts(): Promise<ContentPost[]> {
   const query =
     '*[_type == "article"] | order(coalesce(legacyOrder, 999999) asc, publishedAt desc) ' +
-    articleProjection;
+    SANITY_ARTICLE_PROJECTION;
   const posts = await client.fetch<SanityPostProjection[]>(
     query,
     {},
@@ -151,7 +163,7 @@ export async function getSanityPostBySlug(
   slug: string
 ): Promise<ContentPost | null> {
   const query =
-    '*[_type == "article" && slug.current == $slug][0] ' + articleProjection;
+    '*[_type == "article" && slug.current == $slug][0] ' + SANITY_ARTICLE_PROJECTION;
   const post = await client.fetch<SanityPostProjection | null>(
     query,
     { slug },
