@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CMS Staging Parity",
+  title: "CMS Published Parity",
   robots: {
     index: false,
     follow: false,

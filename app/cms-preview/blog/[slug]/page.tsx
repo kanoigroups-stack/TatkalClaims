@@ -2,17 +2,64 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, Clock, User } from "lucide-react";
 import PortableArticleBody from "@/components/blog/PortableArticleBody";
-import { getPostBySlug } from "@/lib/content";
+import { getPreviewSanityPostBySlug } from "@/lib/content/sanity-preview";
+import { buildArticleMetadata } from "@/lib/content/seo";
 import { formatDate } from "@/utils/date";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  try {
+    const post = await getPreviewSanityPostBySlug(params.slug);
+
+    if (!post) {
+      return {
+        title: "Article Not Found",
+        robots: { index: false, follow: false },
+      };
+    }
+
+    return buildArticleMetadata(post, { noIndex: true });
+  } catch {
+    return {
+      title: "CMS Editorial Preview",
+      robots: { index: false, follow: false, nocache: true },
+    };
+  }
+}
 
 export default async function CmsPreviewArticlePage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const post = await getPostBySlug(params.slug, "sanity");
+  let post;
+
+  try {
+    post = await getPreviewSanityPostBySlug(params.slug);
+  } catch (error) {
+    return (
+      <main className="min-h-screen bg-slate-50 px-4 py-24">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-red-200 bg-white p-8">
+          <p className="text-sm font-semibold uppercase tracking-wide text-red-700">
+            Sanity editorial preview
+          </p>
+          <h1 className="mt-2 text-3xl font-bold text-slate-900">Preview unavailable</h1>
+          <p className="mt-4 text-slate-600">
+            This noindex route could not read the authenticated draft. The public
+            article is unaffected.
+          </p>
+          <pre className="mt-5 overflow-x-auto rounded-xl bg-slate-950 p-4 text-xs text-slate-100">
+            {error instanceof Error ? error.message : "Unknown Sanity preview error"}
+          </pre>
+        </div>
+      </main>
+    );
+  }
 
   if (!post) {
     notFound();
@@ -22,8 +69,8 @@ export default async function CmsPreviewArticlePage({
     <main className="min-h-screen bg-slate-50 pb-20 pt-20">
       <div className="border-b border-amber-300 bg-amber-50">
         <div className="container-main px-4 py-4 text-sm text-amber-950">
-          <strong>CMS migration preview:</strong> Sanity dataset only. This page is
-          noindex and does not replace the public article.
+          <strong>CMS editorial preview:</strong> production dataset, draft-first
+          perspective, noindex. This does not replace the published article.
         </div>
       </div>
 

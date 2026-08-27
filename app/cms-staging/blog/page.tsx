@@ -12,8 +12,8 @@ export default async function CmsStagingBlogPage() {
     <main className="min-h-screen bg-slate-50/50 pt-20">
       <div className="border-b border-amber-300 bg-amber-50">
         <div className="container-main px-4 py-3 text-sm text-amber-950">
-          <strong>Phase 6 staging:</strong> noindex · Sanity migration dataset ·
-          current legacy archive order preserved · public /blog/ unchanged
+          <strong>CMS published parity:</strong> noindex · Sanity production dataset ·
+          migrated archive order preserved · public /blog/ uses the same published adapter
         </div>
       </div>
 
@@ -31,7 +31,7 @@ export default async function CmsStagingBlogPage() {
         <div className="container-main px-4">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Knowledge Center</h1>
           <p className="text-lg text-primary-100 max-w-2xl">Expert insights to help you understand your rights and navigate insurance disputes successfully.</p>
-          <p className="mt-4 text-sm text-primary-200">{posts.length} / 57 Sanity articles</p>
+          <p className="mt-4 text-sm text-primary-200">{posts.length} published Sanity articles</p>
         </div>
       </div>
 

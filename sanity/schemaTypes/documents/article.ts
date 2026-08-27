@@ -26,7 +26,8 @@ export const article = defineType({
       group: "content",
       options: { source: "title", maxLength: 120 },
       description:
-        "Existing article slugs must be preserved during migration. Do not regenerate imported slugs.",
+        "Migrated article slugs are locked to protect existing public URLs. New article slugs may be generated from the title before publication.",
+      readOnly: ({ document }) => typeof document?.legacyOrder === "number",
       validation: (Rule) => Rule.required(),
     }),
     defineField({

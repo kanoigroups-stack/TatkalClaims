@@ -10,6 +10,8 @@ export const seo = defineType({
       title: "Meta title",
       type: "string",
       description: "Optional. Falls back to the article title.",
+      validation: (Rule) =>
+        Rule.max(60).warning("Aim for about 60 characters or fewer in search results."),
     }),
     defineField({
       name: "metaDescription",
@@ -17,6 +19,8 @@ export const seo = defineType({
       type: "text",
       rows: 3,
       description: "Optional. Falls back to the article excerpt.",
+      validation: (Rule) =>
+        Rule.max(160).warning("Aim for about 160 characters or fewer in search results."),
     }),
     defineField({
       name: "canonicalOverride",

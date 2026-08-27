@@ -1,0 +1,67 @@
+name: Phase 8 CMS stabilization gate
+
+on:
+  push:
+    branches:
+      - cms/phase8-stabilization
+    paths:
+      - app/cms-preview/**
+      - app/cms-staging/**
+      - app/sitemap.ts
+      - lib/content/**
+      - sanity/**
+      - .env.example
+      - middleware.ts
+      - scripts/verify-phase8-stabilization.ts
+      - scripts/verify-phase7-production-cutover.ts
+      - .github/workflows/sanity-phase8-stabilization.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanity-phase8-stabilization
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out stabilization branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Verify Phase 8 stabilization safeguards
+        run: npx --yes tsx@4.19.2 scripts/verify-phase8-stabilization.ts
+
+      - name: Re-run Phase 7 production parity and rollback gate
+        run: npx --yes tsx@4.19.2 scripts/verify-phase7-production-cutover.ts
+
+      - name: Build with Sanity as live source
+        env:
+          BLOG_CONTENT_SOURCE: sanity
+        run: npm run build
+
+      - name: Build rollback path with legacy source
+        env:
+          BLOG_CONTENT_SOURCE: legacy
+        run: |
+          rm -rf .next
+          npm run build
+
+      - name: Upload Phase 8 stabilization verification
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase8-stabilization-verification
+          path: |
+            migration/phase8/stabilization-verification.json
+            migration/phase7/production-cutover-verification.json
+          if-no-files-found: error

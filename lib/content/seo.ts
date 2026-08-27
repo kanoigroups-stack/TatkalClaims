@@ -15,30 +15,40 @@ export function buildArticleMetadata(
   post: ContentPost,
   options: { noIndex?: boolean } = {}
 ): Metadata {
-  const image = post.socialImage?.url || post.image.url;
+  const seo = post.seo;
+  const title = seo?.metaTitle?.trim() || post.title;
+  const description = seo?.metaDescription?.trim() || post.excerpt;
+  const openGraphTitle = seo?.ogTitle?.trim() || title;
+  const openGraphDescription = seo?.ogDescription?.trim() || description;
+  const image = seo?.ogImageUrl || post.socialImage?.url || post.image.url;
   const modifiedTime = post.updatedAt || post.date;
+  const canonical =
+    seo?.canonicalOverride?.trim() || getPublicArticlePath(post);
+  const noIndex = Boolean(options.noIndex || seo?.noIndex);
+  const noFollow = Boolean(options.noIndex || seo?.noFollow);
+  const hasRobotsOverride = noIndex || noFollow;
 
   return {
-    title: post.title,
-    description: post.excerpt,
+    title,
+    description,
     alternates: {
-      canonical: getPublicArticlePath(post),
+      canonical,
     },
-    robots: options.noIndex
+    robots: hasRobotsOverride
       ? {
-          index: false,
-          follow: false,
-          nocache: true,
+          index: !noIndex,
+          follow: !noFollow,
+          nocache: noIndex,
           googleBot: {
-            index: false,
-            follow: false,
-            noimageindex: true,
+            index: !noIndex,
+            follow: !noFollow,
+            noimageindex: noIndex,
           },
         }
       : undefined,
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title: openGraphTitle,
+      description: openGraphDescription,
       images: [
         {
           url: image,
@@ -55,8 +65,8 @@ export function buildArticleMetadata(
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
+      title: openGraphTitle,
+      description: openGraphDescription,
       images: [image],
     },
   };

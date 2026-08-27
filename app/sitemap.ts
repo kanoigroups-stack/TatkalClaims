@@ -31,12 +31,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Blog posts from the active content adapter source
   const posts = await getAllPosts(getLiveContentSource());
-  const blogPages = posts.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}/`,
-    lastModified: new Date(post.date),
-    changeFrequency: "monthly" as const,
-    priority: 0.6,
-  }));
+  const blogPages = posts
+    .filter((post) => !post.seo?.noIndex)
+    .map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}/`,
+      lastModified: new Date(post.date),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
 
   return [...staticPages, ...servicePages, ...blogPages];
 }
