@@ -1,0 +1,96 @@
+name: Sanity migration test import
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Sanity project ID for the non-production migration dataset"
+        required: true
+        type: string
+      confirmation:
+        description: 'Type exactly: IMPORT_57_TO_MIGRATION'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanity-migration-test-import
+  cancel-in-progress: false
+
+jobs:
+  import-and-verify:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: \${{ inputs.project_id }}
+      NEXT_PUBLIC_SANITY_DATASET: migration
+      NEXT_PUBLIC_SANITY_API_VERSION: 2026-08-27
+      SANITY_WRITE_TOKEN: \${{ secrets.SANITY_WRITE_TOKEN }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate import gate
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ "\${{ inputs.confirmation }}" != "IMPORT_57_TO_MIGRATION" ]; then
+            echo "Import confirmation phrase does not match."
+            exit 1
+          fi
+
+          if [ -z "\${NEXT_PUBLIC_SANITY_PROJECT_ID:-}" ]; then
+            echo "Sanity project ID is required."
+            exit 1
+          fi
+
+          if [ "$NEXT_PUBLIC_SANITY_PROJECT_ID" = "tc000000" ]; then
+            echo "Placeholder Sanity project ID is not allowed."
+            exit 1
+          fi
+
+          if [ "$NEXT_PUBLIC_SANITY_DATASET" != "migration" ]; then
+            echo "Refusing to write outside the migration dataset."
+            exit 1
+          fi
+
+          if [ -z "\${SANITY_WRITE_TOKEN:-}" ]; then
+            echo "Repository secret SANITY_WRITE_TOKEN is not configured."
+            exit 1
+          fi
+
+          echo "Phase 4 safety gate passed for the migration dataset."
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Rebuild deterministic migration payload
+        run: npx --yes tsx@4.19.2 scripts/prepare-sanity-migration.ts
+
+      - name: Confirm deterministic output is unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code -- migration/sanity/dry-run.ndjson migration/sanity/report.json
+
+      - name: Import into Sanity migration dataset
+        run: npx --yes tsx@4.19.2 scripts/import-sanity-migration.ts --confirm-import
+
+      - name: Verify exact Sanity dataset parity
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-migration.ts
+
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-migration-verification
+          path: migration/sanity/verification.json
+          if-no-files-found: warn
