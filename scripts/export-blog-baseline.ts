@@ -14,7 +14,7 @@ type BlogPost = {
   content: string;
 };
 
-const EXPECTED_COUNT = 58;
+const EXPECTED_COUNT = 57;
 const BASE_URL = "https://tatkalclaims.com";
 const SOURCE_BLOG_COMMIT =
   process.env.BASELINE_SOURCE_COMMIT ||
