@@ -115,6 +115,16 @@ export const article = defineType({
       validation: (Rule) => Rule.integer().min(1),
     }),
     defineField({
+      name: "legacyOrder",
+      title: "Migration order",
+      type: "number",
+      group: "settings",
+      readOnly: true,
+      description:
+        "Internal migration parity field. Preserves the current Knowledge Centre sequence until the archive is deliberately redesigned.",
+      validation: (Rule) => Rule.integer().min(0),
+    }),
+    defineField({
       name: "body",
       title: "Body",
       type: "portableText",

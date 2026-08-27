@@ -5,6 +5,24 @@ type Props = {
   value: unknown[];
 };
 
+export const PORTABLE_TEXT_RENDERER_COVERAGE = {
+  blockStyles: ["normal", "h2", "h3", "blockquote", "hr"] as const,
+  listItems: ["bullet", "number"] as const,
+  marks: ["strong", "em", "link"] as const,
+  customTypes: [
+    "articleImage",
+    "articleTable",
+    "articleChart",
+    "keyTakeaway",
+    "importantRule",
+    "expertNote",
+    "warningBlock",
+    "faqBlock",
+    "sourceCitation",
+    "articleCta",
+  ] as const,
+};
+
 function imageUrl(value: any) {
   if (value?.externalUrl) return value.externalUrl;
 
@@ -17,6 +35,22 @@ function imageUrl(value: any) {
   }
 
   return "";
+}
+
+function renderTableCell(cell: string) {
+  const parts = cell.split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
+
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+      return (
+        <strong key={index} className="font-semibold text-slate-900">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+
+    return part;
+  });
 }
 
 const components: any = {
@@ -130,7 +164,7 @@ const components: any = {
                         scope="col"
                         className="border-b border-slate-200 px-4 py-3 font-semibold"
                       >
-                        {cell}
+                        {renderTableCell(cell)}
                       </th>
                     ))}
                   </tr>
@@ -141,7 +175,7 @@ const components: any = {
                   <tr key={row?._key || rowIndex} className="border-b border-slate-100 last:border-b-0">
                     {(row?.cells || []).map((cell: string, cellIndex: number) => (
                       <td key={cellIndex} className="px-4 py-3 align-top text-slate-700">
-                        {cell}
+                        {renderTableCell(cell)}
                       </td>
                     ))}
                   </tr>

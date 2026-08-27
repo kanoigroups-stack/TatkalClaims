@@ -23,6 +23,7 @@ export type ContentPost = {
   updatedAt?: string;
   readTime: string;
   readingTimeMinutes?: number;
+  legacyOrder?: number;
   image: ArticleImage;
   socialImage?: ArticleImage;
   contentType?: string;

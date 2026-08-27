@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "legacyArticles": 57,
+    "sanityArticles": 57
+  },
+  "parity": {
+    "missingSlugs": [],
+    "unexpectedSlugs": [],
+    "metadataMismatches": [],
+    "seoMismatches": [],
+    "schemaMismatches": [],
+    "sitemapMismatches": [],
+    "protectedSlugsPresent": true,
+    "deprecatedSlugPresent": false,
+    "redirectPreserved": true,
+    "seoDataExact": true
+  },
+  "ordering": {
+    "archiveOrderParity": true,
+    "firstArchiveOrderMismatch": null,
+    "moreArticlesMismatchCount": 0,
+    "moreArticlesMismatchSample": [],
+    "legacyFirstFive": [
+      "claim-rejection-guide",
+      "claim-delay-tactics",
+      "mis-selling-guide",
+      "irdai-ai-governance-working-group-insurance",
+      "e20-ethanol-petrol-insurance-claim-rejection-india"
+    ],
+    "sanityFirstFive": [
+      "claim-rejection-guide",
+      "claim-delay-tactics",
+      "mis-selling-guide",
+      "irdai-ai-governance-working-group-insurance",
+      "e20-ethanol-petrol-insurance-claim-rejection-india"
+    ]
+  },
+  "renderer": {
+    "actualBodyTypes": [
+      "articleTable",
+      "block"
+    ],
+    "actualStyles": [
+      "blockquote",
+      "h2",
+      "h3",
+      "hr",
+      "normal"
+    ],
+    "actualLists": [
+      "bullet",
+      "number"
+    ],
+    "actualDecorators": [
+      "strong"
+    ],
+    "actualAnnotations": [
+      "link"
+    ],
+    "unsupportedBodyTypes": [],
+    "unsupportedStyles": [],
+    "unsupportedLists": [],
+    "unsupportedDecorators": [],
+    "unsupportedAnnotations": [],
+    "rendererCoverageExact": true
+  },
+  "parserReview": {
+    "warningCount": 3,
+    "parserWarningsMatchFrozenSet": true,
+    "tableWarningReviewPassed": true,
+    "reviewDecision": "All three warnings contain balanced **strong** emphasis only; table cells render that emphasis without mutating stored source text.",
+    "tableWarningReview": [
+      {
+        "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
+        "markedCellCount": 1,
+        "safeStrongOnly": true
+      },
+      {
+        "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
+        "markedCellCount": 2,
+        "safeStrongOnly": true
+      },
+      {
+        "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
+        "markedCellCount": 2,
+        "safeStrongOnly": true
+      }
+    ],
+    "warnings": [
+      {
+        "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+        "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
+        "line": 21,
+        "message": "Markdown markers inside table cells were preserved literally."
+      },
+      {
+        "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+        "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
+        "line": 33,
+        "message": "Markdown markers inside table cells were preserved literally."
+      },
+      {
+        "code": "TABLE_CELL_MARKDOWN_PRESERVED",
+        "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
+        "line": 27,
+        "message": "Markdown markers inside table cells were preserved literally."
+      }
+    ]
+  },
+  "cutover": {
+    "ready": true,
+    "blockers": []
+  }
+}
