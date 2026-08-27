@@ -13,7 +13,7 @@
     "images": "Existing remote image URL is preserved in featuredImage.externalUrl; article title is used as alt text to match legacy frontend behavior.",
     "monetization": "Migrated articles default to \"none\" so migration cannot accidentally introduce ads.",
     "relatedArticles": "No related-article relationships are inferred during migration.",
-    "parsing": "H2, H3, bullets, numbered lists, inline strong, Markdown links and valid pipe tables are parsed. Unsupported or malformed syntax is preserved and reported."
+    "parsing": "H2, H3, blockquotes, dividers, bullets, numbered lists, inline strong, Markdown links and valid pipe tables are parsed. Unsupported or malformed syntax is preserved and reported."
   },
   "summary": {
     "articles": 57,
@@ -21,9 +21,8 @@
     "categories": 5,
     "topics": 0,
     "documents": 65,
-    "warnings": 46,
+    "warnings": 3,
     "warningCounts": {
-      "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED": 43,
       "TABLE_CELL_MARKDOWN_PRESERVED": 3
     },
     "tables": 11,
@@ -45,208 +44,10 @@
   ],
   "warnings": [
     {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "irdai-ai-governance-working-group-insurance",
-      "line": 78,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
-      "line": 11,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
       "code": "TABLE_CELL_MARKDOWN_PRESERVED",
       "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
       "line": 21,
       "message": "Markdown markers inside table cells were preserved literally."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
-      "line": 95,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "term-insurance-protection-gap-what-your-family-really-needs",
-      "line": 85,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "irdai-proposes-commission-overhaul-to-curb-insurance-mis-selling",
-      "line": 102,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "mumbai-doctor-wins-20-lakh-insurance-claim-child-cancer-speech-delay",
-      "line": 79,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "low-insurance-penetration-india-claim-rejection-risk",
-      "line": 61,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "rbi-flags-rising-life-insurance-surrenders-policyholder-dissatisfaction",
-      "line": 85,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "saral-jeevan-bima-affordable-term-insurance-protection-gap",
-      "line": 93,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "irdai-puts-insurer-ceos-room-complainants-grievance-redressal",
-      "line": 79,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "parliamentary-panel-doubling-ayushman-bharat-cover-10-lakh",
-      "line": 87,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "80-year-old-deaf-man-mis-sold-insurance-bank-fd-wins-2-47-lakh",
-      "line": 85,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "health-insurance-nation-building-claim-rejection-awareness",
-      "line": 69,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "cancer-patient-wins-1-65-lakh-insurer-could-not-prove-alcohol-smoking-caused-cancer",
-      "line": 91,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "covid-cases-rising-india-health-insurance-covers-medical-costs-vaccination",
-      "line": 95,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "bank-refunded-premium-after-borrower-death-rejected-claim-consumer-commission-relief",
-      "line": 97,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "irdai-comic-book-series-life-insurance-literacy-claim-awareness",
-      "line": 87,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "india-health-premiums-rise-200-percent-medical-inflation-trust-gaps",
-      "line": 91,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "india-health-insurance-premiums-cross-1-2-lakh-crore-sector-grows-9-percent",
-      "line": 87,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "india-insurance-protection-gap-83-percent-coverage-deficit-challenges",
-      "line": 91,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "sons-dengue-claim-rejected-insurer-ordered-pay-father-rs-1-11-lakh",
-      "line": 89,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "alcohol-insurance-claims-indian-courts-5-surprising-lessons",
-      "line": 93,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "united-india-insurance-kota-scam-cbi-probe-fake-claims",
-      "line": 83,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "kerala-hc-cant-reject-claim-non-empanelled-hospital",
-      "line": 93,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "gi-council-fever-admission-norms-insurers-may-reject-claims",
-      "line": 91,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "health-insurers-paid-less-than-claimed-amount-fy26-data",
-      "line": 140,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "cashless-claim-approved-at-admission-denied-at-discharge",
-      "line": 103,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "health-insurance-claims-experience-needs-improvement-india-survey",
-      "line": 91,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "stolen-suv-claim-rejected-policy-transfer-delhi-consumer-commission",
-      "line": 89,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "hdfc-life-rejects-50-lakh-claim-existing-policies-widow-wins",
-      "line": 117,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "no-insurance-no-fuel-supreme-court-irdai-petrol-pump-pilot",
-      "line": 85,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "oriental-insurance-delayed-fire-claim-ancestral-home-shimla-rs-1-35-crore-consumer-commission",
-      "line": 130,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "cholamandalam-rejected-electric-cycle-claim-no-rto-registration-himachal-woman-wins-rs-25500-consumer-commission",
-      "line": 115,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
     },
     {
       "code": "TABLE_CELL_MARKDOWN_PRESERVED",
@@ -255,70 +56,10 @@
       "message": "Markdown markers inside table cells were preserved literally."
     },
     {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
-      "line": 126,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
       "code": "TABLE_CELL_MARKDOWN_PRESERVED",
       "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
       "line": 27,
       "message": "Markdown markers inside table cells were preserved literally."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
-      "line": 98,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "government-calls-ai-solutions-speed-up-ayushman-bharat-claims-auto-adjudication-hackathon-2026",
-      "line": 124,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "health-insurance-claims-experience-needs-improvement-india-delays-rejections-pain-points-survey-2026",
-      "line": 138,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "park-at-your-own-risk-india-parking-crunch-car-insurance-claims-coverage",
-      "line": 124,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "india-plans-insurance-reforms-rein-healthcare-costs-benchmarked-rates-claims-exchange-2026",
-      "line": 102,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "icici-lombard-denied-health-claim-cancelled-policy-consumer-court-hyderabad-rs-2-57-lakh",
-      "line": 116,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "insurance-company-delaying-your-claim-irdai-rules-timelines-penalty-interest",
-      "line": 105,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "understanding-challenges-health-insurance-claims-india-rejections-delays-transparency",
-      "line": 125,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-    },
-    {
-      "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-      "slug": "delhi-hc-pilot-widow-rs-85-6-lakh-insurance-claim-baramati-crash-section-64vb",
-      "line": 108,
-      "message": "Unsupported block-level Markdown preserved as a normal paragraph."
     }
   ],
   "articles": [
@@ -365,27 +106,20 @@
       "slug": "irdai-ai-governance-working-group-insurance",
       "documentId": "article.irdai-ai-governance-working-group-insurance.b42c1a0324",
       "sourceContentSha256": "f570108d65b43234ff4af8f783544035103439f1301d5b723e01379484dad80f",
-      "bodySha256": "257084128855bc2076d216dee3199a194f5a35640f20500bf76af216afc3e87b",
+      "bodySha256": "fd44e5bf1bd524ab3d147b6fad82763e26ed3d012a012c8499c4c947c28cd5dd",
       "contentType": "news",
       "blocks": 43,
       "tables": 1,
       "bullets": 4,
       "numberedItems": 0,
       "headings": 16,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "irdai-ai-governance-working-group-insurance",
-          "line": 78,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
       "documentId": "article.e20-ethanol-petrol-insurance-claim-rejection-india.9cce717513",
       "sourceContentSha256": "456c44de692c4582dfdbd6a3b8cb595fff53b900647950f66d2bda2821473318",
-      "bodySha256": "c98e7696a4eb34473b8e602ed708fcc6af55a34bae4bb853f782c9905d1ee9b4",
+      "bodySha256": "2e283020dda8fb5ef648aeca9adfb8f248fcf163037c3871f5222d183b0fd183",
       "contentType": "news",
       "blocks": 54,
       "tables": 1,
@@ -394,22 +128,10 @@
       "headings": 14,
       "warnings": [
         {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
-          "line": 11,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        },
-        {
           "code": "TABLE_CELL_MARKDOWN_PRESERVED",
           "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
           "line": 21,
           "message": "Markdown markers inside table cells were preserved literally."
-        },
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "e20-ethanol-petrol-insurance-claim-rejection-india",
-          "line": 95,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
         }
       ]
     },
@@ -417,201 +139,131 @@
       "slug": "term-insurance-protection-gap-what-your-family-really-needs",
       "documentId": "article.term-insurance-protection-gap-what-your-family-really-needs.bf1cd75a5c",
       "sourceContentSha256": "e4412278b7ecb6886e701cf6fc79fc98766a9e47aafef57f261e2be1b95898c8",
-      "bodySha256": "bdafc0826d035ef9c948261dd3724c1627dbfffbae3c8ba6f1f61c3502fd277d",
+      "bodySha256": "1a0e815f7cc403ef5f95b142fc2598fc0b1223b4d538b97ee44e7bd90afd3e2f",
       "contentType": "news",
       "blocks": 49,
       "tables": 1,
       "bullets": 16,
       "numberedItems": 0,
       "headings": 13,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "term-insurance-protection-gap-what-your-family-really-needs",
-          "line": 85,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "irdai-proposes-commission-overhaul-to-curb-insurance-mis-selling",
       "documentId": "article.irdai-proposes-commission-overhaul-to-curb-insurance-mis-selling.2f2a5d112e",
       "sourceContentSha256": "d5e35043301c79f490cad0ed8f7c150204a44c6675cf973b2adc5772a3c57369",
-      "bodySha256": "fbde96be79d863ef61f3b7b0e2daedb87d8a545ebcdfe15d1a2fdbde736fd66e",
+      "bodySha256": "c9ea1c674bacd65f3932100d27e731a0c5387d55352d64687c49f952b10bb4e5",
       "contentType": "explainer",
       "blocks": 59,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 22,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "irdai-proposes-commission-overhaul-to-curb-insurance-mis-selling",
-          "line": 102,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "mumbai-doctor-wins-20-lakh-insurance-claim-child-cancer-speech-delay",
       "documentId": "article.mumbai-doctor-wins-20-lakh-insurance-claim-child-cancer-speech-delay.504864766c",
       "sourceContentSha256": "70bf8d7939a2f1876769e9b972bd4f72a1fe5507c911cac730df9e0a15918797",
-      "bodySha256": "6544e88236e7f41ee2fb5f5fad7a152131f3beefdbbac42ffb255b2475d8b257",
+      "bodySha256": "f52c372ad6c1fc5e9c4f34bfac2eea3c13fdfb1047fb791997218b21250b96bb",
       "contentType": "explainer",
       "blocks": 41,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 8,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "mumbai-doctor-wins-20-lakh-insurance-claim-child-cancer-speech-delay",
-          "line": 79,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "low-insurance-penetration-india-claim-rejection-risk",
       "documentId": "article.low-insurance-penetration-india-claim-rejection-risk.c1b00d1132",
       "sourceContentSha256": "04be909a0d35fac08fb8ca0c6f68d853ff98beebef051c4130b39b41ca721049",
-      "bodySha256": "b9493941406f72577fae148b8cb77dc0617ba7355eb35a0d59e2f0d6c7933260",
+      "bodySha256": "67b3d72207487afc6c8c6f8c67e8c3a6f0d8eacf68c0f49892f0f25aaff72da0",
       "contentType": "news",
       "blocks": 32,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 8,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "low-insurance-penetration-india-claim-rejection-risk",
-          "line": 61,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "rbi-flags-rising-life-insurance-surrenders-policyholder-dissatisfaction",
       "documentId": "article.rbi-flags-rising-life-insurance-surrenders-policyholder-dissatisfaction.bb7bea345c",
       "sourceContentSha256": "cb637f296a0ab6a320568bcbc1585e6bd392e84dff1a49bd6bca6f1513ae0f83",
-      "bodySha256": "86a47df1865e101f9a7c831c78e64f26fdf2aac4460a654be5c682eef30f094e",
+      "bodySha256": "f39d3108daeda7a3cc4003f292053748c0d2b1f111e2fa70130e1dfeef683ae5",
       "contentType": "news",
       "blocks": 44,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 12,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "rbi-flags-rising-life-insurance-surrenders-policyholder-dissatisfaction",
-          "line": 85,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "saral-jeevan-bima-affordable-term-insurance-protection-gap",
       "documentId": "article.saral-jeevan-bima-affordable-term-insurance-protection-gap.81df76a284",
       "sourceContentSha256": "82e693b608d406f0631bd92da805861306fe91880bc39b46c66c0c6f3e8ff09a",
-      "bodySha256": "2542de4bc2d23921e23274abee6e399f891e4d3c5f4534ee10513c7636e05c6e",
+      "bodySha256": "049e2f8fbdb811141153ea70a016999e99d173e406b0f2e8220816118744a130",
       "contentType": "news",
       "blocks": 48,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 12,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "saral-jeevan-bima-affordable-term-insurance-protection-gap",
-          "line": 93,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "irdai-puts-insurer-ceos-room-complainants-grievance-redressal",
       "documentId": "article.irdai-puts-insurer-ceos-room-complainants-grievance-redressal.53c218d754",
       "sourceContentSha256": "09228a0b5540ee9c671510339a2ac34f7fcd07ff973e4eb9e6da7d9faee48059",
-      "bodySha256": "d53b97936b1804f71cb5f01d44f39cd2bb310956129e4849b2d63e0580c80742",
+      "bodySha256": "25530644995b901b3f48d8d9e1249f5e1cbcddb336c5be0f54bafc30a69786d0",
       "contentType": "news",
       "blocks": 41,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "irdai-puts-insurer-ceos-room-complainants-grievance-redressal",
-          "line": 79,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "parliamentary-panel-doubling-ayushman-bharat-cover-10-lakh",
       "documentId": "article.parliamentary-panel-doubling-ayushman-bharat-cover-10-lakh.44d83f05ad",
       "sourceContentSha256": "37482af0da353c1fce01300f85cf6497cc01f7f2b356dfaa1b0c3b8e941a0f7c",
-      "bodySha256": "8ed3761fab982287a906a29facc45906bcabf82a6813cae5dfc053ac670c30c6",
+      "bodySha256": "48694a29e64efd62ddaa4d8e7d95ad1afdbc172baec8d43dfd2080b3801548f6",
       "contentType": "news",
       "blocks": 45,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "parliamentary-panel-doubling-ayushman-bharat-cover-10-lakh",
-          "line": 87,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "80-year-old-deaf-man-mis-sold-insurance-bank-fd-wins-2-47-lakh",
       "documentId": "article.80-year-old-deaf-man-mis-sold-insurance-bank-fd-wins-2-47-lakh.63a6d9e344",
       "sourceContentSha256": "10113dbfb1c9b77047be0698abd2342a93466351443ca5e53419552b17de3435",
-      "bodySha256": "f1901521cd85f2ea212942494a930c7a13e3dc795e19cdd0e095f57759f48ad7",
+      "bodySha256": "968dffefe48363ff52e59a3910332946cf8476ae48bef6833f0b0450f1418e57",
       "contentType": "explainer",
       "blocks": 44,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "80-year-old-deaf-man-mis-sold-insurance-bank-fd-wins-2-47-lakh",
-          "line": 85,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "health-insurance-nation-building-claim-rejection-awareness",
       "documentId": "article.health-insurance-nation-building-claim-rejection-awareness.eda0e98d11",
       "sourceContentSha256": "f52db8150dd9c568bbb451beeaf4839d190f1b309b49720afc1d2eae35bd8731",
-      "bodySha256": "9c97ad3cb4a5efb08c3b197cbe43a0e16fb8a268e8ad4f02ef5dd13896d82971",
+      "bodySha256": "6c0e2fd01cd03ceefb8a5f3b64312c9cbaa2931286aadfd2a867c7f83188e03f",
       "contentType": "explainer",
       "blocks": 36,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 8,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "health-insurance-nation-building-claim-rejection-awareness",
-          "line": 69,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "irdai-30-day-claim-settlement-rule-health-insurance-rights",
@@ -630,407 +282,267 @@
       "slug": "cancer-patient-wins-1-65-lakh-insurer-could-not-prove-alcohol-smoking-caused-cancer",
       "documentId": "article.cancer-patient-wins-1-65-lakh-insurer-could-not-prove-alcohol-smoking-caused-cancer.2bae2f21db",
       "sourceContentSha256": "58c60054c218fffec143ff8bc8a584e9ce1df6d18ca60fb74089bbeef376861a",
-      "bodySha256": "291083b01ad0d491cfc7cd4794e4aab11aa5dc38c6ca2886bc5173ffae571a01",
+      "bodySha256": "cb09f0ce269f22b9b59eaafb9bc4836e39aa056565c2c9208acda184f40f2267",
       "contentType": "explainer",
       "blocks": 47,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 11,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "cancer-patient-wins-1-65-lakh-insurer-could-not-prove-alcohol-smoking-caused-cancer",
-          "line": 91,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "covid-cases-rising-india-health-insurance-covers-medical-costs-vaccination",
       "documentId": "article.covid-cases-rising-india-health-insurance-covers-medical-costs-vaccination.7478e58fd3",
       "sourceContentSha256": "2b53c59a08ab73d32b3e1a276967fefb51db2e83862650410512df2f6684a7bd",
-      "bodySha256": "e68049a03140511a3db0771ade92bf967920631fd583f66f51dbaa44999336bb",
+      "bodySha256": "1fd2ca4be3739afbecbc2093b57191a08b8a1ecd25601eacacf15abc61800c9a",
       "contentType": "news",
       "blocks": 49,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "covid-cases-rising-india-health-insurance-covers-medical-costs-vaccination",
-          "line": 95,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "bank-refunded-premium-after-borrower-death-rejected-claim-consumer-commission-relief",
       "documentId": "article.bank-refunded-premium-after-borrower-death-rejected-claim-consumer-commission-relief.ff4d4f1088",
       "sourceContentSha256": "380894d1654c0e5a5fbefe9dd93655eedb9825c81b271382ba5d11e3eba9b107",
-      "bodySha256": "8c52d282a2abb1ace25b7d01efe58a534e34f262166be6e10f4c153e7e06557a",
+      "bodySha256": "59595300f47726a779a2f307f14242aef204236b14d4c6e467b4d5769d91bf8c",
       "contentType": "explainer",
       "blocks": 50,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "bank-refunded-premium-after-borrower-death-rejected-claim-consumer-commission-relief",
-          "line": 97,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "irdai-comic-book-series-life-insurance-literacy-claim-awareness",
       "documentId": "article.irdai-comic-book-series-life-insurance-literacy-claim-awareness.29feeb7d6d",
       "sourceContentSha256": "5fb8fb0ccc3d9f7828c8b1ef91cc5625c2eab19436fb91080dddb596cd3a1e8d",
-      "bodySha256": "e2a337e9e54ae52979dae0cbc0a0276d0f94a1b4e8a441ca40fba6018915f94e",
+      "bodySha256": "06f7caecc5a5ab8d1740555e45fd36d6d7c32db49d313380361729e6edb8c2c4",
       "contentType": "news",
       "blocks": 45,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "irdai-comic-book-series-life-insurance-literacy-claim-awareness",
-          "line": 87,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "india-health-premiums-rise-200-percent-medical-inflation-trust-gaps",
       "documentId": "article.india-health-premiums-rise-200-percent-medical-inflation-trust-gaps.0f97e4a73f",
       "sourceContentSha256": "29507499648890ff2ff742a0daf6f5d67ae8bd50fe615b0a8346e8e13730823a",
-      "bodySha256": "f0d8b021fca280bb062c66df15a8c9a946de61db6d17cc014451ef58103c4c89",
+      "bodySha256": "db23ffec4a559f97656ab3669217c13a454b6e8c2be9fbbd0ccbd072d1eb49a7",
       "contentType": "news",
       "blocks": 47,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 12,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "india-health-premiums-rise-200-percent-medical-inflation-trust-gaps",
-          "line": 91,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "india-health-insurance-premiums-cross-1-2-lakh-crore-sector-grows-9-percent",
       "documentId": "article.india-health-insurance-premiums-cross-1-2-lakh-crore-sector-grows-9-percent.ed3f335983",
       "sourceContentSha256": "4004793d67161819365b25fb1eda0be0f570c0d5084fa4c00961924961b17f79",
-      "bodySha256": "c979af99b272a07bbd995ae4a6b3da2d3bd135faf0e87535adb4d0d096d8b192",
+      "bodySha256": "d8f6addd9962c6e2648cac9000607ecd171aab30cc45122c81ffe6313c41156d",
       "contentType": "news",
       "blocks": 45,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "india-health-insurance-premiums-cross-1-2-lakh-crore-sector-grows-9-percent",
-          "line": 87,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "india-insurance-protection-gap-83-percent-coverage-deficit-challenges",
       "documentId": "article.india-insurance-protection-gap-83-percent-coverage-deficit-challenges.279603f3ea",
       "sourceContentSha256": "c6012cfbccde05615fb061c0e74004b1d7dbec559fd50492e6139d8e798043cb",
-      "bodySha256": "79d650d55c5dd6fbb5f8eb41b5ff28f5cf2951c508e35b3336c90f4b3e9b999e",
+      "bodySha256": "595e37d76df7afec9f112971e5cd55fee90f824338503d1430749c0994da57e9",
       "contentType": "news",
       "blocks": 47,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "india-insurance-protection-gap-83-percent-coverage-deficit-challenges",
-          "line": 91,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "sons-dengue-claim-rejected-insurer-ordered-pay-father-rs-1-11-lakh",
       "documentId": "article.sons-dengue-claim-rejected-insurer-ordered-pay-father-rs-1-11-lakh.5764df3b76",
       "sourceContentSha256": "dbd35752986be2d1a731fa2d9bd3f81babf92e66821ea6047999bcdafa46d852",
-      "bodySha256": "ac15115b2c202ee00fc268bb4bf6df49490a3cb01a968b3490774c6f9c8f0d8f",
+      "bodySha256": "c2f1e245d1390492c34ae4c7ad8c095a54722180d08c37f2cf62b21a8ff3d5a3",
       "contentType": "explainer",
       "blocks": 46,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 8,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "sons-dengue-claim-rejected-insurer-ordered-pay-father-rs-1-11-lakh",
-          "line": 89,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "alcohol-insurance-claims-indian-courts-5-surprising-lessons",
       "documentId": "article.alcohol-insurance-claims-indian-courts-5-surprising-lessons.0d11fdb459",
       "sourceContentSha256": "c844e28bea56974efc6df67261e2acc19d1bc82b24cded346a38da99552ae1b2",
-      "bodySha256": "65a5703afa97e6f0cf2beccd89d790903b1447d0ba672f0ac5402f9f05f5390f",
+      "bodySha256": "e34e873a88d754178833e3ba8aba243118edfe893019943eb4acb47971354e13",
       "contentType": "news",
       "blocks": 48,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "alcohol-insurance-claims-indian-courts-5-surprising-lessons",
-          "line": 93,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "united-india-insurance-kota-scam-cbi-probe-fake-claims",
       "documentId": "article.united-india-insurance-kota-scam-cbi-probe-fake-claims.4095ea5c6a",
       "sourceContentSha256": "ffeaa6e701d66cb3cc26953bdf136a697e1fb846180d2fa9d537060c1f4f580b",
-      "bodySha256": "81b40b1399fa1f71ae1e43c5ab4d82e5ac7efe9c09fa8eefddd4b50e89348b93",
+      "bodySha256": "b7d7f6b6cdfc4097c727e570b1a87a1ae47ef060c7c73a9845021b689f5ff601",
       "contentType": "news",
       "blocks": 43,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 8,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "united-india-insurance-kota-scam-cbi-probe-fake-claims",
-          "line": 83,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "kerala-hc-cant-reject-claim-non-empanelled-hospital",
       "documentId": "article.kerala-hc-cant-reject-claim-non-empanelled-hospital.61676f11c8",
       "sourceContentSha256": "41f1d4a469a0ed8bba7261336a8c136d0ea11f1b063d016f08f288de28a61311",
-      "bodySha256": "921da92a9450caac323a7c1304b08ddd2eaa5264e973039213b999c56c30805a",
+      "bodySha256": "8833b97bb0f6e439105d38a3922f4e8208833655c9906424d593bf6b23c984cb",
       "contentType": "explainer",
       "blocks": 48,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "kerala-hc-cant-reject-claim-non-empanelled-hospital",
-          "line": 93,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "gi-council-fever-admission-norms-insurers-may-reject-claims",
       "documentId": "article.gi-council-fever-admission-norms-insurers-may-reject-claims.456ffd1ee6",
       "sourceContentSha256": "96e785c67f889fd0ef40a1630ed681aed24a9406d1a2e1fffd7dfd7cacd21da8",
-      "bodySha256": "c20bef8d30a2930aa17e86e9f4f6dba585c402626f41a613e74569cfa14394d2",
+      "bodySha256": "4137a14859747f615021a474acd46eadd00e7ef5345b7b93bcacb2095e18621b",
       "contentType": "explainer",
       "blocks": 47,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "gi-council-fever-admission-norms-insurers-may-reject-claims",
-          "line": 91,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "health-insurers-paid-less-than-claimed-amount-fy26-data",
       "documentId": "article.health-insurers-paid-less-than-claimed-amount-fy26-data.808fcc06a0",
       "sourceContentSha256": "cf944527c9cdf41eafdf235004ce88a8101124b861a0b0a48e4f88f42225e92a",
-      "bodySha256": "ace7c72c556e3a8b7bdce7cacaa0228ee9abbb2b98d2a7ebae358b0d0f7e6ee6",
+      "bodySha256": "ff100044aa6d1305a9979ab65abdaba5fed46a6b0381011859be299f878ce197",
       "contentType": "news",
       "blocks": 57,
       "tables": 1,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "health-insurers-paid-less-than-claimed-amount-fy26-data",
-          "line": 140,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "cashless-claim-approved-at-admission-denied-at-discharge",
       "documentId": "article.cashless-claim-approved-at-admission-denied-at-discharge.ca8f4c1cb8",
       "sourceContentSha256": "841bb290173430672464c0165f30584bd44e92ab0458401626ba9b70a642265b",
-      "bodySha256": "f3544232746e2a690c11ff048872532370e8889fb7f5d836cc164c3189eb0d40",
+      "bodySha256": "6651c64f80aac564dad0c13177fbf5c1ea7315f3e83f957718dc40aafbd1be1b",
       "contentType": "explainer",
       "blocks": 53,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "cashless-claim-approved-at-admission-denied-at-discharge",
-          "line": 103,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "health-insurance-claims-experience-needs-improvement-india-survey",
       "documentId": "article.health-insurance-claims-experience-needs-improvement-india-survey.28a6030559",
       "sourceContentSha256": "e513ba7219adb881389ace7bd3ea6f7e4581edb2790b1a580d57f938251da9e1",
-      "bodySha256": "5e51c33d22600c7939732ef38cc39f6d1670c65ab7c75619ffdb1879534c25ff",
+      "bodySha256": "126d0ac3b90fa3946f1a707f618a5b10a8d17af1c0e8cba4eabdcaf3d633c36a",
       "contentType": "news",
       "blocks": 47,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "health-insurance-claims-experience-needs-improvement-india-survey",
-          "line": 91,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "stolen-suv-claim-rejected-policy-transfer-delhi-consumer-commission",
       "documentId": "article.stolen-suv-claim-rejected-policy-transfer-delhi-consumer-commission.246c87240e",
       "sourceContentSha256": "0b704fb65288efa246a055e67ddf057f91c4a35627fd5b7e2a888f28ec9035bc",
-      "bodySha256": "9d01c5bf6438b547d9504cdc8458dc709b8669606ce1dc54e7a19957120244fb",
+      "bodySha256": "653a4f9ed93b08fd206ee2b1b812dfb80c3d00c666cd0b16db25164f48abe645",
       "contentType": "explainer",
       "blocks": 46,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "stolen-suv-claim-rejected-policy-transfer-delhi-consumer-commission",
-          "line": 89,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "hdfc-life-rejects-50-lakh-claim-existing-policies-widow-wins",
       "documentId": "article.hdfc-life-rejects-50-lakh-claim-existing-policies-widow-wins.dda56f080e",
       "sourceContentSha256": "62f7c2970350ced11caa2f6f7d77fdff2723a6367157f217eb23e7731401d356",
-      "bodySha256": "f94bc1ceac69dd90f81f1169288e7f06ec4c2e2b74d2df73837cadaa47a2bda1",
+      "bodySha256": "37bebd719185347b3148a7fe602fa686980f781ec1d059cfcefbcaeebe4dfc11",
       "contentType": "explainer",
       "blocks": 60,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 11,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "hdfc-life-rejects-50-lakh-claim-existing-policies-widow-wins",
-          "line": 117,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "no-insurance-no-fuel-supreme-court-irdai-petrol-pump-pilot",
       "documentId": "article.no-insurance-no-fuel-supreme-court-irdai-petrol-pump-pilot.87e52615a4",
       "sourceContentSha256": "de3127c704a5245eed610885c1fea58079ece3d8775f219e23424e34508bc5fa",
-      "bodySha256": "f0abcf3b4a8b84c1b5c593a35d90e873a431bd41e41b68ee2f1f31cd139c95de",
+      "bodySha256": "b146d9b818647259d1f368b094644b73ac6f05b82f70eb9f1e8ac3b0ee363125",
       "contentType": "news",
       "blocks": 44,
       "tables": 0,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 9,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "no-insurance-no-fuel-supreme-court-irdai-petrol-pump-pilot",
-          "line": 85,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "oriental-insurance-delayed-fire-claim-ancestral-home-shimla-rs-1-35-crore-consumer-commission",
       "documentId": "article.oriental-insurance-delayed-fire-claim-ancestral-home-shimla-rs-1-35-crore-consumer-commission.a05994ed74",
       "sourceContentSha256": "4a24839bf43bba5a34b00b65fa52db40403cdc56c70ec67b93789946d0780295",
-      "bodySha256": "2de2f0459e8cba4d573e6ae61819ee0a0960320e4743e704ffcd69bf050fea19",
+      "bodySha256": "b558e29a9054d8d41b0682a01b899d5e2fe9424c609e57bac9875abfc51485ca",
       "contentType": "explainer",
       "blocks": 64,
       "tables": 1,
       "bullets": 0,
       "numberedItems": 0,
       "headings": 12,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "oriental-insurance-delayed-fire-claim-ancestral-home-shimla-rs-1-35-crore-consumer-commission",
-          "line": 130,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "cholamandalam-rejected-electric-cycle-claim-no-rto-registration-himachal-woman-wins-rs-25500-consumer-commission",
       "documentId": "article.cholamandalam-rejected-electric-cycle-claim-no-rto-registration-himachal-woman-wins-rs-25500-.cd4fd36e6e",
       "sourceContentSha256": "6070d86d3ef23dc4db576323067632bfa3d6302d8565c43ac86f19f6a0183015",
-      "bodySha256": "966a7cee6d31b59f51d9ea1e42e5b0f2b5193a762874e745c53a04aea6bd7c02",
+      "bodySha256": "6c74a4f078b3c350e090dbdde96f828c5c20c207b1196f6c818f0b3796a6279b",
       "contentType": "explainer",
       "blocks": 57,
       "tables": 1,
       "bullets": 2,
       "numberedItems": 0,
       "headings": 11,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "cholamandalam-rejected-electric-cycle-claim-no-rto-registration-himachal-woman-wins-rs-25500-consumer-commission",
-          "line": 115,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
       "documentId": "article.manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs.09c692fe7f",
       "sourceContentSha256": "f58bc9dffb8b561eb37bdca7fd55f1e2dfcbbc7bf697c59556a61fc1b26cc026",
-      "bodySha256": "b3fd669bda882173990a3ecec98ebbdb261ee0595817db8697ca0923aeed95e8",
+      "bodySha256": "0e8be11c31827c9a1660a17e07bf2772a028f64829b663679a93040d9136aed5",
       "contentType": "explainer",
       "blocks": 62,
       "tables": 1,
@@ -1043,12 +555,6 @@
           "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
           "line": 33,
           "message": "Markdown markers inside table cells were preserved literally."
-        },
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "manipal-cigna-denied-brain-tumour-surgery-claim-shifting-grounds-delhi-consumer-commission-rs-2-33-lakh",
-          "line": 126,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
         }
       ]
     },
@@ -1056,7 +562,7 @@
       "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
       "documentId": "article.car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh.64045a659c",
       "sourceContentSha256": "25ffbd8d6d2bd767c76a6f280e1eb1a3e6ff636125f30172b10d0fca1ed4b01e",
-      "bodySha256": "58d3ec2f72b5bc16a3eaeb89bcd9763ba287e6c50a6e807d9b8fdc8f6414dde1",
+      "bodySha256": "d983a9f8fd64a3d449908bda86e19a2c5686bfd04455dabe97df39c3777bfaa1",
       "contentType": "explainer",
       "blocks": 48,
       "tables": 1,
@@ -1069,12 +575,6 @@
           "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
           "line": 27,
           "message": "Markdown markers inside table cells were preserved literally."
-        },
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "car-stolen-parked-under-tree-branches-insurer-denied-claim-consumer-commission-rs-2-26-lakh",
-          "line": 98,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
         }
       ]
     },
@@ -1082,161 +582,105 @@
       "slug": "government-calls-ai-solutions-speed-up-ayushman-bharat-claims-auto-adjudication-hackathon-2026",
       "documentId": "article.government-calls-ai-solutions-speed-up-ayushman-bharat-claims-auto-adjudication-hackathon-202.d8e36a8741",
       "sourceContentSha256": "703ac352953d5614c916b97b51330ef383501d2cf51316abdbd150fdfb16952f",
-      "bodySha256": "12d506707bc2aa5a661dfe32ec6671bc4ffa1a4a46a7b97434df5e549e31d1d2",
+      "bodySha256": "454accaaa764d8562d26f5df55daf24bc7b0893c73df33e8140e72766d1238a9",
       "contentType": "news",
       "blocks": 68,
       "tables": 0,
       "bullets": 10,
       "numberedItems": 0,
       "headings": 16,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "government-calls-ai-solutions-speed-up-ayushman-bharat-claims-auto-adjudication-hackathon-2026",
-          "line": 124,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "health-insurance-claims-experience-needs-improvement-india-delays-rejections-pain-points-survey-2026",
       "documentId": "article.health-insurance-claims-experience-needs-improvement-india-delays-rejections-pain-points-surv.9a1bdc8497",
       "sourceContentSha256": "a7f7a5a77549e9dbceaf7c998cd648ed7fbdb4aae1fd4ae70b5876a9a70b547f",
-      "bodySha256": "44359e3a3b7ac5ae923402cdb67cf064b4d54417e74dbbd3476177a7f28e7e4a",
+      "bodySha256": "33fa7b357f49e5b6f2c06c0918c8e55b5e0f7dff01964c55066f5853a329408e",
       "contentType": "news",
       "blocks": 82,
       "tables": 0,
       "bullets": 11,
       "numberedItems": 0,
       "headings": 23,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "health-insurance-claims-experience-needs-improvement-india-delays-rejections-pain-points-survey-2026",
-          "line": 138,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "park-at-your-own-risk-india-parking-crunch-car-insurance-claims-coverage",
       "documentId": "article.park-at-your-own-risk-india-parking-crunch-car-insurance-claims-coverage.7f566e214c",
       "sourceContentSha256": "b266382d9d79ede09a802abf0bb2688e86d06a90a413fb5de758d647051ded75",
-      "bodySha256": "1eda76c9f665fdc458da1509e05e56978e02bc37370f4bff33a0516ee1cf9423",
+      "bodySha256": "481a13bf8c270afd6bdf4ca03c3a68e72b2e8168cfe87ef8b9f3ef426619fda4",
       "contentType": "news",
       "blocks": 69,
       "tables": 0,
       "bullets": 13,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "park-at-your-own-risk-india-parking-crunch-car-insurance-claims-coverage",
-          "line": 124,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "india-plans-insurance-reforms-rein-healthcare-costs-benchmarked-rates-claims-exchange-2026",
       "documentId": "article.india-plans-insurance-reforms-rein-healthcare-costs-benchmarked-rates-claims-exchange-2026.2593cb6fc3",
       "sourceContentSha256": "d5769f909b4c4012c6eabc63408d1df97a78fec52b3a1aefb829d790a3900fe0",
-      "bodySha256": "db60ca3faa4a373537a19ff21f5f5600b8414bc9e175da9c3292c510b38d9abf",
+      "bodySha256": "ad5cb99fc37f2eeaf7191b1ecbbfe69c502245136d3381a93502c4c86ba8a8b3",
       "contentType": "news",
       "blocks": 55,
       "tables": 0,
       "bullets": 6,
       "numberedItems": 0,
       "headings": 13,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "india-plans-insurance-reforms-rein-healthcare-costs-benchmarked-rates-claims-exchange-2026",
-          "line": 102,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "icici-lombard-denied-health-claim-cancelled-policy-consumer-court-hyderabad-rs-2-57-lakh",
       "documentId": "article.icici-lombard-denied-health-claim-cancelled-policy-consumer-court-hyderabad-rs-2-57-lakh.f934e7a13b",
       "sourceContentSha256": "75646df0ee7d9f94243e37a0f1ea86f837ab9479da3a874c19caaab1374a624f",
-      "bodySha256": "1d8ee459e0e196d73b6c56866af87b38e089bcf11533438d54bca6bd919a80f6",
+      "bodySha256": "7a848fd7e30a52b314baf16db46bd74b738c888d0887bb90873467a23ee00dd4",
       "contentType": "explainer",
       "blocks": 59,
       "tables": 1,
       "bullets": 4,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "icici-lombard-denied-health-claim-cancelled-policy-consumer-court-hyderabad-rs-2-57-lakh",
-          "line": 116,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "insurance-company-delaying-your-claim-irdai-rules-timelines-penalty-interest",
       "documentId": "article.insurance-company-delaying-your-claim-irdai-rules-timelines-penalty-interest.3087e67f7b",
       "sourceContentSha256": "aa7837d8e12f8a7cf8b104ddf66829860aa70b7ad7819c2ad5a397e0a5872bc8",
-      "bodySha256": "d1766fe0cbde81f7272dbd86b8cdcd6ee19151a59fcec20474877eb12abdc4fb",
+      "bodySha256": "2e74bcc063975aa9f775d050440cf368b988559412ac895644003060e941c4ad",
       "contentType": "explainer",
       "blocks": 56,
       "tables": 0,
       "bullets": 6,
       "numberedItems": 0,
       "headings": 17,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "insurance-company-delaying-your-claim-irdai-rules-timelines-penalty-interest",
-          "line": 105,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "understanding-challenges-health-insurance-claims-india-rejections-delays-transparency",
       "documentId": "article.understanding-challenges-health-insurance-claims-india-rejections-delays-transparency.826ec8562a",
       "sourceContentSha256": "4a5b6f55eb9a64ca6d1a77ad4f71ea12d57f9a54c8c7de7e881ae5d585c12734",
-      "bodySha256": "e1323d9ae125ffc6a6d96ca17c82253ed8b194ce68bf272f42993ec2badef186",
+      "bodySha256": "82473f3ebacd24ac40c395c1ccbb86894ebe383bb022bfeeaae4e944015df40b",
       "contentType": "explainer",
       "blocks": 72,
       "tables": 0,
       "bullets": 19,
       "numberedItems": 0,
       "headings": 12,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "understanding-challenges-health-insurance-claims-india-rejections-delays-transparency",
-          "line": 125,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "delhi-hc-pilot-widow-rs-85-6-lakh-insurance-claim-baramati-crash-section-64vb",
       "documentId": "article.delhi-hc-pilot-widow-rs-85-6-lakh-insurance-claim-baramati-crash-section-64vb.efc8dba224",
       "sourceContentSha256": "7ed48244ef56e30c47f2f443f8990cc2e4fddd651f09c3045b2d2abe0bc77caf",
-      "bodySha256": "06a78273e3e3fd1d94e1deda29200f1b7fcc45850bcf8560e1aebe28f74e9078",
+      "bodySha256": "ac89fb1f03415a1d29ad021cd98c56649c288d1debdb2a29cd7c9bbacdfe3522",
       "contentType": "explainer",
       "blocks": 57,
       "tables": 0,
       "bullets": 4,
       "numberedItems": 0,
       "headings": 10,
-      "warnings": [
-        {
-          "code": "UNSUPPORTED_BLOCK_SYNTAX_PRESERVED",
-          "slug": "delhi-hc-pilot-widow-rs-85-6-lakh-insurance-claim-baramati-crash-section-64vb",
-          "line": 108,
-          "message": "Unsupported block-level Markdown preserved as a normal paragraph."
-        }
-      ]
+      "warnings": []
     },
     {
       "slug": "insurance-complaints-q1-fy27-top-insurers-analysis",
