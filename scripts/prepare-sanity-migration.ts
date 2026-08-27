@@ -503,8 +503,8 @@ async function main() {
   const posts = baseline.posts as LegacyPost[];
   assert(!posts.some((post) => post.slug === DEPRECATED_SLUG), "Deprecated slug cannot be prepared");
 
-  const authors = [...new Set(posts.map((post) => post.author))].sort();
-  const categories = [...new Set(posts.map((post) => post.category))].sort();
+  const authors = Array.from(new Set(posts.map((post) => post.author))).sort();
+  const categories = Array.from(new Set(posts.map((post) => post.category))).sort();
 
   const authorIds = new Map(authors.map((name) => [name, documentId("author", name)]));
   const categoryIds = new Map(categories.map((name) => [name, documentId("category", name)]));
