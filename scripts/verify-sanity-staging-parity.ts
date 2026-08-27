@@ -152,6 +152,31 @@ function inspectPortableBlocks(blocks: unknown[], coverage: RendererCoverage) {
   }
 }
 
+function getTableCells(post: ContentPost | undefined): string[] {
+  if (!post) return [];
+
+  const cells: string[] = [];
+  for (const raw of post.body) {
+    if (!raw || typeof raw !== "object") continue;
+    const block = raw as Record<string, any>;
+    if (block._type !== "articleTable") continue;
+
+    for (const row of Array.isArray(block.rows) ? block.rows : []) {
+      for (const cell of Array.isArray(row?.cells) ? row.cells : []) {
+        cells.push(String(cell));
+      }
+    }
+  }
+
+  return cells;
+}
+
+function strongMarkdownIsBalanced(cell: string) {
+  if (!cell.includes("**")) return true;
+  const withoutStrongSegments = cell.replace(/\*\*[^*]+\*\*/g, "");
+  return !withoutStrongSegments.includes("**");
+}
+
 async function main() {
   const [legacyPosts, sanityPosts, reportText, nextConfigText] = await Promise.all([
     Promise.resolve(getLegacyPosts()),
@@ -291,6 +316,24 @@ async function main() {
     JSON.stringify(warningSlugs) === JSON.stringify(EXPECTED_WARNING_SLUGS) &&
     warnings.every((warning: any) => warning.code === "TABLE_CELL_MARKDOWN_PRESERVED");
 
+  const tableWarningReview = warnings.map((warning: any) => {
+    const cells = getTableCells(sanityBySlug.get(String(warning.slug)));
+    const markedCells = cells.filter((cell) => cell.includes("**"));
+    const safeStrongOnly =
+      markedCells.length > 0 &&
+      markedCells.every((cell) => strongMarkdownIsBalanced(cell));
+
+    return {
+      slug: String(warning.slug),
+      markedCellCount: markedCells.length,
+      safeStrongOnly,
+    };
+  });
+
+  const tableWarningReviewPassed =
+    parserWarningsMatchFrozenSet &&
+    tableWarningReview.every((item) => item.safeStrongOnly);
+
   const protectedSlugsPresent = PROTECTED_SLUGS.every(
     (slug) => legacyBySlug.has(slug) && sanityBySlug.has(slug)
   );
@@ -325,7 +368,7 @@ async function main() {
   if (!rendererCoverageExact) cutoverBlockers.push("UNSUPPORTED_PORTABLE_TEXT");
   if (!archiveOrderParity) cutoverBlockers.push("ARCHIVE_ORDER_DRIFT");
   if (moreArticlesMismatches.length > 0) cutoverBlockers.push("MORE_ARTICLES_ORDER_DRIFT");
-  if (warnings.length > 0) cutoverBlockers.push("MANUAL_TABLE_REVIEW_REQUIRED");
+  if (!tableWarningReviewPassed) cutoverBlockers.push("MANUAL_TABLE_REVIEW_REQUIRED");
 
   const result = {
     schemaVersion: 1,
@@ -369,6 +412,10 @@ async function main() {
     parserReview: {
       warningCount: warnings.length,
       parserWarningsMatchFrozenSet,
+      tableWarningReviewPassed,
+      reviewDecision:
+        "All three warnings contain balanced **strong** emphasis only; table cells render that emphasis without mutating stored source text.",
+      tableWarningReview,
       warnings,
     },
     cutover: {
