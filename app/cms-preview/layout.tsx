@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CMS Migration Preview",
+  title: "CMS Editorial Preview",
   robots: {
     index: false,
     follow: false,
