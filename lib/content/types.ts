@@ -10,6 +10,17 @@ export type ArticleImage = {
   displaySize?: "normal" | "wide" | "full";
 };
 
+export type ArticleSeo = {
+  metaTitle?: string;
+  metaDescription?: string;
+  canonicalOverride?: string;
+  noIndex?: boolean;
+  noFollow?: boolean;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImageUrl?: string;
+};
+
 export type ContentPost = {
   source: ContentSource;
   slug: string;
@@ -26,6 +37,7 @@ export type ContentPost = {
   legacyOrder?: number;
   image: ArticleImage;
   socialImage?: ArticleImage;
+  seo?: ArticleSeo;
   contentType?: string;
   featured: boolean;
   cornerstone: boolean;
