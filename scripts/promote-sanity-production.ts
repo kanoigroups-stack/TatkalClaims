@@ -91,10 +91,38 @@ async function main() {
     perspective: "published",
   });
 
-  const [beforeAllCount, beforeManagedIds] = await Promise.all([
+  const [beforeAllCount, beforeManagedIds, beforeDocs] = await Promise.all([
     client.fetch<number>("count(*)"),
     client.fetch<string[]>('*[_type in $types]._id', { types: ALLOWED_TYPES }),
+    client.fetch<Array<{_id:string;_type:string;title?:string;name?:string;slug?:string}>>(
+      '*[]{_id,_type,title,name,"slug":slug.current}'
+    ),
   ]);
+
+  const typeCounts = beforeDocs.reduce<Record<string, number>>((acc, doc) => {
+    acc[doc._type] = (acc[doc._type] || 0) + 1;
+    return acc;
+  }, {});
+
+  console.log(
+    JSON.stringify(
+      {
+        preflightOnly: true,
+        beforeAllCount,
+        beforeManagedDocuments: beforeManagedIds.length,
+        typeCounts,
+        documents: beforeDocs.map((doc) => ({
+          _id: doc._id,
+          _type: doc._type,
+          title: doc.title,
+          name: doc.name,
+          slug: doc.slug,
+        })),
+      },
+      null,
+      2
+    )
+  );
 
   const beforeManagedSet = new Set(beforeManagedIds);
   const beforeExpectedDocuments =
