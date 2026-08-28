@@ -59,8 +59,8 @@ jobs:
           echo "encrypted=${ENCRYPTED}" >> "$GITHUB_OUTPUT"
           echo "stamp=${STAMP}" >> "$GITHUB_OUTPUT"
 
-          # Do not add --no-drafts or --no-assets: the recovery backup must
-          # contain draft documents and asset binaries.
+          # The recovery backup intentionally keeps both draft documents
+          # and asset binaries using Sanity export defaults.
           npx sanity datasets export "$SANITY_DATASET" "$PLAIN" \
             --project-id "$SANITY_PROJECT_ID" \
             --overwrite
