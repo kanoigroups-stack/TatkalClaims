@@ -71,7 +71,7 @@ export function preferDraftArticleDocuments(
     }
   }
 
-  return [...selected.values()].sort((a, b) => {
+  return Array.from(selected.values()).sort((a, b) => {
     const orderDifference =
       (a.legacyOrder ?? 999999) - (b.legacyOrder ?? 999999);
 
