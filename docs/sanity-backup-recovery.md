@@ -64,7 +64,45 @@ A separate offline copy is recommended for long-term retention.
 
 Never test a restore by importing directly into the live `production` dataset.
 
-Recovery validation must use a separate temporary recovery dataset first. Only after verifying the restored document count, assets, references, drafts, and representative articles should any production recovery be considered.
+Recovery validation uses a separate temporary dataset whose name must start with `recovery-`. The workflow also refuses to run if that target dataset is not empty.
+
+### One-time recovery-test setup
+
+Create a temporary Sanity dataset manually, for example:
+
+`recovery-test`
+
+Then create a temporary Sanity project token with **Editor** access and add it to GitHub Actions secrets as:
+
+`SANITY_RECOVERY_TOKEN`
+
+Do not reuse the backup Viewer token because a restore test must write documents into the temporary dataset. Do not use an Administrator token.
+
+### How to validate recovery
+
+In GitHub:
+
+1. Open **Actions**.
+2. Select **Sanity recovery validation**.
+3. Click **Run workflow**.
+4. Leave the target dataset as `recovery-test` unless a different fresh `recovery-` dataset was created.
+5. Leave Backup run ID blank to use the latest successful production backup.
+6. Run the workflow.
+
+The workflow:
+
+- confirms the target exists and is empty
+- downloads the latest successful encrypted production backup
+- verifies its SHA-256 checksum
+- decrypts it only inside the temporary GitHub runner
+- imports with create-only semantics into the recovery dataset
+- compares restored non-asset document IDs, published article slugs, and draft IDs against the backup itself
+- checks the three protected article slugs
+- verifies that restored asset documents exist when the backup contains asset binaries
+- uploads only a non-sensitive recovery verification summary
+- deletes the decrypted backup files from the runner even if the job fails
+
+After a successful recovery test, delete the temporary `SANITY_RECOVERY_TOKEN` GitHub secret and remove the temporary recovery dataset from Sanity when it is no longer needed.
 
 ## Existing website rollback remains separate
 
