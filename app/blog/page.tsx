@@ -1,26 +1,63 @@
-import { Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
+import { BookOpenCheck, Newspaper } from "lucide-react";
 import { getAllPosts } from "@/lib/content";
-import { formatDate } from "@/utils/date";
+import {
+  selectEssentialKnowledgePosts,
+  sortPostsNewestFirst,
+} from "@/lib/content/knowledge";
+import KnowledgeArticleCard, {
+  type KnowledgeArticleSummary,
+} from "@/components/blog/KnowledgeArticleCard";
+import KnowledgeCentreBrowser from "@/components/blog/KnowledgeCentreBrowser";
 
 export const revalidate = 60;
 
 export const metadata = {
   title: "Knowledge Center",
-  description: "Expert insights on insurance claim rejection, delays, mis-selling, and dispute resolution. Read our latest guides and case studies.",
+  description:
+    "Expert insights on insurance claim rejection, delays, mis-selling, and dispute resolution. Read our latest guides and case studies.",
   alternates: {
     canonical: "/blog/",
   },
   openGraph: {
     title: "Knowledge Center | Tatkal Claims",
-    description: "Expert insights on insurance claim rejection, delays, mis-selling, and dispute resolution.",
+    description:
+      "Expert insights on insurance claim rejection, delays, mis-selling, and dispute resolution.",
     url: "https://tatkalclaims.com/blog/",
     type: "website",
   },
 };
 
+function summarizePost(post: Awaited<ReturnType<typeof getAllPosts>>[number]): KnowledgeArticleSummary {
+  return {
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    category: post.category,
+    contentType: post.contentType,
+    author: post.author,
+    date: post.date,
+    publishedAt: post.publishedAt,
+    readTime: post.readTime,
+    image: {
+      url: post.image.url,
+      alt: post.image.alt,
+    },
+  };
+}
+
 export default async function BlogListPage() {
   const posts = await getAllPosts();
+  const newestPosts = sortPostsNewestFirst(posts);
+  const essentialPosts = selectEssentialKnowledgePosts(posts, 3);
+  const essentialSlugs = new Set(essentialPosts.map((post) => post.slug));
+  const latestPosts = newestPosts
+    .filter((post) => !essentialSlugs.has(post.slug))
+    .slice(0, 6);
+
+  const allArticles = newestPosts.map(summarizePost);
+  const essentialArticles = essentialPosts.map(summarizePost);
+  const latestArticles = latestPosts.map(summarizePost);
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -42,75 +79,128 @@ export default async function BlogListPage() {
     })),
   };
 
+  const newsCount = posts.filter(
+    (post) =>
+      post.contentType === "news" ||
+      post.contentType === "regulatoryUpdate"
+  ).length;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <main className="min-h-screen bg-slate-50/50 pt-20">
-        <nav aria-label="Breadcrumb" className="bg-white border-b border-slate-200">
+
+      <main className="min-h-screen bg-white pt-20">
+        <nav
+          aria-label="Breadcrumb"
+          className="border-b border-slate-200 bg-white"
+        >
           <div className="container-main px-4 py-3">
             <ol className="flex items-center gap-2 text-sm text-slate-500">
-              <li><Link href="/" className="hover:text-primary-700 transition-colors">Home</Link></li>
+              <li>
+                <Link
+                  href="/"
+                  className="transition-colors hover:text-primary-700"
+                >
+                  Home
+                </Link>
+              </li>
               <li aria-hidden="true">/</li>
-              <li aria-current="page" className="text-slate-900 font-medium">Knowledge Center</li>
+              <li
+                aria-current="page"
+                className="font-medium text-slate-900"
+              >
+                Knowledge Center
+              </li>
             </ol>
           </div>
         </nav>
 
-        <div className="bg-gradient-to-r from-primary-800 to-primary-900 text-white py-16 md:py-24">
-          <div className="container-main px-4">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Knowledge Center</h1>
-            <p className="text-lg text-primary-100 max-w-2xl">Expert insights to help you understand your rights and navigate insurance disputes successfully.</p>
+        <section className="overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white">
+          <div className="container-main px-4 py-14 md:py-20">
+            <div className="max-w-4xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-200">
+                Tatkal Claims Knowledge Center
+              </p>
+              <h1 className="mt-3 text-3xl font-bold leading-tight md:text-5xl lg:text-6xl">
+                Understand your insurance rights before you need to fight for them
+              </h1>
+              <p className="mt-5 max-w-3xl text-base leading-7 text-primary-100 md:text-lg">
+                Practical guides, real claim decisions, and policyholder-focused
+                updates on claim rejection, delays, mis-selling, health insurance,
+                and changing IRDAI rules.
+              </p>
+
+              <div className="mt-7 flex flex-wrap gap-3 text-sm">
+                <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2">
+                  {posts.length} published articles
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2">
+                  <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
+                  Guides & explainers
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2">
+                  <Newspaper className="h-4 w-4" aria-hidden="true" />
+                  {newsCount} news & updates
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div className="container-main px-4 py-12 md:py-16">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post) => (
-              <article key={post.slug} className="group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 border border-slate-100">
-                <Link href={`/blog/${post.slug}/`} className="block">
-                  <div className="relative h-48 overflow-hidden bg-slate-100">
-                    <img
-                      src={post.image.url}
-                      alt={post.image.alt}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-4 left-4 bg-primary-800 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                      {post.category}
-                    </div>
-                  </div>
+        <section className="container-main px-4 py-14 md:py-16">
+          <div className="mb-8 max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-600">
+              Start here
+            </p>
+            <h2 className="mt-2 text-3xl font-bold text-slate-950 md:text-4xl">
+              Essential guides for the most common insurance disputes
+            </h2>
+            <p className="mt-3 text-slate-600">
+              These guides cover the three problems policyholders most often need
+              to solve first: rejection, delay, and mis-selling.
+            </p>
+          </div>
 
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 text-xs text-slate-500 mb-3">
-                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" aria-hidden="true" />{formatDate(post.date)}</span>
-                      <span className="flex items-center gap-1"><Clock className="w-3 h-3" aria-hidden="true" />{post.readTime}</span>
-                    </div>
-
-                    <h2 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary-700 transition-colors line-clamp-2">
-                      {post.title}
-                    </h2>
-
-                    <p className="text-slate-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-
-                    <div className="flex items-center justify-between">
-                      <span className="flex items-center gap-1 text-xs text-slate-500">
-                        <User className="w-3 h-3" aria-hidden="true" />{post.author}
-                      </span>
-                      <span className="text-primary-700 font-semibold text-sm group-hover:gap-2 gap-1 transition-all inline-flex items-center">
-                        Read More <span aria-hidden="true">→</span>
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              </article>
+          <div className="grid gap-7 md:grid-cols-3">
+            {essentialArticles.map((article) => (
+              <KnowledgeArticleCard
+                key={article.slug}
+                article={article}
+                emphasis
+              />
             ))}
           </div>
-        </div>
+        </section>
+
+        <section className="border-y border-slate-200 bg-slate-50">
+          <div className="container-main px-4 py-14 md:py-16">
+            <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-700">
+                  Latest insights
+                </p>
+                <h2 className="mt-2 text-3xl font-bold text-slate-950 md:text-4xl">
+                  What policyholders should know now
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
+                Ordered by publication date rather than the old migration sequence,
+                so new reporting and guidance can surface naturally.
+              </p>
+            </div>
+
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+              {latestArticles.map((article) => (
+                <KnowledgeArticleCard key={article.slug} article={article} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <KnowledgeCentreBrowser articles={allArticles} />
       </main>
     </>
   );
