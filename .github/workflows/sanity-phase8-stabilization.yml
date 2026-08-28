@@ -9,6 +9,7 @@ on:
       - cms/phase8-preview-fetch-diagnostic
       - cms/phase8-sanity-backup
       - cms/phase8-sanity-recovery
+      - cms/phase8-separate-project-recovery
     paths:
       - app/cms-preview/**
       - app/cms-staging/**
