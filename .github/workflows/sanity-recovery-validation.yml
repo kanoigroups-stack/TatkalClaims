@@ -1,0 +1,203 @@
+name: Sanity recovery validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_dataset:
+        description: Temporary empty recovery dataset (must start with recovery-)
+        required: true
+        default: recovery-test
+        type: string
+      backup_run_id:
+        description: Optional successful backup run ID; leave blank to use the latest successful main backup
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: sanity-recovery-validation
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_RECOVERY_TOKEN }}
+      BACKUP_PASSPHRASE: ${{ secrets.SANITY_BACKUP_PASSPHRASE }}
+      SANITY_RECOVERY_DATASET: ${{ inputs.target_dataset }}
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288
+      NEXT_PUBLIC_SANITY_DATASET: ${{ inputs.target_dataset }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Check required recovery secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${SANITY_AUTH_TOKEN:-}" ]; then
+            echo "::error::Missing GitHub Actions secret SANITY_RECOVERY_TOKEN"
+            exit 1
+          fi
+          if [ -z "${BACKUP_PASSPHRASE:-}" ]; then
+            echo "::error::Missing GitHub Actions secret SANITY_BACKUP_PASSPHRASE"
+            exit 1
+          fi
+
+      - name: Validate isolated empty recovery dataset
+        run: npx --yes tsx@4.19.2 scripts/sanity-recovery-validation.ts preflight
+
+      - name: Resolve encrypted backup artifact
+        id: backup
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_BACKUP_RUN_ID: ${{ inputs.backup_run_id }}
+        run: |
+          set -euo pipefail
+          mkdir -p recovery-work/artifact
+
+          BACKUP_RUN_ID="${REQUESTED_BACKUP_RUN_ID:-}"
+
+          if [ -z "$BACKUP_RUN_ID" ]; then
+            RUNS_JSON="$(curl -fsSL \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/sanity-production-backup.yml/runs?branch=main&status=success&per_page=1")"
+
+            BACKUP_RUN_ID="$(printf '%s' "$RUNS_JSON" | jq -r '.workflow_runs[0].id // empty')"
+          fi
+
+          if [ -z "$BACKUP_RUN_ID" ]; then
+            echo "::error::No successful Sanity production backup run was found"
+            exit 1
+          fi
+
+          ARTIFACTS_JSON="$(curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${BACKUP_RUN_ID}/artifacts")"
+
+          ARTIFACT_ID="$(printf '%s' "$ARTIFACTS_JSON" | jq -r \
+            '[.artifacts[] | select(.expired == false and (.name | startswith("sanity-production-backup-")))] | sort_by(.created_at) | last | .id // empty')"
+
+          ARTIFACT_NAME="$(printf '%s' "$ARTIFACTS_JSON" | jq -r \
+            '[.artifacts[] | select(.expired == false and (.name | startswith("sanity-production-backup-")))] | sort_by(.created_at) | last | .name // empty')"
+
+          if [ -z "$ARTIFACT_ID" ]; then
+            echo "::error::No unexpired encrypted Sanity backup artifact was found for run $BACKUP_RUN_ID"
+            exit 1
+          fi
+
+          echo "run_id=$BACKUP_RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "artifact_id=$ARTIFACT_ID" >> "$GITHUB_OUTPUT"
+          echo "artifact_name=$ARTIFACT_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Download and verify encrypted backup
+        id: archive
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          curl -fsSL \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${{ steps.backup.outputs.artifact_id }}/zip" \
+            -o recovery-work/backup-artifact.zip
+
+          unzip -q recovery-work/backup-artifact.zip -d recovery-work/artifact
+
+          ENCRYPTED="$(find recovery-work/artifact -type f -name '*.tar.gz.enc' -print -quit)"
+          CHECKSUM="$(find recovery-work/artifact -type f -name '*.sha256' -print -quit)"
+
+          if [ -z "$ENCRYPTED" ] || [ -z "$CHECKSUM" ]; then
+            echo "::error::Encrypted backup or checksum is missing from the artifact"
+            exit 1
+          fi
+
+          EXPECTED_HASH="$(awk 'NR==1 {print $1}' "$CHECKSUM")"
+          ACTUAL_HASH="$(sha256sum "$ENCRYPTED" | awk '{print $1}')"
+
+          if [ "$EXPECTED_HASH" != "$ACTUAL_HASH" ]; then
+            echo "::error::Encrypted backup SHA-256 checksum does not match"
+            exit 1
+          fi
+
+          PLAIN="recovery-work/restore.tar.gz"
+
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
+            -in "$ENCRYPTED" \
+            -out "$PLAIN" \
+            -pass env:BACKUP_PASSPHRASE
+
+          gzip -t "$PLAIN"
+          mkdir -p recovery-work/extracted
+          tar -xzf "$PLAIN" -C recovery-work/extracted
+
+          DATA_NDJSON="$(find recovery-work/extracted -type f -name 'data.ndjson' -print -quit)"
+          if [ -z "$DATA_NDJSON" ]; then
+            echo "::error::Decrypted Sanity export does not contain data.ndjson"
+            exit 1
+          fi
+
+          ASSET_BINARY_COUNT="$(find recovery-work/extracted -type f \( -path '*/images/*' -o -path '*/files/*' \) | wc -l | tr -d ' ')"
+
+          echo "plain=$PLAIN" >> "$GITHUB_OUTPUT"
+          echo "data_ndjson=$DATA_NDJSON" >> "$GITHUB_OUTPUT"
+          echo "asset_binary_count=$ASSET_BINARY_COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Import backup into recovery dataset
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx sanity dataset import "${{ steps.archive.outputs.plain }}" "$SANITY_RECOVERY_DATASET"
+
+      - name: Verify restored dataset against backup
+        env:
+          RECOVERY_DATA_NDJSON: ${{ steps.archive.outputs.data_ndjson }}
+          RECOVERY_ASSET_BINARY_COUNT: ${{ steps.archive.outputs.asset_binary_count }}
+          RECOVERY_VERIFICATION_OUTPUT: recovery-work/recovery-verification.json
+        run: npx --yes tsx@4.19.2 scripts/sanity-recovery-validation.ts verify
+
+      - name: Write non-sensitive recovery manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > recovery-work/recovery-manifest.txt <<EOF
+          Tatkal Claims Sanity recovery validation
+          Source backup run: ${{ steps.backup.outputs.run_id }}
+          Source backup artifact: ${{ steps.backup.outputs.artifact_name }}
+          Target dataset: ${SANITY_RECOVERY_DATASET}
+          Production dataset modified: no
+          Migration dataset modified: no
+          EOF
+
+      - name: Upload recovery verification
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-recovery-verification-${{ inputs.target_dataset }}
+          path: |
+            recovery-work/recovery-verification.json
+            recovery-work/recovery-manifest.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Remove decrypted backup files
+        if: always()
+        shell: bash
+        run: rm -rf recovery-work
