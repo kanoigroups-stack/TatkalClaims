@@ -109,6 +109,19 @@ async function main() {
       imageSchema.includes("Rule.required()"),
     "Article image validation is incomplete"
   );
+  assert(
+    articleSchema.includes(
+      "Optional. Used for Open Graph and Twitter sharing. If left blank, the featured image is used."
+    ) &&
+      !articleSchema.includes("generated Tatkal Claims social card"),
+    "Social-image editor guidance does not match frontend fallback behavior"
+  );
+  assert(
+    imageSchema.includes(
+      "Used only for images inserted inside the article body. Featured and social image placement ignores this setting."
+    ),
+    "Image display-size editor guidance does not explain its body-only scope"
+  );
 
   assert(
     envExample.includes("SANITY_PREVIEW_TOKEN=") &&
@@ -231,6 +244,7 @@ async function main() {
       publicSanityCachingPreserved: true,
       migratedSlugLockPresent: true,
       usableImageValidationPresent: true,
+      mediaEditorGuidanceMatchesFrontend: true,
       seoDefaultParity: true,
       seoOverridesActive: true,
       noIndexSitemapExclusion: true,
