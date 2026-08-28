@@ -91,7 +91,7 @@ export const article = defineType({
       type: "articleImage",
       group: "media",
       description:
-        "Optional. Falls back to featured image, then to the generated Tatkal Claims social card.",
+        "Optional. Used for Open Graph and Twitter sharing. If left blank, the featured image is used.",
     }),
     defineField({
       name: "publishedAt",
