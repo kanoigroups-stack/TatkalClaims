@@ -51,6 +51,8 @@ export const articleImage = defineType({
       name: "displaySize",
       title: "Display size",
       type: "string",
+      description:
+        "Used only for images inserted inside the article body. Featured and social image placement ignores this setting.",
       options: {
         list: [
           { title: "Normal", value: "normal" },
