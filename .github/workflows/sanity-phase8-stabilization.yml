@@ -12,6 +12,7 @@ on:
       - cms/phase8-separate-project-recovery
       - cms/phase8-recovery-system-doc-fix
       - cms/sanity-mcp-schema-deploy
+      - cms/sanity-article-draft-sop
     paths:
       - app/cms-preview/**
       - app/cms-staging/**
@@ -32,9 +33,11 @@ on:
       - scripts/verify-sanity-backup-workflow.ts
       - scripts/verify-sanity-recovery-workflow.ts
       - scripts/verify-sanity-schema-deploy-workflow.ts
+      - scripts/verify-sanity-article-draft-sop.ts
       - scripts/sanity-recovery-validation.ts
       - docs/sanity-backup-recovery.md
       - docs/sanity-mcp-automation.md
+      - docs/sanity-article-draft-sop.md
   workflow_dispatch:
 
 permissions:
@@ -73,6 +76,9 @@ jobs:
 
       - name: Verify Sanity schema deploy workflow safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-schema-deploy-workflow.ts
+
+      - name: Verify Sanity article draft SOP invariants
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-article-draft-sop.ts
 
       - name: Set up Node.js for latest Sanity CLI
         uses: actions/setup-node@v4
