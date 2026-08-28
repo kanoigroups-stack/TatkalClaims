@@ -3,6 +3,7 @@ name: Phase 9 legacy retirement gate
 on:
   push:
     branches:
+      - main
       - cms/phase9b-legacy-retirement-dry-run
     paths:
       - app/**
