@@ -6,6 +6,7 @@ on:
       - cms/phase8-stabilization
       - cms/phase8-link-rendering-fix
       - cms/phase8-preview-link-diagnostic
+      - cms/phase8-preview-fetch-diagnostic
     paths:
       - app/cms-preview/**
       - app/cms-staging/**
