@@ -31,6 +31,10 @@ function validateRecoveryTarget() {
   );
 }
 
+function isSystemDocumentId(id: string) {
+  return id.startsWith("_.");
+}
+
 function clientForTarget() {
   assert(token, "SANITY_AUTH_TOKEN is required for recovery validation");
 
@@ -54,14 +58,19 @@ async function preflight() {
     `Recovery dataset "${targetDataset}" does not exist. Create it manually before running recovery validation.`
   );
 
-  const existingCount = await client.fetch<number>("count(*)");
+  const existing = await client.fetch<Array<{ _id: string }>>('*[]{_id}');
+  const existingContent = existing.filter(
+    (document) => !isSystemDocumentId(document._id)
+  );
+  const systemDocumentCount = existing.length - existingContent.length;
+
   assert(
-    existingCount === 0,
-    `Recovery dataset "${targetDataset}" is not empty (${existingCount} documents). Use a fresh empty recovery-* dataset.`
+    existingContent.length === 0,
+    `Recovery dataset "${targetDataset}" is not empty (${existingContent.length} non-system documents; ${systemDocumentCount} Sanity system documents ignored). Use a fresh empty recovery-* dataset.`
   );
 
   console.log(
-    `Recovery preflight passed: project ${projectId}, dataset ${targetDataset} exists, is empty, and is isolated from the live Tatkal Claims project.`
+    `Recovery preflight passed: project ${projectId}, dataset ${targetDataset} has zero non-system documents (${systemDocumentCount} Sanity system documents ignored) and is isolated from the live Tatkal Claims project.`
   );
 }
 
@@ -145,8 +154,12 @@ async function verify() {
   const restored = await client.fetch<RestoredDocument[]>(
     '*[]{_id, _type, "slug": slug.current}'
   );
+  const restoredContent = restored.filter(
+    (document) => !isSystemDocumentId(document._id)
+  );
+  const restoredSystemDocumentCount = restored.length - restoredContent.length;
 
-  const restoredNonAssetIds = restored
+  const restoredNonAssetIds = restoredContent
     .filter((document) => !assetTypes.has(document._type))
     .map((document) => document._id);
 
@@ -155,7 +168,7 @@ async function verify() {
     "Restored non-asset document IDs do not exactly match the backup"
   );
 
-  const restoredPublishedArticleSlugs = restored
+  const restoredPublishedArticleSlugs = restoredContent
     .filter(
       (document) =>
         document._type === "article" &&
@@ -169,7 +182,7 @@ async function verify() {
     "Restored published article slugs do not exactly match the backup"
   );
 
-  const restoredDraftArticleIds = restored
+  const restoredDraftArticleIds = restoredContent
     .filter(
       (document) =>
         document._type === "article" && document._id.startsWith("drafts.")
@@ -184,7 +197,7 @@ async function verify() {
   const expectedAssetBinaryCount = Number(
     process.env.RECOVERY_ASSET_BINARY_COUNT || "0"
   );
-  const restoredAssetCount = restored.filter((document) =>
+  const restoredAssetCount = restoredContent.filter((document) =>
     assetTypes.has(document._type)
   ).length;
 
@@ -208,6 +221,7 @@ async function verify() {
     restoredDraftArticles: restoredDraftArticleIds.length,
     backupAssetBinaries: expectedAssetBinaryCount,
     restoredAssetDocuments: restoredAssetCount,
+    restoredSanitySystemDocumentsIgnored: restoredSystemDocumentCount,
     protectedSlugsVerified: protectedSlugs.length,
     exactNonAssetIdParity: true,
     exactPublishedSlugParity: true,
