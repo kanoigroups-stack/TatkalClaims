@@ -19,6 +19,8 @@ jobs:
       BACKUP_PASSPHRASE: ${{ secrets.SANITY_BACKUP_PASSPHRASE }}
       SANITY_PROJECT_ID: ah5vm288
       SANITY_DATASET: production
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288
+      NEXT_PUBLIC_SANITY_DATASET: production
 
     steps:
       - name: Check out repository
@@ -61,9 +63,7 @@ jobs:
 
           # The recovery backup intentionally keeps both draft documents
           # and asset binaries using Sanity export defaults.
-          npx sanity datasets export "$SANITY_DATASET" "$PLAIN" \
-            --project-id "$SANITY_PROJECT_ID" \
-            --overwrite
+          npx sanity dataset export "$SANITY_DATASET" "$PLAIN" --overwrite
 
           test -s "$PLAIN"
           gzip -t "$PLAIN"
