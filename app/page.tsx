@@ -7,12 +7,11 @@ import KnowledgeSection from "@/components/sections/KnowledgeSection";
 import CTABannerSection from "@/components/sections/CTABannerSection";
 import FAQSection from "@/components/sections/FAQSection";
 import { getAllPosts } from "@/lib/content";
-import { getLiveContentSource } from "@/lib/content/live";
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const posts = await getAllPosts(getLiveContentSource());
+  const posts = await getAllPosts();
   const knowledgeArticles = posts.slice(0, 3).map((post) => ({
     slug: post.slug,
     title: post.title,

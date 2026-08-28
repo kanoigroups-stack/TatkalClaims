@@ -17,7 +17,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
-  const post = await getPostBySlug(params.slug, "sanity");
+  const post = await getPostBySlug(params.slug);
   if (!post) {
     return {
       title: "Article Not Found",
@@ -34,8 +34,8 @@ export default async function CmsStagingArticlePage({
   params: { slug: string };
 }) {
   const [post, posts] = await Promise.all([
-    getPostBySlug(params.slug, "sanity"),
-    getAllPosts("sanity"),
+    getPostBySlug(params.slug),
+    getAllPosts(),
   ]);
 
   if (!post) notFound();

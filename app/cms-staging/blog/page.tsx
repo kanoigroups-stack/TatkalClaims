@@ -6,7 +6,7 @@ import { formatDate } from "@/utils/date";
 export const dynamic = "force-dynamic";
 
 export default async function CmsStagingBlogPage() {
-  const posts = await getAllPosts("sanity");
+  const posts = await getAllPosts();
 
   return (
     <main className="min-h-screen bg-slate-50/50 pt-20">
