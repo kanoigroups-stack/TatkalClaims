@@ -6,12 +6,21 @@ function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 
-const projectId = "ah5vm288";
+const liveProjectId = "ah5vm288";
+const projectId = process.env.SANITY_RECOVERY_PROJECT_ID || "";
 const apiVersion = "2026-08-27";
 const targetDataset = process.env.SANITY_RECOVERY_DATASET || "";
 const token = process.env.SANITY_AUTH_TOKEN || "";
 
-function validateTargetName() {
+function validateRecoveryTarget() {
+  assert(
+    /^[a-z0-9]+$/.test(projectId),
+    "Recovery project ID is required and must contain only lowercase letters and numbers"
+  );
+  assert(
+    projectId !== liveProjectId,
+    "Recovery validation can never target the live Tatkal Claims Sanity project"
+  );
   assert(
     /^recovery-[a-z0-9][a-z0-9-]{0,63}$/.test(targetDataset),
     'Recovery dataset name must start with "recovery-" and contain only lowercase letters, numbers, and hyphens'
@@ -36,7 +45,7 @@ function clientForTarget() {
 }
 
 async function preflight() {
-  validateTargetName();
+  validateRecoveryTarget();
   const client = clientForTarget();
 
   const datasets = await client.datasets.list();
@@ -52,7 +61,7 @@ async function preflight() {
   );
 
   console.log(
-    `Recovery preflight passed: ${targetDataset} exists, is empty, and is isolated from production.`
+    `Recovery preflight passed: project ${projectId}, dataset ${targetDataset} exists, is empty, and is isolated from the live Tatkal Claims project.`
   );
 }
 
@@ -82,7 +91,7 @@ function sameStrings(a: string[], b: string[]) {
 }
 
 async function verify() {
-  validateTargetName();
+  validateRecoveryTarget();
 
   const ndjsonPath = process.env.RECOVERY_DATA_NDJSON || "";
   assert(ndjsonPath, "RECOVERY_DATA_NDJSON is required for recovery verification");
@@ -189,6 +198,7 @@ async function verify() {
   const summary = {
     schemaVersion: 1,
     phase: "8D-recovery-validation",
+    targetProjectId: projectId,
     targetDataset,
     expectedNonAssetDocuments: expectedNonAssetIds.length,
     restoredNonAssetDocuments: restoredNonAssetIds.length,
