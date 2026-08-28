@@ -1,7 +1,3 @@
-export type ContentSource = "legacy" | "sanity";
-
-export type ArticleBodyFormat = "legacy" | "portableText";
-
 export type ArticleImage = {
   url: string;
   alt: string;
@@ -22,7 +18,6 @@ export type ArticleSeo = {
 };
 
 export type ContentPost = {
-  source: ContentSource;
   slug: string;
   title: string;
   excerpt: string;
@@ -43,7 +38,5 @@ export type ContentPost = {
   cornerstone: boolean;
   monetization: "none" | "light" | "standard";
   relatedSlugs: string[];
-  bodyFormat: ArticleBodyFormat;
   body: unknown[];
-  legacyContent?: string;
 };

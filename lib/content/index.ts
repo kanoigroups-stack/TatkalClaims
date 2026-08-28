@@ -1,48 +1,36 @@
-import { getLegacyPosts } from "./legacy";
 import { getSanityPostBySlug, getSanityPosts } from "./sanity";
-import type { ContentPost, ContentSource } from "./types";
+import type { ContentPost } from "./types";
 
-export type { ContentPost, ContentSource } from "./types";
+export type { ContentPost } from "./types";
 
-export async function getAllPosts(
-  source: ContentSource = "legacy"
-): Promise<ContentPost[]> {
-  return source === "sanity" ? getSanityPosts() : getLegacyPosts();
+export async function getAllPosts(): Promise<ContentPost[]> {
+  return getSanityPosts();
 }
 
 export async function getPostBySlug(
-  slug: string,
-  source: ContentSource = "legacy"
+  slug: string
 ): Promise<ContentPost | null> {
-  if (source === "sanity") {
-    return getSanityPostBySlug(slug);
-  }
-
-  return getLegacyPosts().find((post) => post.slug === slug) || null;
+  return getSanityPostBySlug(slug);
 }
 
 export async function getLatestPosts(
-  limit: number,
-  source: ContentSource = "legacy"
+  limit: number
 ): Promise<ContentPost[]> {
-  const posts = await getAllPosts(source);
+  const posts = await getAllPosts();
   return [...posts]
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
     .slice(0, Math.max(0, limit));
 }
 
-export async function getFeaturedPosts(
-  source: ContentSource = "legacy"
-): Promise<ContentPost[]> {
-  const posts = await getAllPosts(source);
+export async function getFeaturedPosts(): Promise<ContentPost[]> {
+  const posts = await getAllPosts();
   return posts.filter((post) => post.featured);
 }
 
 export async function getPostsByCategory(
-  category: string,
-  source: ContentSource = "legacy"
+  category: string
 ): Promise<ContentPost[]> {
-  const posts = await getAllPosts(source);
+  const posts = await getAllPosts();
   return posts.filter(
     (post) => post.category.toLowerCase() === category.toLowerCase()
   );
@@ -50,10 +38,9 @@ export async function getPostsByCategory(
 
 export async function getRelatedPosts(
   slug: string,
-  limit = 3,
-  source: ContentSource = "legacy"
+  limit = 3
 ): Promise<ContentPost[]> {
-  const posts = await getAllPosts(source);
+  const posts = await getAllPosts();
   const target = posts.find((post) => post.slug === slug);
 
   if (!target) return [];

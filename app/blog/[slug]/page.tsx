@@ -2,10 +2,8 @@ import { notFound } from "next/navigation";
 import { Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
 import ReadingProgress from "@/components/blog/ReadingProgress";
-import LegacyArticleBody from "@/components/blog/LegacyArticleBody";
 import PortableArticleBody from "@/components/blog/PortableArticleBody";
 import { getAllPosts, getPostBySlug } from "@/lib/content";
-import { getLiveContentSource } from "@/lib/content/live";
 import {
   buildArticleMetadata,
   buildArticleSchema,
@@ -17,7 +15,7 @@ export const revalidate = 60;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts(getLiveContentSource());
+  const posts = await getAllPosts();
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -29,7 +27,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
-  const post = await getPostBySlug(params.slug, getLiveContentSource());
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
     return {
@@ -46,10 +44,9 @@ export default async function BlogPostPage({
 }: {
   params: { slug: string };
 }) {
-  const source = getLiveContentSource();
   const [post, posts] = await Promise.all([
-    getPostBySlug(params.slug, source),
-    getAllPosts(source),
+    getPostBySlug(params.slug),
+    getAllPosts(),
   ]);
 
   if (!post) {
@@ -119,11 +116,7 @@ export default async function BlogPostPage({
 
         <article className="max-w-3xl mx-auto">
           <div className="prose prose-lg max-w-none">
-            {post.bodyFormat === "portableText" ? (
-              <PortableArticleBody value={post.body} />
-            ) : (
-              <LegacyArticleBody content={post.legacyContent || ""} />
-            )}
+            <PortableArticleBody value={post.body} />
           </div>
         </article>
 

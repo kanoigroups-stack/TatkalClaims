@@ -9,31 +9,29 @@ India's Most Trusted Insurance Dispute Resolution Platform
 3. Import your GitHub repo
 4. Vercel auto-detects Next.js → Click Deploy
 
-## Add Blog Posts
+## Content Management
 
-Edit `data/blogs.json` directly on GitHub:
+Tatkal Claims articles are managed in **Sanity CMS**, not in a repository JSON file.
 
-1. Open `data/blogs.json`
-2. Click the pencil icon (Edit)
-3. Add a new post object to the `"posts"` array
-4. Commit changes
-5. Vercel auto-deploys!
+- Studio: `https://tatkalclaims.com/studio/`
+- Public articles: `/blog/[slug]/`
+- Authenticated editorial preview: `/cms-preview/blog/`
+- Public content reads the Sanity `production` dataset with 60-second revalidation.
+- Drafts must be reviewed through the authenticated preview and are not published automatically.
+- Do not change migrated slugs or `legacyOrder` during routine editorial work.
+- Do not reintroduce the retired `data/blogs.json` / `BLOG_CONTENT_SOURCE=legacy` runtime.
 
-## Post Format
+For MCP-assisted article creation and editing, follow:
 
-```json
-{
-  "slug": "your-post-slug",
-  "title": "Your Post Title",
-  "excerpt": "Short description",
-  "category": "Claim Rejection",
-  "readTime": "5 min read",
-  "author": "Legal Team",
-  "date": "2026-06-15",
-  "image": "https://images.unsplash.com/photo-xxx?w=800&h=400&fit=crop",
-  "content": "Your content here. Use \\n for new lines. Use ## for headings."
-}
-```
+- `docs/sanity-article-draft-sop.md`
+- `docs/sanity-mcp-automation.md`
+
+## Content Safety
+
+- Publishing requires explicit approval.
+- New editorial images should normally be uploaded to Sanity and require alt text.
+- Protected migrated URLs and the permanent claim-rejection redirect must remain intact.
+- Sanity production backups and recovery validation are documented in `docs/sanity-backup-recovery.md`.
 
 ## Tech Stack
 
@@ -42,3 +40,4 @@ Edit `data/blogs.json` directly on GitHub:
 - TypeScript
 - Tailwind CSS
 - Framer Motion
+- Sanity CMS

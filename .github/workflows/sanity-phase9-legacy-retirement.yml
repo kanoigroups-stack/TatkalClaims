@@ -1,0 +1,96 @@
+name: Phase 9 legacy retirement gate
+
+on:
+  push:
+    branches:
+      - main
+      - cms/phase9b-legacy-retirement-dry-run
+    paths:
+      - app/**
+      - components/blog/**
+      - lib/content/**
+      - sanity/**
+      - .env.example
+      - middleware.ts
+      - next.config.js
+      - scripts/**
+      - docs/**
+      - .github/workflows/sanity-phase9-legacy-retirement.yml
+      - .github/workflows/sanity-production-backup.yml
+      - .github/workflows/sanity-recovery-validation.yml
+      - .github/workflows/sanity-schema-deploy.yml
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanity-phase9-legacy-retirement
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out Phase 9 retirement branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Verify Phase 9 Sanity-only retirement invariants
+        run: npx --yes tsx@4.19.2 scripts/verify-phase9-legacy-retirement.ts
+
+      - name: Verify Studio Portable Text link rendering
+        run: npx --yes tsx@4.19.2 scripts/verify-portable-link-rendering.tsx
+
+      - name: Verify deterministic preview draft selection
+        run: npx --yes tsx@4.19.2 scripts/verify-preview-draft-selection.ts
+
+      - name: Verify Sanity backup workflow safeguards
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-backup-workflow.ts
+
+      - name: Verify Sanity schema deploy workflow safeguards
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-schema-deploy-workflow.ts
+
+      - name: Verify Sanity article draft SOP invariants
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-article-draft-sop.ts
+
+      - name: Verify Sanity recovery workflow safeguards
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-recovery-workflow.ts
+
+      - name: Type-check application and verification code
+        run: npx tsc --noEmit
+
+      - name: Set up Node.js for latest Sanity CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+
+      - name: Validate Studio schema with latest Sanity CLI
+        run: npx --yes sanity@latest schemas validate --workspace tatkalClaims --level error
+
+      - name: Restore Node.js for application build
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build Sanity-only application
+        run: npm run build
+
+      - name: Upload Phase 9 retirement verification
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase9-legacy-retirement-verification
+          path: migration/phase9/legacy-retirement-verification.json
+          if-no-files-found: error

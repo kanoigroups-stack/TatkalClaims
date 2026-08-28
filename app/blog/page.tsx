@@ -1,7 +1,6 @@
 import { Clock, User, Calendar } from "lucide-react";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
-import { getLiveContentSource } from "@/lib/content/live";
 import { formatDate } from "@/utils/date";
 
 export const revalidate = 60;
@@ -21,7 +20,7 @@ export const metadata = {
 };
 
 export default async function BlogListPage() {
-  const posts = await getAllPosts(getLiveContentSource());
+  const posts = await getAllPosts();
 
   const structuredData = {
     "@context": "https://schema.org",

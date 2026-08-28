@@ -1,6 +1,5 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/content";
-import { getLiveContentSource } from "@/lib/content/live";
 import { getAllServiceSlugs } from "@/lib/services";
 
 export const revalidate = 60;
@@ -29,8 +28,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Blog posts from the active content adapter source
-  const posts = await getAllPosts(getLiveContentSource());
+  // Blog posts from the Sanity production adapter.
+  const posts = await getAllPosts();
   const blogPages = posts
     .filter((post) => !post.seo?.noIndex)
     .map((post) => ({

@@ -119,7 +119,6 @@ export function mapSanityPost(post: SanityPostProjection): ContentPost {
   }
 
   return {
-    source: "sanity",
     slug: post.slug,
     title: post.title,
     excerpt: post.excerpt,
@@ -142,7 +141,6 @@ export function mapSanityPost(post: SanityPostProjection): ContentPost {
     cornerstone: Boolean(post.cornerstone),
     monetization: post.monetization || "none",
     relatedSlugs: post.relatedSlugs || [],
-    bodyFormat: "portableText",
     body: post.body || [],
   };
 }

@@ -86,7 +86,7 @@ async function main() {
       'count(*[_type in ["article", "author", "category", "topic"]])'
     ),
     anonymousClient.fetch<number>('count(*[_type == "article"])'),
-    getAllPosts("sanity"),
+    getAllPosts(),
   ]);
 
   assert(

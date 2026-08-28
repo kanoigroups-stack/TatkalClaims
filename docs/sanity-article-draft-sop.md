@@ -6,7 +6,7 @@ This is the required operating procedure for creating or editing Tatkal Claims a
 
 It applies to project `ah5vm288`, dataset `production`, and the embedded Studio at `/studio`.
 
-The goal is to automate routine editorial work while keeping URL, SEO, publishing, and rollback safety intact.
+The goal is to automate routine editorial work while keeping URL, SEO, publishing, recovery, and migration-audit safety intact.
 
 ## Non-negotiable safety rules
 
@@ -16,7 +16,7 @@ The goal is to automate routine editorial work while keeping URL, SEO, publishin
 4. **Never change a migrated article slug.**
 5. **Never set or modify `legacyOrder` for a new article.** It is migration-only and also makes the Studio treat the slug as locked.
 6. **Preserve `publishedAt` on existing articles** unless the user explicitly requests a publication-date correction.
-7. **Do not touch the legacy rollback stack** as part of editorial work.
+7. **Do not reintroduce the retired legacy content runtime or alter migration evidence** as part of editorial work.
 8. **Do not place AdSense markup in Sanity body content.**
 9. **Do not use `relatedArticles` as if it controls the current public "More Articles" cards.** The field is stored by Sanity, but the public article page currently chooses the first two other posts instead.
 10. **Do not describe `articleChart` as a graphical chart on the live site.** The current renderer presents chart data as an accessible table.

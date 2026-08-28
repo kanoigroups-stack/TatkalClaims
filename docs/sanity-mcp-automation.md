@@ -23,7 +23,7 @@ Sanity MCP is the day-to-day editorial automation layer. GitHub Actions remains 
    - `irdai-30-day-claim-settlement-rule-health-insurance-rights`
    - `mis-selling-guide`
 6. **Preserve original publication dates** unless a deliberate editorial decision says otherwise.
-7. **No legacy rollback retirement** as part of MCP automation.
+7. **Do not reintroduce the retired legacy content runtime or alter migration evidence** as part of MCP automation.
 8. **No AdSense placement in Sanity body content.** Monetization belongs in Next.js components.
 9. **Backups and recovery stay in GitHub Actions.** MCP must not replace the encrypted backup/recovery workflows.
 
