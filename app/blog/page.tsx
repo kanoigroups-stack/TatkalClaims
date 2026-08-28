@@ -150,6 +150,7 @@ export default async function BlogListPage() {
           </div>
         </section>
 
+        <KnowledgeCentreBrowser articles={allArticles}>
         <section className="container-main px-4 py-14 md:py-16">
           <div className="mb-8 max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-600">
@@ -200,7 +201,7 @@ export default async function BlogListPage() {
           </div>
         </section>
 
-        <KnowledgeCentreBrowser articles={allArticles} />
+        </KnowledgeCentreBrowser>
       </main>
     </>
   );
