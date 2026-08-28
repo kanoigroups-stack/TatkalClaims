@@ -11,6 +11,7 @@ on:
       - cms/phase8-sanity-recovery
       - cms/phase8-separate-project-recovery
       - cms/phase8-recovery-system-doc-fix
+      - cms/sanity-mcp-schema-deploy
     paths:
       - app/cms-preview/**
       - app/cms-staging/**
@@ -66,6 +67,9 @@ jobs:
 
       - name: Verify Sanity backup workflow safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-backup-workflow.ts
+
+      - name: Validate Studio schema with latest Sanity CLI
+        run: npx --yes sanity@latest schemas validate --workspace tatkalClaims --level error
 
       - name: Verify Sanity recovery workflow safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-recovery-workflow.ts
