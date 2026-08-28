@@ -34,7 +34,7 @@ export default function KnowledgeCentreBrowser({
       counts.set(article.category, (counts.get(article.category) || 0) + 1);
     }
 
-    return [...counts.entries()]
+    return Array.from(counts.entries())
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   }, [articles]);
