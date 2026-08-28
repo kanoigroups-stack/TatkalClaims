@@ -36,8 +36,10 @@ async function main() {
     "Draft preview does not use the server-only preview token"
   );
   assert(
-    previewClient.includes('perspective: "previewDrafts"'),
-    "Draft preview is not using previewDrafts perspective"
+    previewClient.includes('perspective: "raw"') &&
+      previewClient.includes("preferDraftArticleDocuments") &&
+      previewClient.includes('post._id.startsWith("drafts.")'),
+    "Draft preview is not explicitly preferring raw draft documents"
   );
   assert(
     previewClient.includes("useCdn: false"),
@@ -216,7 +218,7 @@ async function main() {
     phase: "8A-stabilization",
     summary: {
       previewUsesProductionDataset: true,
-      previewUsesAuthenticatedDraftPerspective: true,
+      previewUsesAuthenticatedRawDraftSelection: true,
       previewTokenServerOnly: true,
       previewRouteAuthenticationRequired: true,
       draftSeoMetadataPreview: true,
