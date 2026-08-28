@@ -5,6 +5,7 @@ on:
     branches:
       - cms/phase8-stabilization
       - cms/phase8-link-rendering-fix
+      - cms/phase8-preview-link-diagnostic
     paths:
       - app/cms-preview/**
       - app/cms-staging/**
