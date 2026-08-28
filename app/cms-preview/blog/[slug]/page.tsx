@@ -2,82 +2,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, Clock, User } from "lucide-react";
 import PortableArticleBody from "@/components/blog/PortableArticleBody";
-import {
-  getPreviewSanityFetchDiagnostics,
-  getPreviewSanityPostBySlug,
-} from "@/lib/content/sanity-preview";
+import { getPreviewSanityPostBySlug } from "@/lib/content/sanity-preview";
 import { buildArticleMetadata } from "@/lib/content/seo";
 import { formatDate } from "@/utils/date";
 
 export const dynamic = "force-dynamic";
-
-function inspectPortableBody(value: unknown[]) {
-  let textBlocks = 0;
-  let articleImages = 0;
-  let articleTables = 0;
-  let linkMarkDefs = 0;
-  let markedLinkSpans = 0;
-  let firstLinkHref = "";
-  let firstLinkedText = "";
-
-  for (const item of value) {
-    if (!item || typeof item !== "object") continue;
-
-    const block = item as any;
-
-    if (block._type === "articleImage") {
-      articleImages += 1;
-      continue;
-    }
-
-    if (block._type === "articleTable") {
-      articleTables += 1;
-      continue;
-    }
-
-    if (block._type !== "block") continue;
-    textBlocks += 1;
-
-    const linkDefs = Array.isArray(block.markDefs)
-      ? block.markDefs.filter(
-          (mark: any) =>
-            mark?._type === "link" &&
-            typeof mark?._key === "string" &&
-            typeof mark?.href === "string"
-        )
-      : [];
-
-    linkMarkDefs += linkDefs.length;
-
-    if (!linkDefs.length) continue;
-
-    const linkKeys = new Set(linkDefs.map((mark: any) => mark._key));
-    if (!firstLinkHref) firstLinkHref = linkDefs[0].href;
-
-    const children = Array.isArray(block.children) ? block.children : [];
-
-    for (const child of children) {
-      const marks = Array.isArray(child?.marks) ? child.marks : [];
-      if (!marks.some((mark: string) => linkKeys.has(mark))) continue;
-
-      markedLinkSpans += 1;
-      if (!firstLinkedText && typeof child?.text === "string") {
-        firstLinkedText = child.text;
-      }
-    }
-  }
-
-  return {
-    totalBlocks: value.length,
-    textBlocks,
-    articleImages,
-    articleTables,
-    linkMarkDefs,
-    markedLinkSpans,
-    firstLinkHref,
-    firstLinkedText,
-  };
-}
 
 export async function generateMetadata({
   params,
@@ -105,10 +34,8 @@ export async function generateMetadata({
 
 export default async function CmsPreviewArticlePage({
   params,
-  searchParams,
 }: {
   params: { slug: string };
-  searchParams?: { debug?: string };
 }) {
   let post;
 
@@ -138,76 +65,12 @@ export default async function CmsPreviewArticlePage({
     notFound();
   }
 
-  const debug =
-    searchParams?.debug === "1" ? inspectPortableBody(post.body) : null;
-
-  const fetchDebug =
-    searchParams?.debug === "1"
-      ? await getPreviewSanityFetchDiagnostics(params.slug)
-      : null;
-
-  const rawDebug = fetchDebug?.raw.map((document) => ({
-    id: document._id,
-    originalId: document._originalId || "",
-    ...inspectPortableBody(Array.isArray(document.body) ? document.body : []),
-  }));
-
-  const previewDraftsDebug = fetchDebug?.previewDrafts.map((document) => ({
-    id: document._id,
-    originalId: document._originalId || "",
-    ...inspectPortableBody(Array.isArray(document.body) ? document.body : []),
-  }));
-
   return (
     <main className="min-h-screen bg-slate-50 pb-20 pt-20">
       <div className="border-b border-amber-300 bg-amber-50">
         <div className="container-main px-4 py-4 text-sm text-amber-950">
           <strong>CMS editorial preview:</strong> production dataset, draft-first
           perspective, noindex. This does not replace the published article.
-          {debug && (
-            <div className="mt-3 rounded-lg border border-amber-300 bg-white/80 p-3 font-mono text-xs leading-5">
-              <strong className="font-semibold">Preview diagnostic v2</strong>
-              <div>
-                body={debug.totalBlocks} blocks · text={debug.textBlocks} ·
-                images={debug.articleImages} · tables={debug.articleTables} ·
-                linkDefs={debug.linkMarkDefs} · markedSpans={debug.markedLinkSpans}
-              </div>
-              <div>
-                firstLinkedText={JSON.stringify(debug.firstLinkedText || null)}
-              </div>
-              <div className="break-all">
-                firstHref={JSON.stringify(debug.firstLinkHref || null)}
-              </div>
-
-              <div className="mt-3 border-t border-amber-200 pt-2">
-                <strong>raw + no-store</strong>
-                {(rawDebug || []).map((entry) => (
-                  <div key={entry.id} className="mt-1 break-all">
-                    id={entry.id} · originalId={entry.originalId || "null"} ·
-                    body={entry.totalBlocks} · images={entry.articleImages} ·
-                    tables={entry.articleTables} · linkDefs={entry.linkMarkDefs} ·
-                    markedSpans={entry.markedLinkSpans} ·
-                    firstLinkedText={JSON.stringify(entry.firstLinkedText || null)}
-                  </div>
-                ))}
-                {rawDebug?.length === 0 && <div>no documents</div>}
-              </div>
-
-              <div className="mt-3 border-t border-amber-200 pt-2">
-                <strong>previewDrafts + no-store</strong>
-                {(previewDraftsDebug || []).map((entry) => (
-                  <div key={entry.id + entry.originalId} className="mt-1 break-all">
-                    id={entry.id} · originalId={entry.originalId || "null"} ·
-                    body={entry.totalBlocks} · images={entry.articleImages} ·
-                    tables={entry.articleTables} · linkDefs={entry.linkMarkDefs} ·
-                    markedSpans={entry.markedLinkSpans} ·
-                    firstLinkedText={JSON.stringify(entry.firstLinkedText || null)}
-                  </div>
-                ))}
-                {previewDraftsDebug?.length === 0 && <div>no documents</div>}
-              </div>
-            </div>
-          )}
         </div>
       </div>
 

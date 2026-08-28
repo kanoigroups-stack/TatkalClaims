@@ -11,18 +11,7 @@ import {
 } from "./sanity";
 import type { ContentPost } from "./types";
 
-type PreviewSanityPostProjection = SanityPostProjection & {
-  _id: string;
-};
-
-const PREVIEW_ARTICLE_PROJECTION = SANITY_ARTICLE_PROJECTION.replace(
-  "{",
-  "{\n  _id,"
-);
-
-function getPreviewClient(
-  perspective: "raw" | "previewDrafts" = "raw"
-) {
+function getPreviewClient() {
   const token = process.env.SANITY_PREVIEW_TOKEN;
 
   if (!token) {
@@ -37,105 +26,37 @@ function getPreviewClient(
     apiVersion,
     useCdn: false,
     token,
-    // This repo currently uses @sanity/client 6.15.x while the Content Lake
-    // API version is 2026-08-27. Use the long-supported raw perspective and
-    // explicitly prefer drafts below so preview correctness does not depend on
-    // newer perspective aliases/client semantics.
-    perspective,
+    perspective: "previewDrafts",
   });
-}
-
-function isDraft(post: PreviewSanityPostProjection) {
-  return post._id.startsWith("drafts.");
-}
-
-function isReleaseVersion(post: PreviewSanityPostProjection) {
-  return post._id.startsWith("versions.");
-}
-
-function canonicalDocumentId(post: PreviewSanityPostProjection) {
-  return isDraft(post) ? post._id.slice("drafts.".length) : post._id;
-}
-
-export function preferDraftArticleDocuments(
-  posts: PreviewSanityPostProjection[]
-): PreviewSanityPostProjection[] {
-  const selected = new Map<string, PreviewSanityPostProjection>();
-
-  for (const post of posts) {
-    if (isReleaseVersion(post)) continue;
-
-    const key = canonicalDocumentId(post);
-    const current = selected.get(key);
-
-    if (!current || isDraft(post)) {
-      selected.set(key, post);
-    }
-  }
-
-  return Array.from(selected.values()).sort((a, b) => {
-    const orderDifference =
-      (a.legacyOrder ?? 999999) - (b.legacyOrder ?? 999999);
-
-    if (orderDifference !== 0) return orderDifference;
-    return b.publishedAt.localeCompare(a.publishedAt);
-  });
-}
-
-export type PreviewFetchDiagnosticDocument = {
-  _id: string;
-  _originalId?: string;
-  body?: unknown[];
-};
-
-export async function getPreviewSanityFetchDiagnostics(
-  slug: string
-): Promise<{
-  raw: PreviewFetchDiagnosticDocument[];
-  previewDrafts: PreviewFetchDiagnosticDocument[];
-}> {
-  const query =
-    '*[_type == "article" && slug.current == $slug] { _id, _originalId, body }';
-
-  const [raw, previewDrafts] = await Promise.all([
-    getPreviewClient("raw").fetch<PreviewFetchDiagnosticDocument[]>(
-      query,
-      { slug },
-      { cache: "no-store" }
-    ),
-    getPreviewClient("previewDrafts").fetch<PreviewFetchDiagnosticDocument[]>(
-      query,
-      { slug },
-      { cache: "no-store" }
-    ),
-  ]);
-
-  return { raw, previewDrafts };
 }
 
 export async function getPreviewSanityPosts(): Promise<ContentPost[]> {
   const query =
-    '*[_type == "article" && defined(slug.current) && defined(title) && defined(excerpt) && defined(publishedAt)] ' +
-    PREVIEW_ARTICLE_PROJECTION;
+    '*[_type == "article" && defined(slug.current) && defined(title) && defined(excerpt) && defined(publishedAt)] | ' +
+    "order(coalesce(legacyOrder, 999999) asc, publishedAt desc) " +
+    SANITY_ARTICLE_PROJECTION;
 
-  const posts =
-    await getPreviewClient().fetch<PreviewSanityPostProjection[]>(query);
+  const posts = await getPreviewClient().fetch<SanityPostProjection[]>(
+    query,
+    {},
+    { cache: "no-store" }
+  );
 
-  return preferDraftArticleDocuments(posts).map(mapSanityPost);
+  return posts.map(mapSanityPost);
 }
 
 export async function getPreviewSanityPostBySlug(
   slug: string
 ): Promise<ContentPost | null> {
   const query =
-    '*[_type == "article" && slug.current == $slug] ' +
-    PREVIEW_ARTICLE_PROJECTION;
+    '*[_type == "article" && slug.current == $slug][0] ' +
+    SANITY_ARTICLE_PROJECTION;
 
-  const posts =
-    await getPreviewClient().fetch<PreviewSanityPostProjection[]>(query, {
-      slug,
-    });
+  const post = await getPreviewClient().fetch<SanityPostProjection | null>(
+    query,
+    { slug },
+    { cache: "no-store" }
+  );
 
-  const post = preferDraftArticleDocuments(posts)[0];
   return post ? mapSanityPost(post) : null;
 }

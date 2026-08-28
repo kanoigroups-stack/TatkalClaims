@@ -36,10 +36,16 @@ async function main() {
     "Draft preview does not use the server-only preview token"
   );
   assert(
-    previewClient.includes('perspective: "raw"') &&
-      previewClient.includes("preferDraftArticleDocuments") &&
-      previewClient.includes('post._id.startsWith("drafts.")'),
-    "Draft preview is not explicitly preferring raw draft documents"
+    previewClient.includes('perspective: "previewDrafts"'),
+    "Draft preview is not using the Sanity previewDrafts perspective"
+  );
+  assert(
+    (previewClient.match(/cache: "no-store"/g) || []).length >= 2,
+    "Draft preview fetches must bypass Next.js caching"
+  );
+  assert(
+    !previewClient.includes('perspective: "raw"'),
+    "Draft preview must not use raw perspective for editorial rendering"
   );
   assert(
     previewClient.includes("useCdn: false"),
@@ -218,7 +224,7 @@ async function main() {
     phase: "8A-stabilization",
     summary: {
       previewUsesProductionDataset: true,
-      previewUsesAuthenticatedRawDraftSelection: true,
+      previewUsesAuthenticatedDraftNoStore: true,
       previewTokenServerOnly: true,
       previewRouteAuthenticationRequired: true,
       draftSeoMetadataPreview: true,
