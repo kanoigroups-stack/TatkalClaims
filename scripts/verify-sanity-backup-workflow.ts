@@ -29,14 +29,15 @@ async function main() {
 
   assert(
     workflow.includes("SANITY_PROJECT_ID: ah5vm288") &&
-      workflow.includes("SANITY_DATASET: production"),
+      workflow.includes("SANITY_DATASET: production") &&
+      workflow.includes("NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288") &&
+      workflow.includes("NEXT_PUBLIC_SANITY_DATASET: production"),
     "Backup workflow is not pinned to the Tatkal Claims production dataset"
   );
 
   assert(
-    workflow.includes('npx sanity datasets export "$SANITY_DATASET" "$PLAIN"') &&
-      workflow.includes('--project-id "$SANITY_PROJECT_ID"'),
-    "Backup workflow does not export the intended Sanity dataset"
+    workflow.includes('npx sanity dataset export "$SANITY_DATASET" "$PLAIN" --overwrite'),
+    "Backup workflow does not use the repo-pinned Sanity v3 export command"
   );
 
   assert(
