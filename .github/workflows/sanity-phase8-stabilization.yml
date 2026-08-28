@@ -7,6 +7,7 @@ on:
       - cms/phase8-link-rendering-fix
       - cms/phase8-preview-link-diagnostic
       - cms/phase8-preview-fetch-diagnostic
+      - cms/phase8-sanity-backup
     paths:
       - app/cms-preview/**
       - app/cms-staging/**
@@ -21,6 +22,9 @@ on:
       - scripts/verify-phase7-production-cutover.ts
       - components/blog/PortableArticleBody.tsx
       - .github/workflows/sanity-phase8-stabilization.yml
+      - .github/workflows/sanity-production-backup.yml
+      - scripts/verify-sanity-backup-workflow.ts
+      - docs/sanity-backup-recovery.md
   workflow_dispatch:
 
 permissions:
@@ -53,6 +57,9 @@ jobs:
 
       - name: Verify deterministic preview draft selection
         run: npx --yes tsx@4.19.2 scripts/verify-preview-draft-selection.ts
+
+      - name: Verify Sanity backup workflow safeguards
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-backup-workflow.ts
 
       - name: Re-run Phase 7 production parity and rollback gate
         run: npx --yes tsx@4.19.2 scripts/verify-phase7-production-cutover.ts

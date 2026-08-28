@@ -1,0 +1,125 @@
+name: Sanity production backup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanity-production-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_BACKUP_TOKEN }}
+      BACKUP_PASSPHRASE: ${{ secrets.SANITY_BACKUP_PASSPHRASE }}
+      SANITY_PROJECT_ID: ah5vm288
+      SANITY_DATASET: production
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288
+      NEXT_PUBLIC_SANITY_DATASET: production
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Check required backup secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${SANITY_AUTH_TOKEN:-}" ]; then
+            echo "::error::Missing GitHub Actions secret SANITY_BACKUP_TOKEN"
+            exit 1
+          fi
+          if [ -z "${BACKUP_PASSPHRASE:-}" ]; then
+            echo "::error::Missing GitHub Actions secret SANITY_BACKUP_PASSPHRASE"
+            exit 1
+          fi
+
+      - name: Export production dataset
+        id: export
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p backup
+          STAMP="$(date -u +'%Y-%m-%dT%H%M%SZ')"
+          PLAIN="backup/tatkalclaims-sanity-production-${STAMP}.tar.gz"
+          ENCRYPTED="${PLAIN}.enc"
+
+          echo "plain=${PLAIN}" >> "$GITHUB_OUTPUT"
+          echo "encrypted=${ENCRYPTED}" >> "$GITHUB_OUTPUT"
+          echo "stamp=${STAMP}" >> "$GITHUB_OUTPUT"
+
+          # The recovery backup intentionally keeps both draft documents
+          # and asset binaries using Sanity export defaults.
+          npx sanity dataset export "$SANITY_DATASET" "$PLAIN" --overwrite
+
+          test -s "$PLAIN"
+          gzip -t "$PLAIN"
+          tar -tzf "$PLAIN" > backup/archive-entries.txt
+          test -s backup/archive-entries.txt
+
+      - name: Encrypt and verify backup
+        shell: bash
+        run: |
+          set -euo pipefail
+          PLAIN="${{ steps.export.outputs.plain }}"
+          ENCRYPTED="${{ steps.export.outputs.encrypted }}"
+          VERIFY="backup/verify-${{ steps.export.outputs.stamp }}.tar.gz"
+
+          openssl enc -aes-256-cbc -salt -pbkdf2 -iter 200000 \
+            -in "$PLAIN" \
+            -out "$ENCRYPTED" \
+            -pass env:BACKUP_PASSPHRASE
+
+          test -s "$ENCRYPTED"
+
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
+            -in "$ENCRYPTED" \
+            -out "$VERIFY" \
+            -pass env:BACKUP_PASSPHRASE
+
+          gzip -t "$VERIFY"
+          tar -tzf "$VERIFY" > /dev/null
+
+          sha256sum "$ENCRYPTED" > "${ENCRYPTED}.sha256"
+
+          # Never leave plaintext backup bytes for artifact upload.
+          rm -f "$PLAIN" "$VERIFY" backup/archive-entries.txt
+
+      - name: Write backup manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > backup/manifest.txt <<EOF
+          Tatkal Claims Sanity production backup
+          Project: ${SANITY_PROJECT_ID}
+          Dataset: ${SANITY_DATASET}
+          Created UTC: ${{ steps.export.outputs.stamp }}
+          Includes drafts: yes
+          Includes assets: yes
+          Encryption: AES-256-CBC, PBKDF2, 200000 iterations
+          Recovery: use SANITY_BACKUP_PASSPHRASE to decrypt; never import directly into production during a restore test
+          EOF
+
+      - name: Upload encrypted backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-production-backup-${{ steps.export.outputs.stamp }}
+          path: |
+            ${{ steps.export.outputs.encrypted }}
+            ${{ steps.export.outputs.encrypted }}.sha256
+            backup/manifest.txt
+          if-no-files-found: error
+          retention-days: 90
