@@ -20,7 +20,9 @@ const PREVIEW_ARTICLE_PROJECTION = SANITY_ARTICLE_PROJECTION.replace(
   "{\n  _id,"
 );
 
-function getPreviewClient() {
+function getPreviewClient(
+  perspective: "raw" | "previewDrafts" = "raw"
+) {
   const token = process.env.SANITY_PREVIEW_TOKEN;
 
   if (!token) {
@@ -39,7 +41,7 @@ function getPreviewClient() {
     // API version is 2026-08-27. Use the long-supported raw perspective and
     // explicitly prefer drafts below so preview correctness does not depend on
     // newer perspective aliases/client semantics.
-    perspective: "raw",
+    perspective,
   });
 }
 
@@ -78,6 +80,37 @@ export function preferDraftArticleDocuments(
     if (orderDifference !== 0) return orderDifference;
     return b.publishedAt.localeCompare(a.publishedAt);
   });
+}
+
+export type PreviewFetchDiagnosticDocument = {
+  _id: string;
+  _originalId?: string;
+  body?: unknown[];
+};
+
+export async function getPreviewSanityFetchDiagnostics(
+  slug: string
+): Promise<{
+  raw: PreviewFetchDiagnosticDocument[];
+  previewDrafts: PreviewFetchDiagnosticDocument[];
+}> {
+  const query =
+    '*[_type == "article" && slug.current == $slug] { _id, _originalId, body }';
+
+  const [raw, previewDrafts] = await Promise.all([
+    getPreviewClient("raw").fetch<PreviewFetchDiagnosticDocument[]>(
+      query,
+      { slug },
+      { cache: "no-store" }
+    ),
+    getPreviewClient("previewDrafts").fetch<PreviewFetchDiagnosticDocument[]>(
+      query,
+      { slug },
+      { cache: "no-store" }
+    ),
+  ]);
+
+  return { raw, previewDrafts };
 }
 
 export async function getPreviewSanityPosts(): Promise<ContentPost[]> {
