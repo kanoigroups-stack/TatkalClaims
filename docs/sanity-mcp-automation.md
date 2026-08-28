@@ -52,6 +52,14 @@ In GitHub:
 
 The workflow validates the `tatkalClaims` workspace with the current Sanity CLI before deployment, deploys only schema metadata, then lists stored schemas and uploads a non-sensitive verification artifact.
 
+## Required article SOP
+
+All MCP-created or MCP-edited articles must follow:
+
+`docs/sanity-article-draft-sop.md`
+
+That SOP is authoritative for field population, draft-only writes, preview isolation, SEO/media/link checks, protected-slug handling, publish approval, post-publish verification, and abandoned-draft cleanup.
+
 ## Planned editorial automation after schema deployment
 
 Once MCP can read the deployed schema, the safe target workflow is:
