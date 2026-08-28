@@ -7,23 +7,26 @@ import KnowledgeSection from "@/components/sections/KnowledgeSection";
 import CTABannerSection from "@/components/sections/CTABannerSection";
 import FAQSection from "@/components/sections/FAQSection";
 import { getAllPosts } from "@/lib/content";
+import { selectHomepageKnowledgePosts } from "@/lib/content/knowledge";
 
 export const revalidate = 60;
 
 export default async function Home() {
   const posts = await getAllPosts();
-  const knowledgeArticles = posts.slice(0, 3).map((post) => ({
-    slug: post.slug,
-    title: post.title,
-    excerpt: post.excerpt,
-    category: post.category,
-    readTime: post.readTime,
-    author: post.author,
-    image: {
-      url: post.image.url,
-      alt: post.image.alt,
-    },
-  }));
+  const knowledgeArticles = selectHomepageKnowledgePosts(posts, 3).map(
+    (post) => ({
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      category: post.category,
+      readTime: post.readTime,
+      author: post.author,
+      image: {
+        url: post.image.url,
+        alt: post.image.alt,
+      },
+    })
+  );
 
   return (
     <>
