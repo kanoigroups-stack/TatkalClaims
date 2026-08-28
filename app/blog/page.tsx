@@ -187,8 +187,7 @@ export default async function BlogListPage() {
                 </h2>
               </div>
               <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
-                Ordered by publication date rather than the old migration sequence,
-                so new reporting and guidance can surface naturally.
+                Fresh reporting and practical guidance, ordered by publication date so\n                the newest developments are easy to find.
               </p>
             </div>
 
