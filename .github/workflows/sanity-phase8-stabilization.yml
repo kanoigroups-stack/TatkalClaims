@@ -11,6 +11,7 @@ on:
       - cms/phase8-sanity-recovery
       - cms/phase8-separate-project-recovery
       - cms/phase8-recovery-system-doc-fix
+      - cms/sanity-mcp-schema-deploy
     paths:
       - app/cms-preview/**
       - app/cms-staging/**
@@ -27,10 +28,13 @@ on:
       - .github/workflows/sanity-phase8-stabilization.yml
       - .github/workflows/sanity-production-backup.yml
       - .github/workflows/sanity-recovery-validation.yml
+      - .github/workflows/sanity-schema-deploy.yml
       - scripts/verify-sanity-backup-workflow.ts
       - scripts/verify-sanity-recovery-workflow.ts
+      - scripts/verify-sanity-schema-deploy-workflow.ts
       - scripts/sanity-recovery-validation.ts
       - docs/sanity-backup-recovery.md
+      - docs/sanity-mcp-automation.md
   workflow_dispatch:
 
 permissions:
@@ -66,6 +70,22 @@ jobs:
 
       - name: Verify Sanity backup workflow safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-backup-workflow.ts
+
+      - name: Verify Sanity schema deploy workflow safeguards
+        run: npx --yes tsx@4.19.2 scripts/verify-sanity-schema-deploy-workflow.ts
+
+      - name: Set up Node.js for latest Sanity CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+
+      - name: Validate Studio schema with latest Sanity CLI
+        run: npx --yes sanity@latest schemas validate --workspace tatkalClaims --level error
+
+      - name: Restore Node.js for application verification
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
       - name: Verify Sanity recovery workflow safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-recovery-workflow.ts
