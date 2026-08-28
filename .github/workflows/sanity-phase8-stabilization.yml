@@ -68,8 +68,18 @@ jobs:
       - name: Verify Sanity backup workflow safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-backup-workflow.ts
 
+      - name: Set up Node.js for latest Sanity CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+
       - name: Validate Studio schema with latest Sanity CLI
         run: npx --yes sanity@latest schemas validate --workspace tatkalClaims --level error
+
+      - name: Restore Node.js for application verification
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
       - name: Verify Sanity recovery workflow safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-recovery-workflow.ts
