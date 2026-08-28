@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - cms/phase8-stabilization
+      - cms/phase8-link-rendering-fix
     paths:
       - app/cms-preview/**
       - app/cms-staging/**
@@ -13,7 +14,10 @@ on:
       - .env.example
       - middleware.ts
       - scripts/verify-phase8-stabilization.ts
+      - scripts/verify-portable-link-rendering.tsx
+      - scripts/verify-preview-draft-selection.ts
       - scripts/verify-phase7-production-cutover.ts
+      - components/blog/PortableArticleBody.tsx
       - .github/workflows/sanity-phase8-stabilization.yml
   workflow_dispatch:
 
@@ -41,6 +45,12 @@ jobs:
 
       - name: Verify Phase 8 stabilization safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-phase8-stabilization.ts
+
+      - name: Verify Studio Portable Text link rendering
+        run: npx --yes tsx@4.19.2 scripts/verify-portable-link-rendering.tsx
+
+      - name: Verify deterministic preview draft selection
+        run: npx --yes tsx@4.19.2 scripts/verify-preview-draft-selection.ts
 
       - name: Re-run Phase 7 production parity and rollback gate
         run: npx --yes tsx@4.19.2 scripts/verify-phase7-production-cutover.ts
