@@ -88,8 +88,7 @@ export default function KnowledgeCentreBrowser({
             Find the guidance you need
           </h2>
           <p className="mt-3 max-w-2xl text-slate-600">
-            Search by issue, insurer problem, ruling, or topic and narrow the
-            archive without changing the public article URLs.
+            Search by issue, insurer problem, ruling, or topic and narrow the\n            library to the guidance most relevant to you.
           </p>
         </div>
         <p className="text-sm text-slate-500">
