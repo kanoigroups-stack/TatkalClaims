@@ -92,7 +92,7 @@ export default async function BlogListPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <main className="min-h-screen bg-white pt-20">
+      <main className="min-h-screen bg-white pt-20 font-body">
         <nav
           aria-label="Breadcrumb"
           className="border-b border-slate-200 bg-white"
@@ -121,13 +121,13 @@ export default async function BlogListPage() {
         <section className="overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white">
           <div className="container-main px-4 py-14 md:py-20">
             <div className="max-w-4xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-200">
+              <div className="inline-flex items-center px-4 py-2 bg-white/10 text-primary-100 rounded-full text-sm font-semibold mb-6">
                 Tatkal Claims Knowledge Center
-              </p>
-              <h1 className="mt-3 text-3xl font-bold leading-tight md:text-5xl lg:text-6xl">
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1]">
                 Understand your insurance rights before you need to fight for them
               </h1>
-              <p className="mt-5 max-w-3xl text-base leading-7 text-primary-100 md:text-lg">
+              <p className="mt-6 max-w-3xl text-lg md:text-xl leading-relaxed text-primary-100">
                 Practical guides, real claim decisions, and policyholder-focused
                 updates on claim rejection, delays, mis-selling, health insurance,
                 and changing IRDAI rules.
@@ -153,13 +153,13 @@ export default async function BlogListPage() {
         <KnowledgeCentreBrowser articles={allArticles}>
         <section className="container-main px-4 py-14 md:py-16">
           <div className="mb-8 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-600">
+            <p className="text-sm font-semibold text-accent-600 mb-3">
               Start here
             </p>
-            <h2 className="mt-2 text-3xl font-bold text-slate-950 md:text-4xl">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
               Essential guides for the most common insurance disputes
             </h2>
-            <p className="mt-3 text-slate-600">
+            <p className="text-lg md:text-xl text-slate-600">
               These guides cover the three problems policyholders most often need
               to solve first: rejection, delay, and mis-selling.
             </p>
@@ -180,10 +180,10 @@ export default async function BlogListPage() {
           <div className="container-main px-4 py-14 md:py-16">
             <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-700">
+                <p className="text-sm font-semibold text-primary-700 mb-3">
                   Latest insights
                 </p>
-                <h2 className="mt-2 text-3xl font-bold text-slate-950 md:text-4xl">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900">
                   What policyholders should know now
                 </h2>
               </div>
