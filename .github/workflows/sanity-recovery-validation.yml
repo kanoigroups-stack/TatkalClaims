@@ -3,6 +3,10 @@ name: Sanity recovery validation
 on:
   workflow_dispatch:
     inputs:
+      recovery_project_id:
+        description: Temporary recovery Sanity project ID (must not be the live Tatkal Claims project)
+        required: true
+        type: string
       target_dataset:
         description: Temporary empty recovery dataset (must start with recovery-)
         required: true
@@ -28,8 +32,9 @@ jobs:
     env:
       SANITY_AUTH_TOKEN: ${{ secrets.SANITY_RECOVERY_TOKEN }}
       BACKUP_PASSPHRASE: ${{ secrets.SANITY_BACKUP_PASSPHRASE }}
+      SANITY_RECOVERY_PROJECT_ID: ${{ inputs.recovery_project_id }}
       SANITY_RECOVERY_DATASET: ${{ inputs.target_dataset }}
-      NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ inputs.recovery_project_id }}
       NEXT_PUBLIC_SANITY_DATASET: ${{ inputs.target_dataset }}
 
     steps:
@@ -182,7 +187,9 @@ jobs:
           Tatkal Claims Sanity recovery validation
           Source backup run: ${{ steps.backup.outputs.run_id }}
           Source backup artifact: ${{ steps.backup.outputs.artifact_name }}
+          Target recovery project: ${SANITY_RECOVERY_PROJECT_ID}
           Target dataset: ${SANITY_RECOVERY_DATASET}
+          Live Tatkal Claims project modified: no
           Production dataset modified: no
           Migration dataset modified: no
           EOF
