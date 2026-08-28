@@ -129,16 +129,16 @@ export default function KnowledgeCentreBrowser({
 
   return (
     <>
-      <section className="border-b border-slate-200 bg-slate-50">
+      <section className="border-b border-slate-200 bg-slate-50 font-body">
         <div className="container-main px-4 py-12 md:py-14">
           <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-700">
+            <p className="text-sm font-semibold text-primary-700 mb-3">
               Browse by issue
             </p>
-            <h2 className="mt-2 text-3xl font-bold text-slate-950 md:text-4xl">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
               What problem are you trying to solve?
             </h2>
-            <p className="mt-3 text-slate-600">
+            <p className="text-lg md:text-xl text-slate-600">
               Choose the issue closest to your situation. We will take you
               directly to the matching articles in the library.
             </p>
@@ -167,10 +167,10 @@ export default function KnowledgeCentreBrowser({
                       {item.count}
                     </span>
                   </div>
-                  <h3 className="mt-5 font-bold text-slate-950 transition-colors group-hover:text-primary-700">
+                  <h3 className="mt-5 text-xl font-bold text-slate-900 transition-colors group-hover:text-primary-700">
                     {item.name === "News" ? "News & Updates" : item.name}
                   </h3>
-                  <p className="mt-2 text-sm leading-5 text-slate-600">
+                  <p className="mt-2 text-sm md:text-base leading-relaxed text-slate-600">
                     {details.description}
                   </p>
                 </button>
@@ -184,17 +184,17 @@ export default function KnowledgeCentreBrowser({
 
       <section
         id="article-library"
-        className="container-main scroll-mt-24 px-4 py-14 md:py-20"
+        className="container-main scroll-mt-24 px-4 py-14 md:py-20 font-body"
       >
         <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-700">
+            <p className="text-sm font-semibold text-primary-700 mb-3">
               Full library
             </p>
-            <h2 className="mt-2 text-3xl font-bold text-slate-950 md:text-4xl">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
               Search all articles
             </h2>
-            <p className="mt-3 max-w-2xl text-slate-600">
+            <p className="max-w-2xl text-lg md:text-xl text-slate-600">
               Search by issue, insurer problem, ruling, or topic and narrow the
               library to the guidance most relevant to you.
             </p>
