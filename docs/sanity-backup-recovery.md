@@ -62,21 +62,25 @@ A separate offline copy is recommended for long-term retention.
 
 ## Recovery safety rule
 
-Never test a restore by importing directly into the live `production` dataset.
+Never test a restore inside the live Tatkal Claims Sanity project.
 
-Recovery validation uses a separate temporary dataset whose name must start with `recovery-`. The workflow also refuses to run if that target dataset is not empty.
+Because the live project already uses its dataset quota, recovery validation uses a **separate temporary Sanity project**. The workflow fails immediately if the Recovery Project ID equals the live Tatkal Claims project ID `ah5vm288`.
+
+Inside the temporary project, the target dataset name must start with `recovery-`, and the workflow refuses to run if that target dataset is not empty.
 
 ### One-time recovery-test setup
 
-Create a temporary Sanity dataset manually, for example:
+1. Create a separate temporary Sanity project, for example **Tatkal Claims Recovery Test**.
+2. Inside that temporary project, create an empty dataset named:
+   `recovery-test`
+3. Copy the temporary project's **Project ID**. Project IDs are public identifiers and may be entered into the GitHub workflow form.
+4. Create a temporary project token in the temporary project with **Editor** access.
+5. Add that token to GitHub Actions secrets as:
+   `SANITY_RECOVERY_TOKEN`
 
-`recovery-test`
+The temporary token must belong to the recovery project, not the live Tatkal Claims project.
 
-Then create a temporary Sanity project token with **Editor** access and add it to GitHub Actions secrets as:
-
-`SANITY_RECOVERY_TOKEN`
-
-Do not reuse the backup Viewer token because a restore test must write documents into the temporary dataset. Do not use an Administrator token.
+Do not reuse the backup Viewer token because a restore test must write documents and assets into the temporary project. Do not use an Administrator token.
 
 ### How to validate recovery
 
@@ -85,13 +89,15 @@ In GitHub:
 1. Open **Actions**.
 2. Select **Sanity recovery validation**.
 3. Click **Run workflow**.
-4. Leave the target dataset as `recovery-test` unless a different fresh `recovery-` dataset was created.
-5. Leave Backup run ID blank to use the latest successful production backup.
-6. Run the workflow.
+4. Enter the temporary **Recovery Project ID**.
+5. Leave the target dataset as `recovery-test` unless a different fresh `recovery-` dataset was created in the temporary project.
+6. Leave Backup run ID blank to use the latest successful production backup.
+7. Run the workflow.
 
 The workflow:
 
-- confirms the target exists and is empty
+- confirms the Recovery Project ID is not the live Tatkal Claims project
+- confirms the target dataset exists and is empty
 - downloads the latest successful encrypted production backup
 - verifies its SHA-256 checksum
 - decrypts it only inside the temporary GitHub runner
@@ -102,7 +108,7 @@ The workflow:
 - uploads only a non-sensitive recovery verification summary
 - deletes the decrypted backup files from the runner even if the job fails
 
-After a successful recovery test, delete the temporary `SANITY_RECOVERY_TOKEN` GitHub secret and remove the temporary recovery dataset from Sanity when it is no longer needed.
+After a successful recovery test, delete the temporary `SANITY_RECOVERY_TOKEN` GitHub secret and delete the entire temporary recovery Sanity project when it is no longer needed.
 
 ## Existing website rollback remains separate
 

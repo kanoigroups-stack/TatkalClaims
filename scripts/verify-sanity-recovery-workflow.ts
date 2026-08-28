@@ -21,6 +21,17 @@ async function main() {
   );
 
   assert(
+    workflow.includes("recovery_project_id:") &&
+      workflow.includes(
+        "SANITY_RECOVERY_PROJECT_ID: ${{ inputs.recovery_project_id }}"
+      ) &&
+      workflow.includes(
+        "NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ inputs.recovery_project_id }}"
+      ),
+    "Recovery workflow must require a separate recovery Sanity project ID"
+  );
+
+  assert(
     workflow.includes(
       "BACKUP_PASSPHRASE: ${{ secrets.SANITY_BACKUP_PASSPHRASE }}"
     ),
@@ -67,11 +78,20 @@ async function main() {
   );
 
   assert(
+    runtime.includes('const liveProjectId = "ah5vm288"') &&
+      runtime.includes("projectId !== liveProjectId") &&
+      runtime.includes(
+        "Recovery validation can never target the live Tatkal Claims Sanity project"
+      ),
+    "Recovery workflow does not fail closed against the live Sanity project"
+  );
+
+  assert(
     /^recovery-/.test("recovery-test") &&
       runtime.includes('/^recovery-[a-z0-9][a-z0-9-]{0,63}$/') &&
       runtime.includes('targetDataset !== "production"') &&
       runtime.includes('targetDataset !== "migration"'),
-    "Recovery target allowlist is not enforced"
+    "Recovery target dataset allowlist is not enforced"
   );
 
   assert(
@@ -123,7 +143,7 @@ async function main() {
   );
 
   console.log(
-    "Sanity recovery workflow is isolated, create-only, backup-grounded, and fail-closed."
+    "Sanity recovery workflow is separate-project isolated, create-only, backup-grounded, and fail-closed."
   );
 }
 
