@@ -18,6 +18,9 @@ on:
       - .github/workflows/sanity-production-backup.yml
       - .github/workflows/sanity-recovery-validation.yml
       - .github/workflows/sanity-schema-deploy.yml
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
