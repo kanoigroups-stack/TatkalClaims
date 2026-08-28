@@ -110,8 +110,8 @@ The workflow:
 
 After a successful recovery test, delete the temporary `SANITY_RECOVERY_TOKEN` GitHub secret and delete the entire temporary recovery Sanity project when it is no longer needed.
 
-## Existing website rollback remains separate
+## Application rollback remains separate from Sanity recovery
 
 This Sanity backup protects CMS content.
 
-The existing `BLOG_CONTENT_SOURCE=legacy` rollback path protects website availability if the Sanity integration fails. Do not remove the legacy rollback stack until the later retirement phase.
+The Phase 9 retirement removes the legacy content-source runtime from the application. This backup/recovery system protects Sanity content and remains separate from application-code rollback. Do not recreate `BLOG_CONTENT_SOURCE=legacy` as part of a restore procedure.
