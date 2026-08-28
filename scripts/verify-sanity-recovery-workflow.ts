@@ -96,8 +96,10 @@ async function main() {
 
   assert(
     runtime.includes("datasets.some((dataset) => dataset.name === targetDataset)") &&
-      runtime.includes("existingCount === 0"),
-    "Recovery preflight must require an existing empty target dataset"
+      runtime.includes('return id.startsWith("_.")') &&
+      runtime.includes("existingContent.length === 0") &&
+      runtime.includes("Sanity system documents ignored"),
+    "Recovery preflight must require zero non-system documents while ignoring only Sanity _. system records"
   );
 
   assert(
@@ -107,12 +109,14 @@ async function main() {
   );
 
   assert(
-    runtime.includes("sameStrings(expectedNonAssetIds, restoredNonAssetIds)") &&
+    runtime.includes("restoredContent = restored.filter(") &&
+      runtime.includes("!isSystemDocumentId(document._id)") &&
+      runtime.includes("sameStrings(expectedNonAssetIds, restoredNonAssetIds)") &&
       runtime.includes(
         "sameStrings(expectedPublishedArticleSlugs, restoredPublishedArticleSlugs)"
       ) &&
       runtime.includes("sameStrings(expectedDraftArticleIds, restoredDraftArticleIds)"),
-    "Recovery verification must compare restored content against the backup itself"
+    "Recovery verification must ignore only Sanity _. system records and compare restored content against the backup itself"
   );
 
   assert(
