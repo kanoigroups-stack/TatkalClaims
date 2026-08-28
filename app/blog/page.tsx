@@ -187,7 +187,8 @@ export default async function BlogListPage() {
                 </h2>
               </div>
               <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
-                Fresh reporting and practical guidance, ordered by publication date so\n                the newest developments are easy to find.
+                Fresh reporting and practical guidance, ordered by publication date so
+                the newest developments are easy to find.
               </p>
             </div>
 
