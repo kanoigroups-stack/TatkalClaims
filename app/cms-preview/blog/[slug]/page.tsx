@@ -2,7 +2,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, Clock, User } from "lucide-react";
 import PortableArticleBody from "@/components/blog/PortableArticleBody";
-import { getPreviewSanityPostBySlug } from "@/lib/content/sanity-preview";
+import {
+  getPreviewSanityFetchDiagnostics,
+  getPreviewSanityPostBySlug,
+} from "@/lib/content/sanity-preview";
 import { buildArticleMetadata } from "@/lib/content/seo";
 import { formatDate } from "@/utils/date";
 
@@ -138,6 +141,23 @@ export default async function CmsPreviewArticlePage({
   const debug =
     searchParams?.debug === "1" ? inspectPortableBody(post.body) : null;
 
+  const fetchDebug =
+    searchParams?.debug === "1"
+      ? await getPreviewSanityFetchDiagnostics(params.slug)
+      : null;
+
+  const rawDebug = fetchDebug?.raw.map((document) => ({
+    id: document._id,
+    originalId: document._originalId || "",
+    ...inspectPortableBody(Array.isArray(document.body) ? document.body : []),
+  }));
+
+  const previewDraftsDebug = fetchDebug?.previewDrafts.map((document) => ({
+    id: document._id,
+    originalId: document._originalId || "",
+    ...inspectPortableBody(Array.isArray(document.body) ? document.body : []),
+  }));
+
   return (
     <main className="min-h-screen bg-slate-50 pb-20 pt-20">
       <div className="border-b border-amber-300 bg-amber-50">
@@ -146,7 +166,7 @@ export default async function CmsPreviewArticlePage({
           perspective, noindex. This does not replace the published article.
           {debug && (
             <div className="mt-3 rounded-lg border border-amber-300 bg-white/80 p-3 font-mono text-xs leading-5">
-              <strong className="font-semibold">Preview diagnostic v1</strong>
+              <strong className="font-semibold">Preview diagnostic v2</strong>
               <div>
                 body={debug.totalBlocks} blocks · text={debug.textBlocks} ·
                 images={debug.articleImages} · tables={debug.articleTables} ·
@@ -157,6 +177,34 @@ export default async function CmsPreviewArticlePage({
               </div>
               <div className="break-all">
                 firstHref={JSON.stringify(debug.firstLinkHref || null)}
+              </div>
+
+              <div className="mt-3 border-t border-amber-200 pt-2">
+                <strong>raw + no-store</strong>
+                {(rawDebug || []).map((entry) => (
+                  <div key={entry.id} className="mt-1 break-all">
+                    id={entry.id} · originalId={entry.originalId || "null"} ·
+                    body={entry.totalBlocks} · images={entry.articleImages} ·
+                    tables={entry.articleTables} · linkDefs={entry.linkMarkDefs} ·
+                    markedSpans={entry.markedLinkSpans} ·
+                    firstLinkedText={JSON.stringify(entry.firstLinkedText || null)}
+                  </div>
+                ))}
+                {rawDebug?.length === 0 && <div>no documents</div>}
+              </div>
+
+              <div className="mt-3 border-t border-amber-200 pt-2">
+                <strong>previewDrafts + no-store</strong>
+                {(previewDraftsDebug || []).map((entry) => (
+                  <div key={entry.id + entry.originalId} className="mt-1 break-all">
+                    id={entry.id} · originalId={entry.originalId || "null"} ·
+                    body={entry.totalBlocks} · images={entry.articleImages} ·
+                    tables={entry.articleTables} · linkDefs={entry.linkMarkDefs} ·
+                    markedSpans={entry.markedLinkSpans} ·
+                    firstLinkedText={JSON.stringify(entry.firstLinkedText || null)}
+                  </div>
+                ))}
+                {previewDraftsDebug?.length === 0 && <div>no documents</div>}
               </div>
             </div>
           )}
