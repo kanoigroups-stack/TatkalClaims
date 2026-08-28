@@ -224,7 +224,7 @@ export default function KnowledgeCentreBrowser({
           </label>
 
           <div className="mt-5">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <p className="mb-2 text-sm font-semibold text-slate-600">
               Content type
             </p>
             <div className="flex flex-wrap gap-2">
@@ -263,7 +263,7 @@ export default function KnowledgeCentreBrowser({
           </div>
 
           <div className="mt-5">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <p className="mb-2 text-sm font-semibold text-slate-600">
               Issue
             </p>
             <div className="flex flex-wrap gap-2">
