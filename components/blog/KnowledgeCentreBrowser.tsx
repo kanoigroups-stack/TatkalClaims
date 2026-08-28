@@ -78,7 +78,7 @@ export default function KnowledgeCentreBrowser({
   const shown = Math.min(visibleCount, filtered.length);
 
   return (
-    <section className="container-main px-4 py-14 md:py-18">
+    <section className="container-main px-4 py-14 md:py-20">
       <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-700">
