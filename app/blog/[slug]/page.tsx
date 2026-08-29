@@ -81,7 +81,7 @@ export default async function BlogPostPage({
 
   const breadcrumbSchema = buildBreadcrumbSchema(post);
   const articleSchema = buildArticleSchema(post);
-  const { headings, headingIds } = buildArticleHeadingNavigation(post.body);
+  const { headings } = buildArticleHeadingNavigation(post.body);
   const typeLabel = contentTypeLabel(post.contentType);
 
   return (
@@ -204,10 +204,7 @@ export default async function BlogPostPage({
             </div>
 
             <article id="article-content" className="min-w-0 max-w-3xl">
-              <PortableArticleBody
-                value={post.body}
-                headingIds={headingIds}
-              />
+              <PortableArticleBody value={post.body} />
             </article>
 
             <ArticleTableOfContents headings={headings} variant="desktop" />
