@@ -35,17 +35,29 @@ https://support.google.com/adsense/answer/7584263
 
 ### 2. Privacy Policy update
 
-The current Tatkal Claims Privacy Policy says:
+The Phase 12C branch prepares a Privacy Policy disclosure for Google AdSense, non-personalized contextual advertising, cookies/local storage used for frequency capping and reporting, and consent handling.
 
-> We do not use cookies for targeted advertising.
+Do not merge or activate advertising until that legal/privacy wording has been deliberately reviewed.
 
-That statement is incompatible with enabling personalized advertising.
+Google requires publishers to disclose data collection, sharing, and use arising from Google products, including third-party cookies, web beacons, IP addresses, or similar identifiers.
 
-The Privacy Policy must be deliberately reviewed and revised before personalized AdSense is enabled. Do not silently change legal/privacy wording as a side effect of a frontend deployment.
+Google guidance:
+https://support.google.com/publisherpolicies/answer/10437794
 
-### 3. Consent management
+### 3. Non-personalized ads and consent management
 
-If personalized ads are served to users in the EEA, UK, or Switzerland, use a Google-certified CMP integrated with the IAB TCF as required by Google.
+Tatkal Claims contains insurance, health-insurance, and financial-dispute content. Google Publisher Policies prohibit using sensitive health information or detailed negative financial status to select or target personalized ads.
+
+For that reason, Tatkal Claims requests non-personalized ads by default for every AdSense page. Non-personalized ads use contextual information and coarse location rather than a visitor's past behavior or interest profile.
+
+Google guidance:
+https://support.google.com/publisherpolicies/answer/15101728
+https://support.google.com/adsense/answer/9007336
+https://support.google.com/adsense/answer/7670312
+
+Non-personalized ads can still use cookies or mobile identifiers for frequency capping, aggregated reporting, and related purposes. Consent may still be required in jurisdictions covered by ePrivacy-style rules.
+
+For EEA, UK, and Switzerland traffic, configure a Google-certified CMP integrated with the IAB TCF where required by Google's publisher consent rules.
 
 Google guidance:
 https://support.google.com/adsense/answer/13554116
@@ -146,17 +158,18 @@ Production does not use the preview override.
 ## Activation sequence
 
 1. Confirm AdSense account/site approval.
-2. Review and approve the Privacy Policy update.
-3. Configure a certified CMP / Google Privacy & messaging as required.
-4. Add the AdSense client ID in deployment environment settings.
-5. Verify `/ads.txt`.
-6. Create the primary and secondary responsive display units.
-7. Add both slot IDs in deployment environment settings.
-8. Keep `NEXT_PUBLIC_ADSENSE_ENABLED=false`.
-9. Select a small article sample and prepare approved Sanity monetization-profile changes.
-10. Verify preview/rendering and policy spacing.
-11. Set `NEXT_PUBLIC_ADSENSE_ENABLED=true` only after all preceding gates are complete.
-12. Verify live ad requests, layout, consent behavior, and `ads.txt`.
+2. Review and approve the Phase 12C Privacy Policy update.
+3. Confirm non-personalized ad mode remains enforced in the Tatkal Claims frontend.
+4. Configure a certified CMP / Google Privacy & messaging as required.
+5. Add the AdSense client ID in deployment environment settings.
+6. Verify `/ads.txt`.
+7. Create the primary and secondary responsive display units.
+8. Add both slot IDs in deployment environment settings.
+9. Keep `NEXT_PUBLIC_ADSENSE_ENABLED=false`.
+10. Select a small article sample and prepare approved Sanity monetization-profile changes.
+11. Verify preview/rendering and policy spacing.
+12. Set `NEXT_PUBLIC_ADSENSE_ENABLED=true` only after all preceding gates are complete.
+13. Verify live requests include non-personalized privacy treatment, along with layout, consent behavior, and `ads.txt`.
 
 ## Emergency rollback
 
