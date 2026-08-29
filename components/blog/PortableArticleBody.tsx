@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { PortableText } from "@portabletext/react";
 import { urlFor } from "@/sanity/lib/image";
+import { buildArticleHeadingNavigation } from "@/lib/content/article-navigation";
 
 type Props = {
   value: unknown[];
-  headingIds?: Record<string, string>;
 };
 
 export const PORTABLE_TEXT_RENDERER_COVERAGE = {
@@ -621,10 +621,9 @@ function createComponents(headingIds: Record<string, string>) {
   return components;
 }
 
-export default function PortableArticleBody({
-  value,
-  headingIds = {},
-}: Props) {
+export default function PortableArticleBody({ value }: Props) {
+  const { headingIds } = buildArticleHeadingNavigation(value);
+
   return (
     <PortableText
       value={value as any}
