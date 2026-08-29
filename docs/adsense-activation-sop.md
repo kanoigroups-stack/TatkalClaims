@@ -31,7 +31,7 @@ Add `tatkalclaims.com` to the AdSense Sites list and complete ownership verifica
 The site must show a Ready/approved state before live ad serving is enabled.
 
 Google guidance:
-https://support.google.com/adsense/answer/7584263
+https://support.google.com/adsense/answer/12169212
 
 ### 2. Privacy Policy update
 
