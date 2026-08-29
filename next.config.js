@@ -8,6 +8,11 @@ const nextConfig = {
         destination: '/blog/claim-rejection-guide/',
         permanent: true,
       },
+      {
+        source: '/blog/health-insurance-claims-experience-needs-improvement-india-survey/',
+        destination: '/blog/health-insurance-claims-experience-needs-improvement-india-delays-rejections-pain-points-survey-2026/',
+        permanent: true,
+      },
     ]
   },
   images: {
