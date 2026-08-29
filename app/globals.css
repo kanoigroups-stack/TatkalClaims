@@ -54,3 +54,10 @@
     -webkit-backface-visibility: hidden;
   }
 }
+
+
+/* Avoid overlay controls competing with or sitting beside active article ads. */
+body[data-article-ads-active="true"] .tc-sticky-mobile-cta,
+body[data-article-ads-active="true"] .tc-whatsapp-float {
+  display: none !important;
+}
