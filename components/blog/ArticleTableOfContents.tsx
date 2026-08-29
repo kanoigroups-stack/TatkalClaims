@@ -22,13 +22,15 @@ function TocLinks({ headings }: { headings: ArticleHeading[] }) {
 
 export default function ArticleTableOfContents({
   headings,
+  variant,
 }: {
   headings: ArticleHeading[];
+  variant: "mobile" | "desktop";
 }) {
   if (headings.length < 2) return null;
 
-  return (
-    <>
+  if (variant === "mobile") {
+    return (
       <details className="mb-8 rounded-2xl border border-slate-200 bg-slate-50 p-5 lg:hidden">
         <summary className="cursor-pointer font-semibold text-slate-900">
           On this page
@@ -40,7 +42,10 @@ export default function ArticleTableOfContents({
           <TocLinks headings={headings} />
         </nav>
       </details>
+    );
+  }
 
+  return (
       <aside className="hidden lg:block">
         <div className="sticky top-28 rounded-2xl border border-slate-200 bg-slate-50 p-5">
           <p className="font-semibold text-slate-900">On this page</p>
@@ -52,6 +57,5 @@ export default function ArticleTableOfContents({
           </nav>
         </div>
       </aside>
-    </>
   );
 }
