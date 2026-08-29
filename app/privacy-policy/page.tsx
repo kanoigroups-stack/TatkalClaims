@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
             <span className="text-sm font-semibold uppercase tracking-wider text-accent-300">Legal</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-3">Privacy Policy</h1>
-          <p className="text-primary-100 text-lg">Last updated: June 22, 2026</p>
+          <p className="text-primary-100 text-lg">Last updated: August 29, 2026</p>
         </div>
 
         <div className="prose prose-lg max-w-none text-slate-700">
@@ -87,9 +87,9 @@ export default function PrivacyPolicyPage() {
               <li><strong>Insurance Companies:</strong> When filing complaints or claims on your behalf</li>
               <li><strong>Regulatory Bodies:</strong> IRDAI, Insurance Ombudsman, and Consumer Courts as required</li>
               <li><strong>Legal Partners:</strong> Advocates and retired ombudsmen assisting with your case</li>
-              <li><strong>Service Providers:</strong> Cloud hosting, email, and analytics providers under strict confidentiality agreements</li>
+              <li><strong>Service Providers:</strong> Cloud hosting, email, analytics, and, when enabled, advertising technology providers used to operate and measure our website</li>
             </ul>
-            <p className="mt-4">All third parties are contractually bound to protect your data and use it only for the specified purposes.</p>
+            <p className="mt-4">We require service providers to handle data for the purposes for which they are engaged and subject to applicable contractual, platform, and legal requirements. Advertising providers may process technical identifiers as described in the Cookies and Tracking section below.</p>
           </section>
 
           <section className="mb-10">
@@ -132,14 +132,43 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="mb-10">
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">8. Cookies and Tracking</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">8. Cookies, Analytics and Advertising</h2>
             <p className="mb-4">We use cookies and similar technologies to:</p>
             <ul className="space-y-3 list-disc list-inside">
               <li>Ensure website functionality and security</li>
               <li>Analyze website traffic and user behavior (via Google Analytics)</li>
-              <li>Remember your preferences</li>
+              <li>Remember preferences and consent choices where applicable</li>
+              <li>When advertising is enabled, support ad delivery, frequency capping, aggregated reporting, fraud prevention, and related measurement</li>
             </ul>
-            <p className="mt-4">You can manage cookie preferences through your browser settings. We do not use cookies for targeted advertising.</p>
+
+            <p className="mt-4">
+              When enabled on selected Knowledge Centre articles, we may use Google AdSense. Tatkal Claims is configured to request <strong>non-personalized ads by default</strong>. Non-personalized ads are selected using contextual information such as the content of the current page and coarse location rather than a visitor&apos;s past browsing behavior or interest profile.
+            </p>
+
+            <p className="mt-4">
+              Non-personalized advertising may still use cookies, local storage, IP addresses, or similar identifiers for purposes such as frequency capping, aggregated ad reporting, security, and fraud prevention. Third-party vendors, including Google, may place or read these technologies when advertising is active.
+            </p>
+
+            <p className="mt-4">
+              We do not intentionally use insurance claim documents, case details, contact-form information, health information, or other information you submit to Tatkal Claims to personalize advertising.
+            </p>
+
+            <p className="mt-4">
+              Where applicable law requires consent for advertising or analytics technologies, we use consent controls before the relevant processing is enabled. You may also manage cookies through your browser settings.
+            </p>
+
+            <p className="mt-4">
+              You can learn more about how Google uses information from sites and apps that use its services in Google&apos;s
+              {" "}
+              <a
+                href="https://policies.google.com/technologies/partner-sites"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary-700 hover:underline"
+              >
+                partner sites privacy information
+              </a>.
+            </p>
           </section>
 
           <section className="mb-10">
