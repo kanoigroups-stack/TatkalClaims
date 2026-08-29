@@ -69,6 +69,9 @@ jobs:
       - name: Verify Sanity article draft SOP invariants
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-article-draft-sop.ts
 
+      - name: Verify Phase 13 editorial and SEO hardening
+        run: npx --yes tsx@4.19.2 scripts/verify-phase13-editorial-seo-hardening.ts
+
       - name: Verify Phase 12 AdSense safeguards
         run: npx --yes tsx@4.19.2 scripts/verify-phase12-adsense.ts
 
