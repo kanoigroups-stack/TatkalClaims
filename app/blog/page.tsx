@@ -28,12 +28,15 @@ export const metadata = {
   },
 };
 
-function summarizePost(post: Awaited<ReturnType<typeof getAllPosts>>[number]): KnowledgeArticleSummary {
+function summarizePost(
+  post: Awaited<ReturnType<typeof getAllPosts>>[number]
+): KnowledgeArticleSummary & { topics: string[] } {
   return {
     slug: post.slug,
     title: post.title,
     excerpt: post.excerpt,
     category: post.category,
+    topics: post.topics,
     contentType: post.contentType,
     author: post.author,
     date: post.date,
@@ -76,6 +79,7 @@ export default async function BlogListPage() {
         name: post.author,
       },
       image: post.image.url,
+      keywords: [post.category, ...post.topics],
     })),
   };
 
@@ -151,56 +155,55 @@ export default async function BlogListPage() {
         </section>
 
         <KnowledgeCentreBrowser articles={allArticles}>
-        <section className="container-main px-4 py-14 md:py-16">
-          <div className="mb-8 max-w-3xl">
-            <p className="text-sm font-semibold text-accent-600 mb-3">
-              Start here
-            </p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
-              Essential guides for the most common insurance disputes
-            </h2>
-            <p className="text-lg md:text-xl text-slate-600">
-              These guides cover the three problems policyholders most often need
-              to solve first: rejection, delay, and mis-selling.
-            </p>
-          </div>
-
-          <div className="grid gap-7 md:grid-cols-3">
-            {essentialArticles.map((article) => (
-              <KnowledgeArticleCard
-                key={article.slug}
-                article={article}
-                emphasis
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="border-y border-slate-200 bg-slate-50">
-          <div className="container-main px-4 py-14 md:py-16">
-            <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-sm font-semibold text-primary-700 mb-3">
-                  Latest insights
-                </p>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900">
-                  What policyholders should know now
-                </h2>
-              </div>
-              <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
-                Fresh reporting and practical guidance, ordered by publication date so
-                the newest developments are easy to find.
+          <section className="container-main px-4 py-14 md:py-16">
+            <div className="mb-8 max-w-3xl">
+              <p className="text-sm font-semibold text-accent-600 mb-3">
+                Start here
+              </p>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+                Essential guides for the most common insurance disputes
+              </h2>
+              <p className="text-lg md:text-xl text-slate-600">
+                These guides cover the three problems policyholders most often need
+                to solve first: rejection, delay, and mis-selling.
               </p>
             </div>
 
-            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-              {latestArticles.map((article) => (
-                <KnowledgeArticleCard key={article.slug} article={article} />
+            <div className="grid gap-7 md:grid-cols-3">
+              {essentialArticles.map((article) => (
+                <KnowledgeArticleCard
+                  key={article.slug}
+                  article={article}
+                  emphasis
+                />
               ))}
             </div>
-          </div>
-        </section>
+          </section>
 
+          <section className="border-y border-slate-200 bg-slate-50">
+            <div className="container-main px-4 py-14 md:py-16">
+              <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-primary-700 mb-3">
+                    Latest insights
+                  </p>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900">
+                    What policyholders should know now
+                  </h2>
+                </div>
+                <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
+                  Fresh reporting and practical guidance, ordered by publication date so
+                  the newest developments are easy to find.
+                </p>
+              </div>
+
+              <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+                {latestArticles.map((article) => (
+                  <KnowledgeArticleCard key={article.slug} article={article} />
+                ))}
+              </div>
+            </div>
+          </section>
         </KnowledgeCentreBrowser>
       </main>
     </>
