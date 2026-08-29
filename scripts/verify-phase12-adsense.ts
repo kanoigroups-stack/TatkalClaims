@@ -13,6 +13,7 @@ async function main() {
     renderer,
     provider,
     articleAd,
+    adsenseScript,
     adsTxtRoute,
     articleSchema,
     portableTextSchema,
@@ -28,6 +29,7 @@ async function main() {
     readFile("components/blog/PortableArticleBody.tsx", "utf8"),
     readFile("components/ads/ArticleMonetizationProvider.tsx", "utf8"),
     readFile("components/ads/ArticleAd.tsx", "utf8"),
+    readFile("components/ads/AdSenseScript.tsx", "utf8"),
     readFile("app/ads.txt/route.ts", "utf8"),
     readFile("sanity/schemaTypes/documents/article.ts", "utf8"),
     readFile("sanity/schemaTypes/objects/portableText.ts", "utf8"),
@@ -92,6 +94,13 @@ async function main() {
   );
 
   assert(
+    adsenseScript.includes("requestNonPersonalizedAds = 1") &&
+      adsenseScript.includes('privacyTreatments = "disablePersonalization"') &&
+      adsenseScript.includes("Tatkal Claims contains insurance, health-insurance, and financial-dispute"),
+    "Tatkal Claims must request non-personalized AdSense by default"
+  );
+
+  assert(
     adsTxtRoute.includes("getAdsTxtLine") &&
       adsTxtRoute.includes('status: 404') &&
       config.includes("google.com, ${publisherId}, DIRECT, f08c47fec0942fa0"),
@@ -107,11 +116,14 @@ async function main() {
   );
 
   assert(
-    privacyPolicy.includes("We do not use cookies for targeted advertising") &&
-      activationSop.includes("must be deliberately reviewed and revised before personalized AdSense is enabled") &&
+    privacyPolicy.includes("non-personalized ads by default") &&
+      privacyPolicy.includes("frequency capping") &&
+      privacyPolicy.includes("partner sites privacy information") &&
+      privacyPolicy.includes("We do not intentionally use insurance claim documents") &&
+      activationSop.includes("sensitive health information") &&
       activationSop.includes("Google-certified CMP") &&
       activationSop.includes("NEXT_PUBLIC_ADSENSE_ENABLED=false"),
-    "Activation SOP must keep privacy/CMP review and disabled rollback explicit"
+    "Activation SOP and Privacy Policy must preserve non-personalized, disclosure, CMP, and rollback safeguards"
   );
 
   const syntheticBody = Array.from({ length: 48 }, (_, index) => ({
@@ -149,6 +161,7 @@ async function main() {
         profiles: ["none", "light", "standard"],
         previewPlaceholders: true,
         adsTxt: "requires valid client ID",
+        adPersonalization: "non-personalized by default",
         activation: "privacy/CMP/site approval/slots required",
         syntheticBoundaries: boundaries,
       },
