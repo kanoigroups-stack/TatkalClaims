@@ -1,4 +1,6 @@
-import Script from "next/script";
+"use client";
+
+import { useEffect } from "react";
 import {
   adsenseConfig,
   canServeArticleAds,
@@ -12,18 +14,34 @@ export default function AdSenseScript({
   profile: ArticleMonetizationProfile;
   preview: boolean;
 }) {
-  if (preview || !canServeArticleAds(profile)) return null;
+  const canServe = !preview && canServeArticleAds(profile);
 
-  return (
-    <Script
-      id="google-adsense"
-      async
-      strategy="afterInteractive"
-      crossOrigin="anonymous"
-      src={
-        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" +
-        adsenseConfig.clientId
-      }
-    />
-  );
+  useEffect(() => {
+    if (!canServe) return;
+
+    const adsbygoogle = ((window as any).adsbygoogle =
+      (window as any).adsbygoogle || []);
+
+    // Tatkal Claims contains insurance, health-insurance, and financial-dispute
+    // content. Request non-personalized ads by default so ad selection does not
+    // use a visitor's past behavior or interest profile.
+    adsbygoogle.requestNonPersonalizedAds = 1;
+
+    const existing = document.querySelector(
+      'script[data-tatkal-adsense="true"]'
+    );
+    if (existing) return;
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.src =
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" +
+      adsenseConfig.clientId;
+    script.dataset.tatkalAdsense = "true";
+    script.dataset.privacyTreatments = "disablePersonalization";
+    document.head.appendChild(script);
+  }, [canServe]);
+
+  return null;
 }
