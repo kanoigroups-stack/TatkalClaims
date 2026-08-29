@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import type { ContentPost } from "./types";
+import {
+  getKnowledgeTopicByTitle,
+  getKnowledgeTopicPath,
+} from "./topics";
 
 const SITE_URL = "https://tatkalclaims.com";
 
@@ -61,7 +65,13 @@ export function buildArticleMetadata(
       publishedTime: post.date,
       modifiedTime,
       authors: [post.author],
-      tags: [post.category, "insurance", "claim dispute", "india"],
+      tags: [
+        post.category,
+        ...post.topics,
+        "insurance",
+        "claim dispute",
+        "india",
+      ],
     },
     twitter: {
       card: "summary_large_image",
@@ -73,29 +83,45 @@ export function buildArticleMetadata(
 }
 
 export function buildBreadcrumbSchema(post: ContentPost) {
+  const primaryTopic = post.topics[0]
+    ? getKnowledgeTopicByTitle(post.topics[0])
+    : undefined;
+
+  const itemListElement = [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: SITE_URL + "/",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Knowledge Center",
+      item: SITE_URL + "/blog/",
+    },
+  ];
+
+  if (primaryTopic) {
+    itemListElement.push({
+      "@type": "ListItem",
+      position: 3,
+      name: primaryTopic.title,
+      item: SITE_URL + getKnowledgeTopicPath(primaryTopic),
+    });
+  }
+
+  itemListElement.push({
+    "@type": "ListItem",
+    position: itemListElement.length + 1,
+    name: post.title,
+    item: getPublicArticleUrl(post),
+  });
+
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: SITE_URL + "/",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Knowledge Center",
-        item: SITE_URL + "/blog/",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: post.title,
-        item: getPublicArticleUrl(post),
-      },
-    ],
+    itemListElement,
   };
 }
 
@@ -132,7 +158,13 @@ export function buildArticleSchema(post: ContentPost) {
       "@type": "WebPage",
       "@id": getPublicArticleUrl(post),
     },
-    keywords: [post.category, "insurance claim", "dispute resolution", "india"],
-    articleSection: post.category,
+    keywords: [
+      post.category,
+      ...post.topics,
+      "insurance claim",
+      "dispute resolution",
+      "india",
+    ],
+    articleSection: post.topics[0] || post.category,
   };
 }
