@@ -11,6 +11,8 @@ import ReadingProgress from "@/components/blog/ReadingProgress";
 import PortableArticleBody from "@/components/blog/PortableArticleBody";
 import ArticleTableOfContents from "@/components/blog/ArticleTableOfContents";
 import KnowledgeArticleCard from "@/components/blog/KnowledgeArticleCard";
+import AdSenseScript from "@/components/ads/AdSenseScript";
+import ArticleMonetizationProvider from "@/components/ads/ArticleMonetizationProvider";
 import {
   getAllPosts,
   getPostBySlug,
@@ -83,10 +85,16 @@ export default async function BlogPostPage({
   const articleSchema = buildArticleSchema(post);
   const { headings } = buildArticleHeadingNavigation(post.body);
   const typeLabel = contentTypeLabel(post.contentType);
+  const adPreviewProfile =
+    process.env.VERCEL_ENV === "preview" ? "standard" : undefined;
 
   return (
     <div className="min-h-screen bg-white pt-20 font-body">
       <ReadingProgress targetId="article-content" />
+      <AdSenseScript
+        profile={post.monetization}
+        preview={Boolean(adPreviewProfile)}
+      />
 
       <script
         type="application/ld+json"
@@ -203,9 +211,14 @@ export default async function BlogPostPage({
               <ArticleTableOfContents headings={headings} variant="mobile" />
             </div>
 
-            <article id="article-content" className="min-w-0 max-w-3xl">
-              <PortableArticleBody value={post.body} />
-            </article>
+            <ArticleMonetizationProvider
+              profile={post.monetization}
+              previewProfile={adPreviewProfile}
+            >
+              <article id="article-content" className="min-w-0 max-w-3xl">
+                <PortableArticleBody value={post.body} />
+              </article>
+            </ArticleMonetizationProvider>
 
             <ArticleTableOfContents headings={headings} variant="desktop" />
           </div>
