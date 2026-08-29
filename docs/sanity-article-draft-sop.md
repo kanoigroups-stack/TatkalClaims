@@ -153,7 +153,9 @@ If a consequential choice is unclear, surface it before creating the draft rathe
 
 **`monetization`**
 - Allowed values: `none`, `light`, `standard`.
-- New article default in schema is `standard`.
+- New article default in schema is `none`.
+- Keep new drafts at `none` unless the user explicitly approves monetization for that article.
+- `light` or `standard` is a consequential editorial/monetization decision and must be surfaced in the publish summary.
 - This is an editorial profile only; do not inject ad markup into the article body.
 
 ## Phase D — media rules
@@ -381,6 +383,7 @@ Before calling any publish operation, present a concise publish summary containi
 - any table/chart/special blocks
 - whether this is a new article or an update
 - exact fields changed for an existing article
+- monetization profile, with explicit callout if it is not `none`
 
 Then ask for explicit approval to publish.
 
@@ -424,4 +427,4 @@ Without changing the approval model, MCP may prepare:
 - draft QA queries
 - post-write comparison of draft vs published content
 
-Publishing, protected-slug edits, new taxonomy creation, canonical overrides, and other consequential editorial decisions remain approval-gated.
+Publishing, protected-slug edits, new taxonomy creation, canonical overrides, changing monetization from `none`, and other consequential editorial decisions remain approval-gated.

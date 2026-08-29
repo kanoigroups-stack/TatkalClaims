@@ -122,7 +122,7 @@ export const article = defineType({
       group: "settings",
       readOnly: true,
       description:
-        "Internal migration parity field. Preserves the current Knowledge Centre sequence until the archive is deliberately redesigned.",
+        "Internal migration parity field retained for historical ordering evidence and rollback verification. Do not use it as current editorial presentation logic.",
       validation: (Rule) => Rule.integer().min(0),
     }),
     defineField({
@@ -172,7 +172,7 @@ export const article = defineType({
         ],
         layout: "radio",
       },
-      initialValue: "standard",
+      initialValue: "none",
       validation: (Rule) => Rule.required(),
     }),
   ],
