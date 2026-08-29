@@ -200,7 +200,7 @@ export default async function BlogPostPage({
         <div className="mx-auto max-w-6xl">
           <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-12">
             <div className="lg:hidden">
-              <ArticleTableOfContents headings={headings} />
+              <ArticleTableOfContents headings={headings} variant="mobile" />
             </div>
 
             <article id="article-content" className="min-w-0 max-w-3xl">
@@ -210,7 +210,7 @@ export default async function BlogPostPage({
               />
             </article>
 
-            <ArticleTableOfContents headings={headings} />
+            <ArticleTableOfContents headings={headings} variant="desktop" />
           </div>
 
           <section className="mt-16 max-w-3xl rounded-2xl border border-primary-100 bg-gradient-to-r from-primary-50 to-accent-50 p-6 md:p-8">
