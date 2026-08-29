@@ -17,6 +17,14 @@ export default function StickyMobileCTA() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const footer = document.querySelector("footer");
+      const articleAdsActive =
+        document.body.dataset.articleAdsActive === "true";
+
+      if (articleAdsActive) {
+        setIsVisible(false);
+        document.body.classList.remove("pb-24");
+        return;
+      }
 
       // Hide CTA when near footer (within 200px of footer)
       let nearFooter = false;
@@ -52,7 +60,7 @@ export default function StickyMobileCTA() {
           animate={{ y: 0 }}
           exit={prefersReducedMotion ? { opacity: 0 } : { y: 100 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }} 
-          className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-slate-200 p-4 shadow-lg lg:hidden"
+          className="tc-sticky-mobile-cta fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-slate-200 p-4 shadow-lg lg:hidden"
         >
           <Link 
             href={isHomePage ? "#contact-form" : "/#contact-form"}
