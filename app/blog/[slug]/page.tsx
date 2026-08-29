@@ -24,6 +24,10 @@ import {
   buildArticleSchema,
   buildBreadcrumbSchema,
 } from "@/lib/content/seo";
+import {
+  getKnowledgeTopicByTitle,
+  getKnowledgeTopicPath,
+} from "@/lib/content/topics";
 import { formatDate } from "@/utils/date";
 
 export const revalidate = 60;
@@ -81,6 +85,9 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  const primaryTopic = post.topics[0]
+    ? getKnowledgeTopicByTitle(post.topics[0])
+    : undefined;
   const breadcrumbSchema = buildBreadcrumbSchema(post);
   const articleSchema = buildArticleSchema(post);
   const { headings } = buildArticleHeadingNavigation(post.body);
@@ -126,6 +133,19 @@ export default async function BlogPostPage({
                   Knowledge Center
                 </Link>
               </li>
+              {primaryTopic && (
+                <>
+                  <li aria-hidden="true">/</li>
+                  <li>
+                    <Link
+                      href={getKnowledgeTopicPath(primaryTopic)}
+                      className="transition-colors hover:text-primary-700"
+                    >
+                      {primaryTopic.title}
+                    </Link>
+                  </li>
+                </>
+              )}
               <li aria-hidden="true">/</li>
               <li
                 aria-current="page"
@@ -145,6 +165,18 @@ export default async function BlogPostPage({
               <span className="rounded-full bg-primary-100 px-3.5 py-1.5 text-sm font-semibold text-primary-800">
                 {post.category}
               </span>
+              {post.topics.map((topicTitle) => {
+                const topic = getKnowledgeTopicByTitle(topicTitle);
+                return topic ? (
+                  <Link
+                    key={topic.slug}
+                    href={getKnowledgeTopicPath(topic)}
+                    className="rounded-full border border-accent-200 bg-accent-50 px-3.5 py-1.5 text-sm font-semibold text-accent-700 transition hover:border-accent-300 hover:bg-accent-100"
+                  >
+                    {topic.title}
+                  </Link>
+                ) : null;
+              })}
               {typeLabel && (
                 <span className="rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-600">
                   {typeLabel}

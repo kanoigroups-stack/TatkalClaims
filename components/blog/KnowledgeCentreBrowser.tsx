@@ -1,22 +1,33 @@
 "use client";
 
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import {
   BadgeAlert,
   BookOpen,
+  Car,
   Clock3,
   HeartPulse,
   Newspaper,
   Search,
+  ShieldCheck,
   ShieldX,
   X,
 } from "lucide-react";
+import {
+  KNOWLEDGE_TOPICS,
+  getKnowledgeTopicPath,
+} from "@/lib/content/topics";
 import KnowledgeArticleCard, {
   type KnowledgeArticleSummary,
 } from "./KnowledgeArticleCard";
 
 const PAGE_SIZE = 12;
+
+type TopicAwareKnowledgeArticleSummary = KnowledgeArticleSummary & {
+  topics: string[];
+};
 
 type TypeFilter = "all" | "guides" | "news";
 
@@ -46,7 +57,16 @@ const CATEGORY_DETAILS: Record<
   },
 };
 
-function matchesType(article: KnowledgeArticleSummary, filter: TypeFilter) {
+const TOPIC_ICONS: Record<string, typeof ShieldCheck> = {
+  "Health Insurance Claims": HeartPulse,
+  "Motor Insurance Claims": Car,
+  "Life Insurance Claims": ShieldCheck,
+};
+
+function matchesType(
+  article: TopicAwareKnowledgeArticleSummary,
+  filter: TypeFilter
+) {
   if (filter === "all") return true;
   const newsLike =
     article.contentType === "news" ||
@@ -58,11 +78,12 @@ export default function KnowledgeCentreBrowser({
   articles,
   children,
 }: {
-  articles: KnowledgeArticleSummary[];
+  articles: TopicAwareKnowledgeArticleSummary[];
   children: ReactNode;
 }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
+  const [topic, setTopic] = useState("all");
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -77,12 +98,23 @@ export default function KnowledgeCentreBrowser({
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   }, [articles]);
 
+  const topicCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const article of articles) {
+      for (const articleTopic of article.topics) {
+        counts.set(articleTopic, (counts.get(articleTopic) || 0) + 1);
+      }
+    }
+    return counts;
+  }, [articles]);
+
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase();
 
     return articles.filter((article) => {
       const categoryMatch =
         category === "all" || article.category === category;
+      const topicMatch = topic === "all" || article.topics.includes(topic);
       const typeMatch = matchesType(article, typeFilter);
       const searchMatch =
         !normalized ||
@@ -91,14 +123,15 @@ export default function KnowledgeCentreBrowser({
           article.excerpt,
           article.category,
           article.author,
+          ...article.topics,
         ]
           .join(" ")
           .toLowerCase()
           .includes(normalized);
 
-      return categoryMatch && typeMatch && searchMatch;
+      return categoryMatch && topicMatch && typeMatch && searchMatch;
     });
-  }, [articles, category, query, typeFilter]);
+  }, [articles, category, query, topic, typeFilter]);
 
   function resetVisibleCount() {
     setVisibleCount(PAGE_SIZE);
@@ -106,6 +139,7 @@ export default function KnowledgeCentreBrowser({
 
   function chooseCategory(name: string) {
     setCategory(name);
+    setTopic("all");
     setTypeFilter("all");
     setQuery("");
     resetVisibleCount();
@@ -119,12 +153,16 @@ export default function KnowledgeCentreBrowser({
   function clearFilters() {
     setQuery("");
     setCategory("all");
+    setTopic("all");
     setTypeFilter("all");
     resetVisibleCount();
   }
 
   const hasFilters =
-    query.trim().length > 0 || category !== "all" || typeFilter !== "all";
+    query.trim().length > 0 ||
+    category !== "all" ||
+    topic !== "all" ||
+    typeFilter !== "all";
   const shown = Math.min(visibleCount, filtered.length);
 
   return (
@@ -180,6 +218,53 @@ export default function KnowledgeCentreBrowser({
         </div>
       </section>
 
+      <section className="border-b border-slate-200 bg-white font-body">
+        <div className="container-main px-4 py-12 md:py-14">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold text-accent-600 mb-3">
+              Browse by insurance type
+            </p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Explore claim guidance by topic
+            </h2>
+            <p className="text-lg text-slate-600">
+              Health, motor and life claim topics now have dedicated collections
+              while general insurance guidance remains available in the full library.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {KNOWLEDGE_TOPICS.map((item) => {
+              const Icon = TOPIC_ICONS[item.title] || ShieldCheck;
+              const count = topicCounts.get(item.title) || 0;
+
+              return (
+                <Link
+                  key={item.slug}
+                  href={getKnowledgeTopicPath(item)}
+                  className="group rounded-2xl border border-slate-200 bg-slate-50 p-6 transition-all hover:-translate-y-1 hover:border-primary-300 hover:bg-white hover:shadow-card"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 text-primary-800">
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-slate-600">
+                      {count}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 text-xl font-bold text-slate-900 transition-colors group-hover:text-primary-700">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {item.description}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {children}
 
       <section
@@ -218,7 +303,7 @@ export default function KnowledgeCentreBrowser({
                 setQuery(event.target.value);
                 resetVisibleCount();
               }}
-              placeholder="Search claim rejection, IRDAI, health insurance, rulings..."
+              placeholder="Search claim rejection, IRDAI, health, motor, life, rulings..."
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 text-sm text-slate-900 outline-none transition focus:border-primary-400 focus:bg-white focus:ring-4 focus:ring-primary-100"
             />
           </label>
@@ -256,6 +341,55 @@ export default function KnowledgeCentreBrowser({
                       <BookOpen className="h-4 w-4" aria-hidden="true" />
                     )}
                     {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <p className="mb-2 text-sm font-semibold text-slate-600">
+              Topic
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setTopic("all");
+                  resetVisibleCount();
+                }}
+                className={
+                  "rounded-full border px-4 py-2 text-sm font-medium transition " +
+                  (topic === "all"
+                    ? "border-accent-200 bg-accent-50 text-accent-700"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-accent-300")
+                }
+                aria-pressed={topic === "all"}
+              >
+                All topics
+              </button>
+              {KNOWLEDGE_TOPICS.map((item) => {
+                const active = topic === item.title;
+                return (
+                  <button
+                    key={item.slug}
+                    type="button"
+                    onClick={() => {
+                      setTopic(item.title);
+                      resetVisibleCount();
+                    }}
+                    className={
+                      "rounded-full border px-4 py-2 text-sm font-medium transition " +
+                      (active
+                        ? "border-accent-200 bg-accent-50 text-accent-700"
+                        : "border-slate-200 bg-white text-slate-700 hover:border-accent-300")
+                    }
+                    aria-pressed={active}
+                  >
+                    {item.title}
+                    <span className="ml-1.5 text-xs opacity-70">
+                      {topicCounts.get(item.title) || 0}
+                    </span>
                   </button>
                 );
               })}

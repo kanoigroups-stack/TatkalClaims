@@ -1,5 +1,9 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/content";
+import {
+  KNOWLEDGE_TOPICS,
+  getKnowledgeTopicPath,
+} from "@/lib/content/topics";
 import { getAllServiceSlugs } from "@/lib/services";
 
 export const revalidate = 60;
@@ -13,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/`, changeFrequency: "daily" as const, priority: 1.0 },
     { url: `${baseUrl}/about/`, changeFrequency: "monthly" as const, priority: 0.9 },
     { url: `${baseUrl}/services/`, changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: `${baseUrl}/blog/`, changeFrequency: "weekly" as const, priority: 0.9 },
     { url: `${baseUrl}/how-it-works/`, changeFrequency: "weekly" as const, priority: 0.9 },
     { url: `${baseUrl}/why-us/`, changeFrequency: "weekly" as const, priority: 0.9 },
     { url: `${baseUrl}/faqs/`, changeFrequency: "weekly" as const, priority: 0.8 },
@@ -29,6 +34,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  // Topic landing pages are code-backed collections over the Sanity taxonomy.
+  const topicPages = KNOWLEDGE_TOPICS.map((topic) => ({
+    url: baseUrl + getKnowledgeTopicPath(topic),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
   // Blog posts from the Sanity production adapter.
   // Use a real substantive updatedAt when present; otherwise preserve the
   // original publication date.
@@ -42,5 +54,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }));
 
-  return [...staticPages, ...servicePages, ...blogPages];
+  return [...staticPages, ...servicePages, ...topicPages, ...blogPages];
 }

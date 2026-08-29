@@ -8,7 +8,11 @@ import {
   getPublicArticlePath,
 } from "../lib/content/seo";
 
-const EXPECTED_ARTICLES = 57;
+const EXPECTED_ARTICLES = 56;
+const RETIRED_DUPLICATE_LEGACY_ORDER = 30;
+const EXPECTED_MIGRATED_ORDERS = Array.from({ length: 57 }, (_, index) => index).filter(
+  (value) => value !== RETIRED_DUPLICATE_LEGACY_ORDER
+);
 const PROTECTED_SLUGS = [
   "claim-rejection-guide",
   "irdai-30-day-claim-settlement-rule-health-insurance-rights",
@@ -141,11 +145,13 @@ async function main() {
 
   assert(
     migratedOrders.length === EXPECTED_ARTICLES,
-    "Expected all 57 migrated articles to retain legacyOrder during Phase 9"
+    "Expected all 56 published migrated articles to retain legacyOrder after duplicate retirement"
   );
   assert(
-    migratedOrders.every((value, index) => value === index),
-    "legacyOrder is no longer the exact 0..56 sequence"
+    migratedOrders.every(
+      (value, index) => value === EXPECTED_MIGRATED_ORDERS[index]
+    ),
+    "legacyOrder no longer preserves the migrated sequence after retiring legacyOrder 30"
   );
 
   for (const post of posts) {
@@ -168,7 +174,9 @@ async function main() {
     const breadcrumbSchema = buildBreadcrumbSchema(post);
     assert(articleSchema.headline === post.title, "Article schema headline mismatch for " + post.slug);
     assert(
-      breadcrumbSchema.itemListElement[2]?.item.endsWith("/blog/" + post.slug + "/"),
+      breadcrumbSchema.itemListElement[
+        breadcrumbSchema.itemListElement.length - 1
+      ]?.item.endsWith("/blog/" + post.slug + "/"),
       "Breadcrumb public URL mismatch for " + post.slug
     );
   }
@@ -185,6 +193,7 @@ async function main() {
       migratedCount: migratedOrders.length,
       min: migratedOrders[0],
       max: migratedOrders[migratedOrders.length - 1],
+      retiredDuplicateOrder: RETIRED_DUPLICATE_LEGACY_ORDER,
     },
     seo: {
       protectedRedirectPresent: true,
