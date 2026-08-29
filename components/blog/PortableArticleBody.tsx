@@ -2,6 +2,8 @@ import Link from "next/link";
 import { PortableText } from "@portabletext/react";
 import { urlFor } from "@/sanity/lib/image";
 import { buildArticleHeadingNavigation } from "@/lib/content/article-navigation";
+import { getArticleAdBoundaries } from "@/lib/adsense/article-placement";
+import ArticleAd from "@/components/ads/ArticleAd";
 
 type Props = {
   value: unknown[];
@@ -623,11 +625,39 @@ function createComponents(headingIds: Record<string, string>) {
 
 export default function PortableArticleBody({ value }: Props) {
   const { headingIds } = buildArticleHeadingNavigation(value);
+  const components = createComponents(headingIds);
+  const { primary, secondary } = getArticleAdBoundaries(value);
+
+  if (primary === null) {
+    return <PortableText value={value as any} components={components} />;
+  }
 
   return (
-    <PortableText
-      value={value as any}
-      components={createComponents(headingIds)}
-    />
+    <>
+      <PortableText
+        value={value.slice(0, primary) as any}
+        components={components}
+      />
+      <ArticleAd position="primary" />
+
+      {secondary === null ? (
+        <PortableText
+          value={value.slice(primary) as any}
+          components={components}
+        />
+      ) : (
+        <>
+          <PortableText
+            value={value.slice(primary, secondary) as any}
+            components={components}
+          />
+          <ArticleAd position="secondary" />
+          <PortableText
+            value={value.slice(secondary) as any}
+            components={components}
+          />
+        </>
+      )}
+    </>
   );
 }

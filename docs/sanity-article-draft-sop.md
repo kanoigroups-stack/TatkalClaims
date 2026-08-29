@@ -18,8 +18,8 @@ The goal is to automate routine editorial work while keeping URL, SEO, publishin
 6. **Preserve `publishedAt` on existing articles** unless the user explicitly requests a publication-date correction.
 7. **Do not reintroduce the retired legacy content runtime or alter migration evidence** as part of editorial work.
 8. **Do not place AdSense markup in Sanity body content.**
-9. **Do not use `relatedArticles` as if it controls the current public "More Articles" cards.** The field is stored by Sanity, but the public article page currently chooses the first two other posts instead.
-10. **Do not describe `articleChart` as a graphical chart on the live site.** The current renderer presents chart data as an accessible table.
+9. **Use `relatedArticles` deliberately.** Editorial overrides now drive the public Related articles section first; when overrides are absent, the frontend falls back to topic/category/content-type relevance and recency.
+10. **Describe `articleChart` accurately.** The live renderer now draws bar, line, or pie visuals and also exposes the underlying data in an accessible expandable table.
 11. The following protected slugs require separate explicit approval before any draft edit:
    - `claim-rejection-guide`
    - `irdai-30-day-claim-settlement-rule-health-insurance-rights`
@@ -119,9 +119,10 @@ If a consequential choice is unclear, surface it before creating the draft rathe
 - Reuse an existing author.
 - Surface the proposed author in the pre-write summary.
 
-**`relatedArticles`** — optional editorial data only.
-- May be populated for future use.
-- Must not be used as evidence that the live "More Articles" UI will change today.
+**`relatedArticles`** — optional editorial override.
+- When populated, valid referenced articles are considered first in the public Related articles section.
+- Remaining slots fall back to topic/category/content-type relevance and recency.
+- Verify every referenced article exists and is genuinely relevant.
 
 ### Dates and reading time
 
@@ -251,8 +252,8 @@ For `articleChart`:
 - type required: `bar`, `line`, or `pie`
 - at least one data point with label + numeric value
 - unit/source/sourceUrl/notes are optional
-- current public rendering is a **data table**, not a drawn bar/line/pie visualization
-- only use it when the tabular representation is acceptable until graphical rendering is deliberately added later
+- current public rendering is a graphical bar/line/pie visualization with an accessible expandable data-table fallback
+- keep labels, numeric values, units, source, and notes accurate because both the visual and underlying data are public
 
 ### FAQ
 
@@ -341,7 +342,7 @@ A draft is not ready for publish approval until all applicable checks pass:
 - Portable Text contains no unsupported block types
 - internal links resolve to intended public URLs
 - tables render correctly
-- articleChart is acceptable as a table in the current frontend
+- articleChart visual and accessible data fallback both represent the intended values accurately
 - SEO fallbacks/overrides are intentional
 - canonical is correct
 - noIndex/noFollow publish state is intentional

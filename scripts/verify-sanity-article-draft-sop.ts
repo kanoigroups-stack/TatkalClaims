@@ -5,7 +5,7 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 async function main() {
-  const [sop, articleSchema, imageSchema, seoSchema, portableText, renderer, policy] =
+  const [sop, articleSchema, imageSchema, seoSchema, portableText, renderer, policy, contentIndex] =
     await Promise.all([
       readFile("docs/sanity-article-draft-sop.md", "utf8"),
       readFile("sanity/schemaTypes/documents/article.ts", "utf8"),
@@ -14,6 +14,7 @@ async function main() {
       readFile("sanity/schemaTypes/objects/portableText.ts", "utf8"),
       readFile("components/blog/PortableArticleBody.tsx", "utf8"),
       readFile("docs/sanity-mcp-automation.md", "utf8"),
+      readFile("lib/content/index.ts", "utf8"),
     ]);
 
   for (const field of [
@@ -98,14 +99,18 @@ async function main() {
 
   assert(
     renderer.includes("articleChart:") &&
-      renderer.includes("<table") &&
-      sop.includes("current public rendering is a **data table**, not a drawn bar/line/pie visualization"),
-    "SOP must disclose the current chart-as-table renderer behavior"
+      renderer.includes("ChartVisual") &&
+      renderer.includes("View chart data") &&
+      sop.includes("graphical bar/line/pie visualization with an accessible expandable data-table fallback"),
+    "SOP must match the current graphical chart renderer and data fallback"
   );
 
   assert(
-    sop.includes('Do not use `relatedArticles` as if it controls the current public "More Articles" cards'),
-    "SOP must disclose that relatedArticles does not currently drive the public cards"
+    contentIndex.includes("getRelatedPosts") &&
+      contentIndex.includes("target.relatedSlugs") &&
+      sop.includes("public Related articles section") &&
+      sop.includes("topic/category/content-type relevance and recency"),
+    "SOP must match the current related-article override and fallback behavior"
   );
 
   assert(
