@@ -140,6 +140,9 @@ export function buildArticleMetadata(
   const modifiedTime = post.updatedAt || post.date;
   const canonical =
     seo?.canonicalOverride?.trim() || getPublicArticlePath(post);
+  const openGraphUrl = canonical.startsWith("http")
+    ? canonical
+    : SITE_URL + canonical;
   const noIndex = Boolean(options.noIndex || seo?.noIndex);
   const noFollow = Boolean(options.noIndex || seo?.noFollow);
   const hasRobotsOverride = noIndex || noFollow;
@@ -165,6 +168,9 @@ export function buildArticleMetadata(
     openGraph: {
       title: openGraphTitle,
       description: openGraphDescription,
+      url: openGraphUrl,
+      siteName: "Tatkal Claims",
+      locale: "en_IN",
       images: [
         {
           url: image,
@@ -190,6 +196,7 @@ export function buildArticleMetadata(
       title: openGraphTitle,
       description: openGraphDescription,
       images: [image],
+      creator: "@tatkalclaims",
     },
   };
 }
