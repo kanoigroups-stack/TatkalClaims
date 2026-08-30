@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Star,
   HelpCircle,
+  BookOpen,
 } from "lucide-react";
 import {
   getServiceBySlug,
@@ -16,6 +17,7 @@ import {
 } from "@/lib/services";
 import SectionWrapper from "@/components/ui/SectionWrapper";
 import SectionHeader from "@/components/ui/SectionHeader";
+import { getIssueIntentLinkByServiceSlug } from "@/lib/content/issue-intent-links";
 
 export function generateStaticParams() {
   return getAllServiceSlugs().map((slug) => ({ slug }));
@@ -167,6 +169,7 @@ export default function ServiceDetailPage({
   const related = getRelatedServices(service.relatedSlugs);
   const Icon = service.icon;
   const answers = geoContent[service.slug] ?? [];
+  const issueIntentLink = getIssueIntentLinkByServiceSlug(service.slug);
 
   return (
     <main className="min-h-screen bg-white pt-20">
@@ -247,6 +250,35 @@ export default function ServiceDetailPage({
                 <p className="text-slate-600 leading-relaxed">{item.answer}</p>
               </article>
             ))}
+          </div>
+        </SectionWrapper>
+      )}
+
+      {/* Informational guide link — separates education intent from service intent */}
+      {issueIntentLink && (
+        <SectionWrapper className="bg-white">
+          <div className="mx-auto max-w-4xl rounded-3xl border border-primary-100 bg-primary-50/60 p-6 md:p-8">
+            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-2xl">
+                <p className="inline-flex items-center gap-2 text-sm font-semibold text-primary-700">
+                  <BookOpen className="h-4 w-4" aria-hidden="true" />
+                  Understand the issue first
+                </p>
+                <h2 className="mt-3 text-2xl font-bold text-slate-900 md:text-3xl">
+                  Want to review your options before asking for help?
+                </h2>
+                <p className="mt-3 leading-7 text-slate-600">
+                  {issueIntentLink.guideDescription}
+                </p>
+              </div>
+              <Link
+                href={`/blog/${issueIntentLink.guideSlug}/`}
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-primary-800 bg-white px-5 py-3 font-semibold text-primary-800 transition-colors hover:bg-primary-800 hover:text-white"
+              >
+                Read: {issueIntentLink.guideTitle}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </SectionWrapper>
       )}

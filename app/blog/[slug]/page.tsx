@@ -30,6 +30,7 @@ import {
   getKnowledgeTopicPath,
 } from "@/lib/content/topics";
 import { formatDate } from "@/utils/date";
+import { getIssueIntentLinkByGuideSlug } from "@/lib/content/issue-intent-links";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -95,6 +96,7 @@ export default async function BlogPostPage({
   const typeLabel = contentTypeLabel(post.contentType);
   const adPreviewProfile =
     process.env.VERCEL_ENV === "preview" ? "standard" : undefined;
+  const issueIntentLink = getIssueIntentLinkByGuideSlug(post.slug);
 
   return (
     <main className="min-h-screen bg-white pt-20 font-body">
@@ -270,22 +272,44 @@ export default async function BlogPostPage({
 
           <section className="mt-16 max-w-3xl rounded-2xl border border-primary-100 bg-gradient-to-r from-primary-50 to-accent-50 p-6 md:p-8">
             <h2 className="text-2xl font-bold text-primary-900">
-              Facing a similar insurance issue?
+              {issueIntentLink
+                ? `Need case-specific help with ${issueIntentLink.issueLabel}?`
+                : "Facing a similar insurance issue?"}
             </h2>
             <p className="mt-3 leading-7 text-slate-600">
-              Share what happened and our team can help you understand the next
-              practical step for your claim or complaint.
+              {issueIntentLink
+                ? issueIntentLink.serviceDescription
+                : "Share what happened and our team can help you understand the next practical step for your claim or complaint."}
             </p>
             <div className="mt-6 flex flex-col gap-4 sm:flex-row">
-              <Link href="/#contact-form" className="btn-primary text-center">
-                Get Free Case Evaluation
-              </Link>
-              <a
-                href="tel:+917207382073"
-                className="btn-secondary text-center"
-              >
-                Call Our Experts
-              </a>
+              {issueIntentLink ? (
+                <>
+                  <Link
+                    href={`/services/${issueIntentLink.serviceSlug}/`}
+                    className="btn-primary text-center"
+                  >
+                    Explore {issueIntentLink.serviceTitle} Help
+                  </Link>
+                  <Link
+                    href="/#contact-form"
+                    className="btn-secondary text-center"
+                  >
+                    Get Free Case Evaluation
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/#contact-form" className="btn-primary text-center">
+                    Get Free Case Evaluation
+                  </Link>
+                  <a
+                    href="tel:+917207382073"
+                    className="btn-secondary text-center"
+                  >
+                    Call Our Experts
+                  </a>
+                </>
+              )}
             </div>
           </section>
 
