@@ -97,7 +97,7 @@ export default async function BlogPostPage({
     process.env.VERCEL_ENV === "preview" ? "standard" : undefined;
 
   return (
-    <div className="min-h-screen bg-white pt-20 font-body">
+    <main className="min-h-screen bg-white pt-20 font-body">
       <ReadingProgress targetId="article-content" />
       <AdSenseScript
         profile={post.monetization}
@@ -327,6 +327,6 @@ export default async function BlogPostPage({
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

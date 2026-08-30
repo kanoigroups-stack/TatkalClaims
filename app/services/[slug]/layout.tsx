@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getServiceBySlug } from "@/lib/services";
-
-const SITE_URL = "https://tatkalclaims.com";
+import { ORGANIZATION_ID, SITE_URL } from "@/lib/content/seo";
 
 export default function ServiceLayout({
   children,
@@ -20,13 +19,13 @@ export default function ServiceLayout({
     {
       "@context": "https://schema.org",
       "@type": "Service",
+      "@id": `${serviceUrl}#service`,
       name: service.title,
-      description: service.shortDesc,
+      description: service.fullDesc,
       url: serviceUrl,
+      serviceType: service.title,
       provider: {
-        "@type": "Organization",
-        name: "Tatkal Claims",
-        url: SITE_URL,
+        "@id": ORGANIZATION_ID,
       },
       areaServed: {
         "@type": "Country",
@@ -57,6 +56,23 @@ export default function ServiceLayout({
         },
       ],
     },
+    ...(service.faqs.length > 0
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "@id": `${serviceUrl}#faq`,
+            mainEntity: service.faqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.q,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.a,
+              },
+            })),
+          },
+        ]
+      : []),
   ];
 
   return (

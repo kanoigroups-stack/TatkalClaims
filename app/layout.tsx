@@ -169,7 +169,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <Header />
-        <main id="main-content">{children}</main>
+        <div id="main-content" tabIndex={-1}>{children}</div>
         <Footer />
         <WhatsAppFloat />
         <StickyMobileCTA />

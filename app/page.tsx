@@ -29,7 +29,7 @@ export default async function Home() {
   );
 
   return (
-    <>
+    <main>
       <HeroSection />
       <ServicesSection />
       <ProcessSection />
@@ -38,6 +38,6 @@ export default async function Home() {
       <KnowledgeSection articles={knowledgeArticles} />
       <CTABannerSection />
       <FAQSection />
-    </>
+    </main>
   );
 }
