@@ -18,7 +18,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center mb-6" aria-label="Tatkal Claims Home">
+            <Link href="/" className="inline-flex items-center mb-6 rounded-xl bg-white px-3 py-2" aria-label="Tatkal Claims Home">
               <Image
                 src="/logo.png"
                 alt="Tatkal Claims"
