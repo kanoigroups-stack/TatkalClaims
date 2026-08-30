@@ -204,9 +204,8 @@ export default async function AuthorProfilePage({
                   </>
                 ) : (
                   <p className="max-w-3xl text-sm leading-6 text-slate-600">
-                    This is a Tatkal Claims team author profile. It represents the
-                    named editorial or claims-review team rather than an invented
-                    individual identity.
+                    This profile represents a Tatkal Claims team author rather
+                    than an individual person.
                   </p>
                 )}
               </div>
@@ -223,8 +222,8 @@ export default async function AuthorProfilePage({
               Articles by {author.schemaName}
             </h2>
             <p className="mt-3 text-lg leading-7 text-slate-600">
-              Published guidance, explainers, judgments, news, and regulatory
-              updates attributed to this Tatkal Claims author profile.
+              Published articles attributed to this Tatkal Claims author
+              profile.
             </p>
           </div>
 
