@@ -65,7 +65,6 @@ export default function KnowledgeCentreBrowser({
 }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
-  const [topic, setTopic] = useState("all");
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -96,7 +95,6 @@ export default function KnowledgeCentreBrowser({
     return articles.filter((article) => {
       const categoryMatch =
         category === "all" || article.category === category;
-      const topicMatch = topic === "all" || article.topics.includes(topic);
       const typeMatch = matchesType(article, typeFilter);
       const searchMatch =
         !normalized ||
@@ -111,9 +109,9 @@ export default function KnowledgeCentreBrowser({
           .toLowerCase()
           .includes(normalized);
 
-      return categoryMatch && topicMatch && typeMatch && searchMatch;
+      return categoryMatch && typeMatch && searchMatch;
     });
-  }, [articles, category, query, topic, typeFilter]);
+  }, [articles, category, query, typeFilter]);
 
   function resetVisibleCount() {
     setVisibleCount(PAGE_SIZE);
@@ -121,7 +119,6 @@ export default function KnowledgeCentreBrowser({
 
   function chooseCategory(name: string) {
     setCategory(name);
-    setTopic("all");
     setTypeFilter("all");
     setQuery("");
     resetVisibleCount();
@@ -135,7 +132,6 @@ export default function KnowledgeCentreBrowser({
   function clearFilters() {
     setQuery("");
     setCategory("all");
-    setTopic("all");
     setTypeFilter("all");
     resetVisibleCount();
   }
@@ -143,7 +139,6 @@ export default function KnowledgeCentreBrowser({
   const hasFilters =
     query.trim().length > 0 ||
     category !== "all" ||
-    topic !== "all" ||
     typeFilter !== "all";
   const shown = Math.min(visibleCount, filtered.length);
 
@@ -299,103 +294,7 @@ export default function KnowledgeCentreBrowser({
             </div>
           </div>
 
-          <div className="mt-5">
-            <p className="mb-2 text-sm font-semibold text-slate-600">
-              Topic
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setTopic("all");
-                  resetVisibleCount();
-                }}
-                className={
-                  "rounded-full border px-4 py-2 text-sm font-medium transition " +
-                  (topic === "all"
-                    ? "border-accent-200 bg-accent-50 text-accent-700"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-accent-300")
-                }
-                aria-pressed={topic === "all"}
-              >
-                All topics
-              </button>
-              {KNOWLEDGE_TOPICS.map((item) => {
-                const active = topic === item.title;
-                return (
-                  <button
-                    key={item.slug}
-                    type="button"
-                    onClick={() => {
-                      setTopic(item.title);
-                      resetVisibleCount();
-                    }}
-                    className={
-                      "rounded-full border px-4 py-2 text-sm font-medium transition " +
-                      (active
-                        ? "border-accent-200 bg-accent-50 text-accent-700"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-accent-300")
-                    }
-                    aria-pressed={active}
-                  >
-                    {item.title}
-                    <span className="ml-1.5 text-xs opacity-70">
-                      {topicCounts.get(item.title) || 0}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
 
-          <div className="mt-5">
-            <p className="mb-2 text-sm font-semibold text-slate-600">
-              Issue
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setCategory("all");
-                  resetVisibleCount();
-                }}
-                className={
-                  "rounded-full border px-4 py-2 text-sm font-medium transition " +
-                  (category === "all"
-                    ? "border-primary-200 bg-primary-50 text-primary-800"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-primary-300")
-                }
-                aria-pressed={category === "all"}
-              >
-                All issues
-              </button>
-              {categories.map((item) => {
-                const active = category === item.name;
-                return (
-                  <button
-                    key={item.name}
-                    type="button"
-                    onClick={() => {
-                      setCategory(item.name);
-                      resetVisibleCount();
-                    }}
-                    className={
-                      "rounded-full border px-4 py-2 text-sm font-medium transition " +
-                      (active
-                        ? "border-primary-200 bg-primary-50 text-primary-800"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-primary-300")
-                    }
-                    aria-pressed={active}
-                  >
-                    {item.name === "News" ? "News & Updates" : item.name}
-                    <span className="ml-1.5 text-xs opacity-70">
-                      {item.count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
 
           {hasFilters && (
             <button
