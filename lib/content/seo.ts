@@ -84,7 +84,7 @@ export function buildAuthorProfileMetadata(author: AuthorProfile): Metadata {
       title: author.schemaName + " | Tatkal Claims",
       description,
       url: getAuthorUrl(author),
-      type: "profile",
+      type: author.entityType === "Person" ? "profile" : "website",
     },
   };
 }
