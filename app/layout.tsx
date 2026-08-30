@@ -106,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             "@graph": [
               {
                 "@type": "LocalBusiness",
-                "@id": "https://tatkalclaims.com/#localbusiness",
+                "@id": "https://tatkalclaims.com/#organization",
                 name: "Tatkal Claims",
                 url: "https://tatkalclaims.com",
                 logo: {
@@ -150,20 +150,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   areaServed: "IN",
                   availableLanguage: ["English", "Hindi"],
                 },
-                sameAs: [
-                  "https://tatkalclaims.com/blog/",
-                  "https://tatkalclaims.com/partner-with-us/",
-                ],
               },
               {
                 "@type": "WebSite",
                 "@id": "https://tatkalclaims.com/#website",
                 name: "Tatkal Claims",
                 url: "https://tatkalclaims.com",
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: "https://tatkalclaims.com/blog?q={search_term_string}",
-                  "query-input": "required name=search_term_string",
+                publisher: {
+                  "@id": "https://tatkalclaims.com/#organization",
                 },
               },
             ],

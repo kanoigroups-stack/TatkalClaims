@@ -9,6 +9,10 @@ import KnowledgeArticleCard, {
   type KnowledgeArticleSummary,
 } from "@/components/blog/KnowledgeArticleCard";
 import KnowledgeCentreBrowser from "@/components/blog/KnowledgeCentreBrowser";
+import {
+  buildAuthorSchema,
+  ORGANIZATION_ID,
+} from "@/lib/content/seo";
 
 export const revalidate = 60;
 
@@ -74,9 +78,9 @@ export default async function BlogListPage() {
       description: post.excerpt,
       url: `https://tatkalclaims.com/blog/${post.slug}/`,
       datePublished: post.date,
-      author: {
-        "@type": "Organization",
-        name: post.author,
+      author: buildAuthorSchema(post.authorEntity),
+      publisher: {
+        "@id": ORGANIZATION_ID,
       },
       image: post.image.url,
       keywords: [post.category, ...post.topics],

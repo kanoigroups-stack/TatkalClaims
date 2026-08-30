@@ -19,8 +19,29 @@ export const author = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "entityType",
+      title: "Structured data entity type",
+      type: "string",
+      options: {
+        list: [
+          { title: "Person", value: "Person" },
+          { title: "Organization / team", value: "Organization" },
+        ],
+        layout: "radio",
+      },
+      description:
+        "Optional. Used for author structured data. Legacy authors use a conservative frontend fallback until this is set.",
+    }),
+    defineField({
+      name: "schemaName",
+      title: "Structured data name",
+      type: "string",
+      description:
+        "Optional. Use the clean person or organization name without a role/title suffix. The visible byline remains unchanged.",
+    }),
+    defineField({
       name: "role",
-      title: "Role",
+      title: "Role / job title",
       type: "string",
     }),
     defineField({

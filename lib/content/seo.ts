@@ -1,11 +1,37 @@
 import type { Metadata } from "next";
-import type { ContentPost } from "./types";
+import type { ContentAuthor, ContentPost } from "./types";
 import {
   getKnowledgeTopicByTitle,
   getKnowledgeTopicPath,
 } from "./topics";
 
-const SITE_URL = "https://tatkalclaims.com";
+export const SITE_URL = "https://tatkalclaims.com";
+export const ORGANIZATION_ID = SITE_URL + "/#organization";
+export const WEBSITE_ID = SITE_URL + "/#website";
+
+export function buildAuthorSchema(author: ContentAuthor) {
+  if (author.entityType === "Person") {
+    return {
+      "@type": "Person",
+      ...(author.profileUrl ? { "@id": author.profileUrl } : {}),
+      name: author.schemaName,
+      ...(author.profileUrl ? { url: author.profileUrl } : {}),
+      ...(author.role ? { jobTitle: author.role } : {}),
+      ...(author.linkedin ? { sameAs: [author.linkedin] } : {}),
+      worksFor: {
+        "@id": ORGANIZATION_ID,
+      },
+    };
+  }
+
+  return {
+    "@type": "Organization",
+    name: author.schemaName,
+    parentOrganization: {
+      "@id": ORGANIZATION_ID,
+    },
+  };
+}
 
 export function getPublicArticlePath(post: Pick<ContentPost, "slug">) {
   return `/blog/${post.slug}/`;
@@ -137,20 +163,9 @@ export function buildArticleSchema(post: ContentPost) {
       width: 800,
       height: 400,
     },
-    author: {
-      "@type": "Organization",
-      name: post.author,
-      url: SITE_URL,
-    },
+    author: buildAuthorSchema(post.authorEntity),
     publisher: {
-      "@type": "Organization",
-      name: "Tatkal Claims",
-      logo: {
-        "@type": "ImageObject",
-        url: SITE_URL + "/logo.png",
-        width: 512,
-        height: 512,
-      },
+      "@id": ORGANIZATION_ID,
     },
     datePublished: post.date,
     dateModified: post.updatedAt || post.date,
