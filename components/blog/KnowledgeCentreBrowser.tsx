@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import {
   BookOpen,
-  Newspaper,
   Search,
   X,
 } from "lucide-react";
@@ -18,19 +17,6 @@ type TopicAwareKnowledgeArticleSummary = KnowledgeArticleSummary & {
   topics: string[];
 };
 
-type TypeFilter = "all" | "guides" | "news";
-
-function matchesType(
-  article: TopicAwareKnowledgeArticleSummary,
-  filter: TypeFilter
-) {
-  if (filter === "all") return true;
-  const newsLike =
-    article.contentType === "news" ||
-    article.contentType === "regulatoryUpdate";
-  return filter === "news" ? newsLike : !newsLike;
-}
-
 export default function KnowledgeCentreBrowser({
   articles,
   children,
@@ -39,14 +25,26 @@ export default function KnowledgeCentreBrowser({
   children: ReactNode;
 }) {
   const [query, setQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
+  const [category, setCategory] = useState("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  const categories = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const article of articles) {
+      counts.set(article.category, (counts.get(article.category) || 0) + 1);
+    }
+
+    return Array.from(counts.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  }, [articles]);
 
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase();
 
     return articles.filter((article) => {
-      const typeMatch = matchesType(article, typeFilter);
+      const categoryMatch =
+        category === "all" || article.category === category;
       const searchMatch =
         !normalized ||
         [
@@ -60,9 +58,9 @@ export default function KnowledgeCentreBrowser({
           .toLowerCase()
           .includes(normalized);
 
-      return typeMatch && searchMatch;
+      return categoryMatch && searchMatch;
     });
-  }, [articles, query, typeFilter]);
+  }, [articles, category, query]);
 
   function resetVisibleCount() {
     setVisibleCount(PAGE_SIZE);
@@ -70,13 +68,13 @@ export default function KnowledgeCentreBrowser({
 
   function clearFilters() {
     setQuery("");
-    setTypeFilter("all");
+    setCategory("all");
     resetVisibleCount();
   }
 
   const hasFilters =
     query.trim().length > 0 ||
-    typeFilter !== "all";
+    category !== "all";
   const shown = Math.min(visibleCount, filtered.length);
 
   return (
@@ -126,37 +124,47 @@ export default function KnowledgeCentreBrowser({
 
           <div className="mt-5">
             <p className="mb-2 text-sm font-semibold text-slate-600">
-              Content type
+              Article type
             </p>
             <div className="flex flex-wrap gap-2">
-              {([
-                ["all", "All content"],
-                ["guides", "Guides & explainers"],
-                ["news", "News & updates"],
-              ] as const).map(([value, label]) => {
-                const active = typeFilter === value;
+              <button
+                type="button"
+                onClick={() => {
+                  setCategory("all");
+                  resetVisibleCount();
+                }}
+                className={
+                  "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition " +
+                  (category === "all"
+                    ? "border-primary-800 bg-primary-800 text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-primary-300 hover:text-primary-800")
+                }
+                aria-pressed={category === "all"}
+              >
+                <BookOpen className="h-4 w-4" aria-hidden="true" />
+                All articles
+              </button>
+
+              {categories.map((item) => {
+                const active = category === item.name;
                 return (
                   <button
-                    key={value}
+                    key={item.name}
                     type="button"
                     onClick={() => {
-                      setTypeFilter(value);
+                      setCategory(item.name);
                       resetVisibleCount();
                     }}
                     className={
-                      "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition " +
+                      "rounded-full border px-4 py-2 text-sm font-medium transition " +
                       (active
                         ? "border-primary-800 bg-primary-800 text-white"
                         : "border-slate-200 bg-white text-slate-700 hover:border-primary-300 hover:text-primary-800")
                     }
                     aria-pressed={active}
                   >
-                    {value === "news" ? (
-                      <Newspaper className="h-4 w-4" aria-hidden="true" />
-                    ) : (
-                      <BookOpen className="h-4 w-4" aria-hidden="true" />
-                    )}
-                    {label}
+                    {item.name === "News" ? "News & Updates" : item.name}
+                    <span className="ml-1.5 text-xs opacity-70">{item.count}</span>
                   </button>
                 );
               })}
