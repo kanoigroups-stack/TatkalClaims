@@ -31,30 +31,12 @@ type TopicAwareKnowledgeArticleSummary = KnowledgeArticleSummary & {
 
 type TypeFilter = "all" | "guides" | "news";
 
-const CATEGORY_DETAILS: Record<
-  string,
-  { description: string; icon: typeof ShieldX }
-> = {
-  "Claim Rejection": {
-    description: "Rejected claims, denial reasons, appeals and consumer rulings.",
-    icon: ShieldX,
-  },
-  "Claim Delay": {
-    description: "Settlement timelines, document delays and insurer obligations.",
-    icon: Clock3,
-  },
-  "Mis-selling": {
-    description: "Wrong policies, bank sales, dark patterns and complaint routes.",
-    icon: BadgeAlert,
-  },
-  "Health Insurance": {
-    description: "Cashless treatment, hospitalisation and health-claim problems.",
-    icon: HeartPulse,
-  },
-  News: {
-    description: "IRDAI, courts, policy changes and insurance developments.",
-    icon: Newspaper,
-  },
+const CATEGORY_ICONS: Record<string, typeof ShieldX> = {
+  "Claim Rejection": ShieldX,
+  "Claim Delay": Clock3,
+  "Mis-selling": BadgeAlert,
+  "Health Insurance": HeartPulse,
+  News: Newspaper,
 };
 
 const TOPIC_ICONS: Record<string, typeof ShieldCheck> = {
@@ -167,100 +149,70 @@ export default function KnowledgeCentreBrowser({
 
   return (
     <>
-      <section className="border-b border-slate-200 bg-slate-50 font-body">
-        <div className="container-main px-4 py-12 md:py-14">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold text-primary-700 mb-3">
-              Browse by issue
-            </p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
-              What problem are you trying to solve?
-            </h2>
-            <p className="text-lg md:text-xl text-slate-600">
-              Choose the issue closest to your situation. We will take you
-              directly to the matching articles in the library.
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {categories.map((item) => {
-              const details = CATEGORY_DETAILS[item.name] || {
-                description: "Guidance and updates for policyholders.",
-                icon: BookOpen,
-              };
-              const Icon = details.icon;
-
-              return (
-                <button
-                  key={item.name}
-                  type="button"
-                  onClick={() => chooseCategory(item.name)}
-                  className="group rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-sm transition-all hover:-translate-y-1 hover:border-primary-300 hover:shadow-card"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 text-primary-800">
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
-                      {item.count}
-                    </span>
-                  </div>
-                  <h3 className="mt-5 text-xl font-bold text-slate-900 transition-colors group-hover:text-primary-700">
-                    {item.name === "News" ? "News & Updates" : item.name}
-                  </h3>
-                  <p className="mt-2 text-sm md:text-base leading-relaxed text-slate-600">
-                    {details.description}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       <section className="border-b border-slate-200 bg-white font-body">
-        <div className="container-main px-4 py-12 md:py-14">
-          <div className="max-w-3xl">
-            <p className="text-sm font-semibold text-accent-600 mb-3">
-              Browse by insurance type
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Explore claim guidance by topic
-            </h2>
-            <p className="text-lg text-slate-600">
-              Health, motor and life claim topics now have dedicated collections
-              while general insurance guidance remains available in the full library.
+        <div className="container-main px-4 py-8 md:py-10">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="mb-2 text-sm font-semibold text-primary-700">
+                Find guidance
+              </p>
+              <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">
+                Browse by issue or insurance type
+              </h2>
+            </div>
+            <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
+              Jump straight to the dispute or claim category closest to your
+              situation without scrolling through a separate directory.
             </p>
           </div>
 
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {KNOWLEDGE_TOPICS.map((item) => {
-              const Icon = TOPIC_ICONS[item.title] || ShieldCheck;
-              const count = topicCounts.get(item.title) || 0;
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                By issue
+              </p>
+              <div className="flex flex-wrap gap-2.5">
+                {categories.map((item) => {
+                  const Icon = CATEGORY_ICONS[item.name] || BookOpen;
+                  return (
+                    <button
+                      key={item.name}
+                      type="button"
+                      onClick={() => chooseCategory(item.name)}
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-800"
+                    >
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                      {item.name === "News" ? "News & Updates" : item.name}
+                      <span className="text-xs text-slate-400">{item.count}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-              return (
-                <Link
-                  key={item.slug}
-                  href={getKnowledgeTopicPath(item)}
-                  className="group rounded-2xl border border-slate-200 bg-slate-50 p-6 transition-all hover:-translate-y-1 hover:border-primary-300 hover:bg-white hover:shadow-card"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 text-primary-800">
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-slate-600">
-                      {count}
-                    </span>
-                  </div>
-                  <h3 className="mt-5 text-xl font-bold text-slate-900 transition-colors group-hover:text-primary-700">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {item.description}
-                  </p>
-                </Link>
-              );
-            })}
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                By insurance type
+              </p>
+              <div className="flex flex-wrap gap-2.5">
+                {KNOWLEDGE_TOPICS.map((item) => {
+                  const Icon = TOPIC_ICONS[item.title] || ShieldCheck;
+                  const count = topicCounts.get(item.title) || 0;
+
+                  return (
+                    <Link
+                      key={item.slug}
+                      href={getKnowledgeTopicPath(item)}
+                      className="inline-flex items-center gap-2 rounded-full border border-accent-200 bg-accent-50 px-3.5 py-2 text-sm font-medium text-accent-700 transition hover:border-accent-300 hover:bg-white"
+                    >
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                      {item.title.replace(" Insurance Claims", "")}
+                      <span className="text-xs opacity-70">{count}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -273,13 +225,13 @@ export default function KnowledgeCentreBrowser({
       >
         <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-primary-700 mb-3">
+            <p className="mb-3 text-sm font-semibold text-primary-700">
               Full library
             </p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+            <h2 className="mb-4 text-3xl font-bold text-slate-900 md:text-4xl lg:text-5xl">
               Search all articles
             </h2>
-            <p className="max-w-2xl text-lg md:text-xl text-slate-600">
+            <p className="max-w-2xl text-lg text-slate-600 md:text-xl">
               Search by issue, insurer problem, ruling, or topic and narrow the
               library to the guidance most relevant to you.
             </p>
