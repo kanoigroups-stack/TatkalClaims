@@ -54,11 +54,11 @@ export const services: Service[] = [
     faqs: [
       {
         q: "What are the most common reasons for claim rejection?",
-        a: "The most common reasons include: non-disclosure of pre-existing conditions, policy lapse due to non-payment, claim falling under exclusions, delayed intimation beyond 7 days, and insufficient documentation. Many of these are challengeable.",
+        a: "Common reasons include non-disclosure or misrepresentation of material facts, policy lapse or non-payment, exclusions, late claim intimation, and incomplete documentation. A delay in intimation is not a universal seven-day bar; the policy terms, applicable regulations, and reasons for delay matter, and some delayed claims may still need to be considered on their facts.",
       },
       {
         q: "Can I appeal a claim rejection after 1 year?",
-        a: "You can approach the Insurance Ombudsman within 1 year of the insurer's final rejection letter. For Consumer Court, the limitation is 2 years. We can also explore condonation of delay in exceptional circumstances.",
+        a: "You normally must first complain to the insurer. An Insurance Ombudsman complaint is generally filed within one year of the insurer's rejection or unsatisfactory decision, or after one month without a reply; the Ombudsman may condone delay in appropriate cases. A Consumer Commission complaint is generally filed within two years from when the cause of action arose, with delay condonation possible for sufficient cause.",
       },
     ],
     relatedSlugs: ["claim-delay", "short-settlement"],
@@ -69,7 +69,7 @@ export const services: Service[] = [
     shortDesc:
       "Expedite delayed settlements through regulatory pressure and expert negotiation.",
     fullDesc:
-      "When insurers delay settlements beyond IRDAI-mandated timelines (30 days for non-investigated claims, 45 days for investigated), we step in with formal demand notices, regulatory complaints to IRDAI, and persistent follow-ups. Our relationships with insurer grievance cells ensure your case gets priority attention. We also claim interest on delayed payments as per IRDAI regulations.",
+      "When insurers delay a claim beyond the IRDAI timeline applicable to that product and claim type, we step in with formal demand notices, regulatory complaints to IRDAI, and persistent follow-ups. Turnaround times differ across life, health, and general insurance; for example, current health-insurance TATs include one hour for cashless pre-authorisation, three hours for final discharge authorisation, and 15 days for settlement of claims other than cashless. Where the applicable rules provide penal interest for delay, we also pursue that amount.",
     color: "bg-amber-50 text-amber-600 border-amber-200",
     iconBg: "bg-amber-100",
     icon: Clock,
@@ -86,18 +86,18 @@ export const services: Service[] = [
       "Document delay timeline & communications",
       "Send formal demand notice to insurer",
       "File IRDAI grievance if no response",
-      "Claim statutory interest on delay",
+      "Claim applicable penal interest on delay",
       "Escalate to Ombudsman if needed",
-      "Receive settlement + interest",
+      "Receive settlement + applicable interest",
     ],
     faqs: [
       {
         q: "How long should an insurer take to settle a claim?",
-        a: "As per IRDAI guidelines: 30 days for claims not requiring investigation, 45 days for claims requiring investigation. Beyond this, you're entitled to interest at 2% above bank rate.",
+        a: "There is no single universal 30/45-day rule for every insurance claim. IRDAI timelines depend on the product and claim type. For health insurance, current TATs include 1 hour for cashless pre-authorisation, 3 hours for final discharge authorisation, and 15 days for settlement of claims other than cashless. We check the current rule that applies to your specific claim.",
       },
       {
         q: "Will I get interest on the delayed amount?",
-        a: "Yes. IRDAI mandates insurers pay interest at 2% above the bank rate for delays beyond the stipulated period. We ensure this is included in your final settlement.",
+        a: "Depending on the product and applicable regulation, delay beyond the prescribed TAT may attract penal interest. Where the rule provides it, the rate is commonly 2% above the applicable bank rate. We calculate and pursue only the amount legally applicable to your claim.",
       },
     ],
     relatedSlugs: ["claim-rejection", "short-settlement"],
@@ -136,7 +136,7 @@ export const services: Service[] = [
       },
       {
         q: "Can the insurer reject my claim for a pre-existing disease?",
-        a: "Only if the disease was existing before policy purchase AND you failed to disclose it. If the policy has completed the waiting period (typically 2-4 years), the claim must be honored. We challenge wrongful PED rejections regularly.",
+        a: "An insurer may examine non-disclosure, policy terms, waiting periods, exclusions, and other claim conditions. Under current IRDAI health-insurance guidance, waiting periods including PED waiting periods cannot exceed 36 months. After the applicable waiting period is completed, coverage still depends on the policy terms, disclosure history, admissibility, and other applicable conditions.",
       },
     ],
     relatedSlugs: ["claim-rejection", "mis-selling-complaints"],
@@ -175,7 +175,7 @@ export const services: Service[] = [
       },
       {
         q: "Can I choose my own garage for repairs?",
-        a: "For cashless claims, you must use a network garage. If none is satisfactory, you can opt for reimbursement and choose any garage. We help you navigate both options.",
+        a: "Cashless repairs are generally available through garages eligible under your insurer's cashless or network arrangements, subject to the policy and insurer process. You may choose another garage, but the claim may then be handled on a reimbursement basis rather than cashless. We help you check the applicable policy terms before repairs proceed.",
       },
     ],
     relatedSlugs: ["claim-delay", "short-settlement"],
@@ -214,7 +214,7 @@ export const services: Service[] = [
       },
       {
         q: "Can I get a full refund if my policy was mis-sold?",
-        a: "Yes, if mis-selling is proven. IRDAI mandates insurers refund premiums with interest in confirmed mis-selling cases. We've secured full refunds even for policies held for several years.",
+        a: "Possible remedies depend on the facts, policy, evidence, and forum. A complaint may result in correction, cancellation, refund, compensation, or other relief where justified, but there is no blanket IRDAI rule guaranteeing a full premium refund with interest in every proven mis-selling case. We assess the evidence and pursue the relief that is legally supportable.",
       },
     ],
     relatedSlugs: ["health-insurance-disputes", "claim-rejection"],
@@ -253,7 +253,7 @@ export const services: Service[] = [
       },
       {
         q: "Can I challenge the surveyor's assessment?",
-        a: "Yes. Surveyor reports are not final. You can request a re-survey, present an independent surveyor's report, or challenge the assessment through IRDAI/Ombudsman. We handle this regularly.",
+        a: "Yes. A surveyor's assessment can be challenged with policy terms, repair bills, valuations, expert evidence, and other records. Depending on the circumstances, you can ask the insurer to reconsider the assessment and escalate the dispute through its grievance process, IRDAI facilitation, the Ombudsman, or Consumer Commission as applicable. A fresh re-survey is not an automatic right in every case.",
       },
     ],
     relatedSlugs: ["claim-rejection", "claim-delay"],
