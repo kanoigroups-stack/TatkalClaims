@@ -41,7 +41,7 @@ export function generateMetadata({
       title: `${service.title} | Tatkal Claims`,
       description: service.fullDesc.slice(0, 160),
       url: `https://tatkalclaims.com/services/${service.slug}/`,
-      type: "article",
+      type: "website",
     },
   };
 }
