@@ -127,7 +127,10 @@ async function main() {
   );
 
   const posts = await getAllPosts();
-  assert(\n    posts.length >= EXPECTED_MIGRATED_ARTICLES,\n    "Expected at least 56 published Sanity articles, found " + posts.length\n  );
+  assert(
+    posts.length >= EXPECTED_MIGRATED_ARTICLES,
+    "Expected at least 56 published Sanity articles, found " + posts.length
+  );
 
   const slugs = posts.map((post) => post.slug);
   assert(new Set(slugs).size === slugs.length, "Duplicate published Sanity slugs found");
@@ -144,8 +147,8 @@ async function main() {
     .sort((a, b) => a - b);
 
   assert(
-    migratedOrders.length === EXPECTED_ARTICLES,
-    "Expected all 56 published migrated articles to retain legacyOrder after duplicate retirement"
+    migratedOrders.length === EXPECTED_MIGRATED_ARTICLES,
+    "Expected all 56 migrated articles to retain legacyOrder after duplicate retirement"
   );
   assert(
     migratedOrders.every(
