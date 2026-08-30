@@ -40,9 +40,9 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://tatkalclaims.com",
     images: [{
-      url: "https://tatkalclaims.com/og-image.jpg",
-      width: 1200,
-      height: 630,
+      url: "https://tatkalclaims.com/logo.png",
+      width: 512,
+      height: 512,
       alt: "Tatkal Claims - Insurance Dispute Resolution Experts",
     }],
   },
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Tatkal Claims | Insurance Dispute Experts",
     description: "Recover your rightful insurance claims with professional dispute resolution.",
-    images: ["https://tatkalclaims.com/og-image.jpg"],
+    images: ["https://tatkalclaims.com/logo.png"],
     creator: "@tatkalclaims",
   },
   robots: { 
