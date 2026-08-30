@@ -7,6 +7,7 @@ import {
 import type {
   ArticleImage,
   ArticleSeo,
+  AuthorProfile,
   ContentAuthor,
   ContentPost,
 } from "./types";
@@ -27,6 +28,8 @@ export type SanityAuthorProjection = {
   entityType?: "Person" | "Organization";
   schemaName?: string;
   role?: string;
+  credentials?: string[];
+  bio?: string;
   linkedin?: string;
 };
 
@@ -76,6 +79,8 @@ export const SANITY_ARTICLE_PROJECTION = [
   "    entityType,",
   "    schemaName,",
   "    role,",
+  "    credentials,",
+  "    bio,",
   "    linkedin",
   "  },",
   "  featuredImage {",
@@ -116,8 +121,8 @@ export const SANITY_ARTICLE_PROJECTION = [
   "}",
 ].join("\n");
 
+const SITE_URL = "https://tatkalclaims.com";
 const ANKIT_AUTHOR_SLUG = "ankit-l-kanoi-founder";
-const ANKIT_PROFILE_URL = "https://tatkalclaims.com/about/#ankit-l-kanoi";
 const ANKIT_LINKEDIN_URL =
   "https://www.linkedin.com/in/ankit-kanoi-9730b1403/";
 
@@ -137,7 +142,7 @@ function normalizeAuthor(
   const role = author?.role?.trim() || (isKnownAnkit ? "Founder" : undefined);
   const linkedin =
     author?.linkedin?.trim() || (isKnownAnkit ? ANKIT_LINKEDIN_URL : undefined);
-  const profileUrl = isKnownAnkit ? ANKIT_PROFILE_URL : undefined;
+  const profileUrl = slug ? SITE_URL + "/author/" + slug + "/" : undefined;
 
   return {
     displayName,
@@ -146,9 +151,38 @@ function normalizeAuthor(
     slug,
     role,
     linkedin,
+    credentials: author?.credentials,
+    bio: author?.bio?.trim() || undefined,
     profileUrl,
   };
 }
+
+function mapSanityAuthor(
+  author: SanityAuthorProjection | undefined
+): AuthorProfile | null {
+  const normalized = normalizeAuthor(author);
+
+  if (!normalized.slug) return null;
+
+  return {
+    ...normalized,
+    slug: normalized.slug,
+  };
+}
+
+const SANITY_AUTHOR_PROJECTION = [
+  "{",
+  '  "_id": _id,',
+  "  name,",
+  '  "slug": slug.current,',
+  "  entityType,",
+  "  schemaName,",
+  "  role,",
+  "  credentials,",
+  "  bio,",
+  "  linkedin",
+  "}",
+].join("\n");
 
 function normalizeImage(
   image: SanityImageProjection | undefined,
@@ -227,4 +261,35 @@ export async function getSanityPostBySlug(
     { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
   );
   return post ? mapSanityPost(post) : null;
+}
+
+
+export async function getSanityAuthors(): Promise<AuthorProfile[]> {
+  const query =
+    '*[_type == "author" && defined(slug.current)] | order(name asc) ' +
+    SANITY_AUTHOR_PROJECTION;
+  const authors = await client.fetch<SanityAuthorProjection[]>(
+    query,
+    {},
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+  );
+
+  return authors
+    .map(mapSanityAuthor)
+    .filter((author): author is AuthorProfile => Boolean(author));
+}
+
+export async function getSanityAuthorBySlug(
+  slug: string
+): Promise<AuthorProfile | null> {
+  const query =
+    '*[_type == "author" && slug.current == $slug][0] ' +
+    SANITY_AUTHOR_PROJECTION;
+  const author = await client.fetch<SanityAuthorProjection | null>(
+    query,
+    { slug },
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+  );
+
+  return author ? mapSanityAuthor(author) : null;
 }

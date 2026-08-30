@@ -50,10 +50,10 @@ const aboutSchema = {
     },
     {
       "@type": "Person",
-      "@id": "https://tatkalclaims.com/about/#ankit-l-kanoi",
+      "@id": "https://tatkalclaims.com/author/ankit-l-kanoi-founder/",
       name: "Ankit L Kanoi",
       jobTitle: "Founder",
-      url: "https://tatkalclaims.com/about/#ankit-l-kanoi",
+      url: "https://tatkalclaims.com/author/ankit-l-kanoi-founder/",
       sameAs: [
         "https://www.linkedin.com/in/ankit-kanoi-9730b1403/",
       ],

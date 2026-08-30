@@ -24,7 +24,13 @@ export type ContentAuthor = {
   slug?: string;
   role?: string;
   linkedin?: string;
+  credentials?: string[];
+  bio?: string;
   profileUrl?: string;
+};
+
+export type AuthorProfile = ContentAuthor & {
+  slug: string;
 };
 
 export type ContentPost = {
