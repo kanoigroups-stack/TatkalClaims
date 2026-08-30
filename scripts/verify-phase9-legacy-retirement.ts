@@ -8,7 +8,7 @@ import {
   getPublicArticlePath,
 } from "../lib/content/seo";
 
-const EXPECTED_ARTICLES = 56;
+const EXPECTED_MIGRATED_ARTICLES = 56;
 const RETIRED_DUPLICATE_LEGACY_ORDER = 30;
 const EXPECTED_MIGRATED_ORDERS = Array.from({ length: 57 }, (_, index) => index).filter(
   (value) => value !== RETIRED_DUPLICATE_LEGACY_ORDER
@@ -127,7 +127,10 @@ async function main() {
   );
 
   const posts = await getAllPosts();
-  assert(posts.length === EXPECTED_ARTICLES, "Expected 57 published Sanity articles, found " + posts.length);
+  assert(
+    posts.length >= EXPECTED_MIGRATED_ARTICLES,
+    "Expected at least 56 published Sanity articles, found " + posts.length
+  );
 
   const slugs = posts.map((post) => post.slug);
   assert(new Set(slugs).size === slugs.length, "Duplicate published Sanity slugs found");
@@ -144,8 +147,8 @@ async function main() {
     .sort((a, b) => a - b);
 
   assert(
-    migratedOrders.length === EXPECTED_ARTICLES,
-    "Expected all 56 published migrated articles to retain legacyOrder after duplicate retirement"
+    migratedOrders.length === EXPECTED_MIGRATED_ARTICLES,
+    "Expected all 56 migrated articles to retain legacyOrder after duplicate retirement"
   );
   assert(
     migratedOrders.every(
