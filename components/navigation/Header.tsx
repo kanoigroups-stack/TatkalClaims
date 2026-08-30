@@ -10,6 +10,7 @@ import { scrollToForm } from "@/utils/scroll";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const navLinks = [
+  { href: "/", label: "Home" },
   { href: "/about/", label: "About Us" },
   { href: "/services/", label: "Services" },
   { href: "/how-it-works/", label: "How It Works" },
@@ -51,6 +52,7 @@ export default function Header() {
   }, []);
 
   const isActive = (href: string) => {
+    if (href === "/") return isHomePage;
     return pathname === href || pathname.startsWith(href.replace(/\/$/, ""));
   };
 
@@ -183,10 +185,10 @@ export default function Header() {
               <a 
                 href="tel:+917207382073" 
                 className="flex items-center justify-center gap-2 text-primary-700 font-medium mt-2"
-                aria-label="Call our experts"
+                aria-label="Call us at +91 7207382073"
               >
                 <Phone className="w-5 h-5" aria-hidden="true" />
-                Call: +91 7207382073
+                Call Us
               </a>
             </nav>
           </motion.div>
