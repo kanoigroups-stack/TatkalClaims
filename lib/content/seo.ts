@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { ContentAuthor, ContentPost } from "./types";
+import type { AuthorProfile, ContentAuthor, ContentPost } from "./types";
 import {
   getKnowledgeTopicByTitle,
   getKnowledgeTopicPath,
@@ -18,6 +18,15 @@ export function buildAuthorSchema(author: ContentAuthor) {
       ...(author.profileUrl ? { url: author.profileUrl } : {}),
       ...(author.role ? { jobTitle: author.role } : {}),
       ...(author.linkedin ? { sameAs: [author.linkedin] } : {}),
+      ...(author.bio ? { description: author.bio } : {}),
+      ...(author.credentials?.length
+        ? {
+            hasCredential: author.credentials.map((credential) => ({
+              "@type": "EducationalOccupationalCredential",
+              name: credential,
+            })),
+          }
+        : {}),
       worksFor: {
         "@id": ORGANIZATION_ID,
       },
@@ -26,7 +35,10 @@ export function buildAuthorSchema(author: ContentAuthor) {
 
   return {
     "@type": "Organization",
+    ...(author.profileUrl ? { "@id": author.profileUrl } : {}),
     name: author.schemaName,
+    ...(author.profileUrl ? { url: author.profileUrl } : {}),
+    ...(author.bio ? { description: author.bio } : {}),
     parentOrganization: {
       "@id": ORGANIZATION_ID,
     },
@@ -39,6 +51,80 @@ export function getPublicArticlePath(post: Pick<ContentPost, "slug">) {
 
 export function getPublicArticleUrl(post: Pick<ContentPost, "slug">) {
   return SITE_URL + getPublicArticlePath(post);
+}
+
+export function getAuthorPath(author: Pick<AuthorProfile, "slug">) {
+  return "/author/" + author.slug + "/";
+}
+
+export function getAuthorUrl(author: Pick<AuthorProfile, "slug">) {
+  return SITE_URL + getAuthorPath(author);
+}
+
+function getAuthorDescription(author: AuthorProfile) {
+  return (
+    author.bio ||
+    (author.role
+      ? author.schemaName + " — " + author.role + " at Tatkal Claims."
+      : author.schemaName + " — author at Tatkal Claims.")
+  );
+}
+
+export function buildAuthorProfileMetadata(author: AuthorProfile): Metadata {
+  const description = getAuthorDescription(author);
+  const path = getAuthorPath(author);
+
+  return {
+    title: author.schemaName,
+    description,
+    alternates: {
+      canonical: path,
+    },
+    openGraph: {
+      title: author.schemaName + " | Tatkal Claims",
+      description,
+      url: getAuthorUrl(author),
+      type: author.entityType === "Person" ? "profile" : "website",
+    },
+  };
+}
+
+export function buildAuthorProfileSchema(
+  author: AuthorProfile,
+  posts: ContentPost[]
+) {
+  const url = getAuthorUrl(author);
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfilePage",
+        "@id": url + "#profilepage",
+        url,
+        name: author.schemaName,
+        description: getAuthorDescription(author),
+        mainEntity: {
+          "@id": url,
+        },
+      },
+      buildAuthorSchema({
+        ...author,
+        profileUrl: url,
+      }),
+      {
+        "@type": "ItemList",
+        name: "Articles by " + author.schemaName,
+        numberOfItems: posts.length,
+        itemListElement: posts.map((post, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          url: getPublicArticleUrl(post),
+          name: post.title,
+        })),
+      },
+    ],
+  };
 }
 
 export function buildArticleMetadata(

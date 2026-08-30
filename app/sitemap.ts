@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
-import { getAllPosts } from "@/lib/content";
+import { getAllAuthors, getAllPosts } from "@/lib/content";
+import { getAuthorPath } from "@/lib/content/seo";
 import {
   KNOWLEDGE_TOPICS,
   getKnowledgeTopicPath,
@@ -41,6 +42,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Author profile pages are backed by published Sanity author records.
+  const authors = await getAllAuthors();
+  const authorPages = authors.map((author) => ({
+    url: baseUrl + getAuthorPath(author),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
   // Blog posts from the Sanity production adapter.
   // Use a real substantive updatedAt when present; otherwise preserve the
   // original publication date.
@@ -54,5 +63,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }));
 
-  return [...staticPages, ...servicePages, ...topicPages, ...blogPages];
+  return [
+    ...staticPages,
+    ...servicePages,
+    ...topicPages,
+    ...authorPages,
+    ...blogPages,
+  ];
 }

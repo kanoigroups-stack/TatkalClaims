@@ -23,6 +23,7 @@ import {
   buildArticleMetadata,
   buildArticleSchema,
   buildBreadcrumbSchema,
+  getAuthorPath,
 } from "@/lib/content/seo";
 import {
   getKnowledgeTopicByTitle,
@@ -193,10 +194,22 @@ export default async function BlogPostPage({
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-slate-200 pt-6 text-sm text-slate-500">
-              <span className="inline-flex items-center gap-2">
-                <User className="h-4 w-4" aria-hidden="true" />
-                {post.author}
-              </span>
+              {post.authorEntity.slug ? (
+                <Link
+                  href={getAuthorPath({
+                    slug: post.authorEntity.slug,
+                  })}
+                  className="inline-flex items-center gap-2 font-medium text-slate-600 transition-colors hover:text-primary-700"
+                >
+                  <User className="h-4 w-4" aria-hidden="true" />
+                  {post.author}
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-2">
+                  <User className="h-4 w-4" aria-hidden="true" />
+                  {post.author}
+                </span>
+              )}
               <span className="inline-flex items-center gap-2">
                 <Calendar className="h-4 w-4" aria-hidden="true" />
                 Published {formatDate(post.date)}

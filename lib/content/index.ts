@@ -1,7 +1,12 @@
-import { getSanityPostBySlug, getSanityPosts } from "./sanity";
-import type { ContentPost } from "./types";
+import {
+  getSanityAuthorBySlug,
+  getSanityAuthors,
+  getSanityPostBySlug,
+  getSanityPosts,
+} from "./sanity";
+import type { AuthorProfile, ContentPost } from "./types";
 
-export type { ContentPost } from "./types";
+export type { AuthorProfile, ContentPost } from "./types";
 
 export async function getAllPosts(): Promise<ContentPost[]> {
   return getSanityPosts();
@@ -11,6 +16,26 @@ export async function getPostBySlug(
   slug: string
 ): Promise<ContentPost | null> {
   return getSanityPostBySlug(slug);
+}
+
+export async function getAllAuthors(): Promise<AuthorProfile[]> {
+  return getSanityAuthors();
+}
+
+export async function getAuthorBySlug(
+  slug: string
+): Promise<AuthorProfile | null> {
+  return getSanityAuthorBySlug(slug);
+}
+
+export async function getPostsByAuthorSlug(
+  slug: string
+): Promise<ContentPost[]> {
+  const posts = await getAllPosts();
+
+  return posts
+    .filter((post) => post.authorEntity.slug === slug)
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
 export async function getLatestPosts(
