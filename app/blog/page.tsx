@@ -57,10 +57,7 @@ export default async function BlogListPage() {
   const posts = await getAllPosts();
   const newestPosts = sortPostsNewestFirst(posts);
   const essentialPosts = selectEssentialKnowledgePosts(posts, 3);
-  const essentialSlugs = new Set(essentialPosts.map((post) => post.slug));
-  const latestPosts = newestPosts
-    .filter((post) => !essentialSlugs.has(post.slug))
-    .slice(0, 6);
+  const latestPosts = newestPosts.slice(0, 6);
 
   const allArticles = newestPosts.map(summarizePost);
   const essentialArticles = essentialPosts.map(summarizePost);
@@ -76,7 +73,7 @@ export default async function BlogListPage() {
       "@type": "BlogPosting",
       headline: post.title,
       description: post.excerpt,
-      url: `https://tatkalclaims.com/blog/${post.slug}/`,
+      url: "https://tatkalclaims.com/blog/" + post.slug + "/",
       datePublished: post.date,
       author: buildAuthorSchema(post.authorEntity),
       publisher: {
@@ -127,29 +124,29 @@ export default async function BlogListPage() {
         </nav>
 
         <section className="overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-primary-800 text-white">
-          <div className="container-main px-4 py-14 md:py-20">
+          <div className="container-main px-4 py-10 md:py-12">
             <div className="max-w-4xl">
-              <div className="inline-flex items-center px-4 py-2 bg-white/10 text-primary-100 rounded-full text-sm font-semibold mb-6">
+              <div className="mb-4 inline-flex items-center rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-semibold text-primary-100">
                 Tatkal Claims Knowledge Center
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1]">
+              <h1 className="text-4xl font-bold leading-[1.1] sm:text-5xl lg:text-5xl">
                 Understand your insurance rights before you need to fight for them
               </h1>
-              <p className="mt-6 max-w-3xl text-lg md:text-xl leading-relaxed text-primary-100">
+              <p className="mt-4 max-w-3xl text-base leading-7 text-primary-100 md:text-lg">
                 Practical guides, real claim decisions, and policyholder-focused
                 updates on claim rejection, delays, mis-selling, health insurance,
                 and changing IRDAI rules.
               </p>
 
-              <div className="mt-7 flex flex-wrap gap-3 text-sm">
-                <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2">
+              <div className="mt-5 flex flex-wrap gap-2 text-xs sm:text-sm">
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
                   {posts.length} published articles
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
                   <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
                   Guides & explainers
                 </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
                   <Newspaper className="h-4 w-4" aria-hidden="true" />
                   {newsCount} news & updates
                 </span>
@@ -158,52 +155,54 @@ export default async function BlogListPage() {
           </div>
         </section>
 
-        <KnowledgeCentreBrowser articles={allArticles}>
-          <section className="container-main px-4 py-14 md:py-16">
-            <div className="mb-8 max-w-3xl">
-              <p className="text-sm font-semibold text-accent-600 mb-3">
-                Start here
-              </p>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
-                Essential guides for the most common insurance disputes
-              </h2>
-              <p className="text-lg md:text-xl text-slate-600">
-                These guides cover the three problems policyholders most often need
-                to solve first: rejection, delay, and mis-selling.
+        <section className="border-b border-slate-200 bg-white">
+          <div className="container-main px-4 py-10 md:py-12">
+            <div className="mb-7 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="mb-2 text-sm font-semibold text-primary-700">
+                  Latest articles
+                </p>
+                <h2 className="text-3xl font-bold text-slate-900 md:text-4xl">
+                  What policyholders should know now
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
+                The newest guidance, decisions and regulatory updates, shown first
+                so fresh information is easy to reach.
               </p>
             </div>
 
-            <div className="grid gap-7 md:grid-cols-3">
-              {essentialArticles.map((article) => (
-                <KnowledgeArticleCard
-                  key={article.slug}
-                  article={article}
-                  emphasis
-                />
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+              {latestArticles.map((article) => (
+                <KnowledgeArticleCard key={article.slug} article={article} />
               ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section className="border-y border-slate-200 bg-slate-50">
-            <div className="container-main px-4 py-14 md:py-16">
-              <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-primary-700 mb-3">
-                    Latest insights
-                  </p>
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900">
-                    What policyholders should know now
-                  </h2>
-                </div>
-                <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
-                  Fresh reporting and practical guidance, ordered by publication date so
-                  the newest developments are easy to find.
+        <KnowledgeCentreBrowser articles={allArticles}>
+          <section className="border-b border-slate-200 bg-slate-50">
+            <div className="container-main px-4 py-10 md:py-12">
+              <div className="mb-7 max-w-3xl">
+                <p className="mb-2 text-sm font-semibold text-accent-600">
+                  Start here
+                </p>
+                <h2 className="mb-3 text-3xl font-bold text-slate-900 md:text-4xl">
+                  Essential guides for common insurance disputes
+                </h2>
+                <p className="text-base leading-7 text-slate-600 md:text-lg">
+                  Foundational guidance for rejection, delay and mis-selling when
+                  you need a clear first step.
                 </p>
               </div>
 
-              <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-                {latestArticles.map((article) => (
-                  <KnowledgeArticleCard key={article.slug} article={article} />
+              <div className="grid gap-7 md:grid-cols-3">
+                {essentialArticles.map((article) => (
+                  <KnowledgeArticleCard
+                    key={article.slug}
+                    article={article}
+                    emphasis
+                  />
                 ))}
               </div>
             </div>
