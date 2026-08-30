@@ -46,10 +46,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Single Quick Links Column - spans 2 cols on desktop */}
+          {/* Quick Links */}
           <div className="lg:col-span-2">
             <p className="text-white font-semibold mb-4">Quick Links</p>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-3">
               <li>
                 <Link href="/" className="text-slate-400 hover:text-white transition-colors text-sm">
                   Home
