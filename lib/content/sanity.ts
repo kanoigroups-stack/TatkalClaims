@@ -4,7 +4,12 @@ import {
   productionDataset,
   projectId,
 } from "@/sanity/env";
-import type { ArticleImage, ArticleSeo, ContentPost } from "./types";
+import type {
+  ArticleImage,
+  ArticleSeo,
+  ContentAuthor,
+  ContentPost,
+} from "./types";
 
 export type SanityImageProjection = {
   externalUrl?: string;
@@ -15,6 +20,16 @@ export type SanityImageProjection = {
   displaySize?: "normal" | "wide" | "full";
 };
 
+export type SanityAuthorProjection = {
+  _id?: string;
+  name?: string;
+  slug?: string;
+  entityType?: "Person" | "Organization";
+  schemaName?: string;
+  role?: string;
+  linkedin?: string;
+};
+
 export type SanityPostProjection = {
   slug: string;
   title: string;
@@ -22,7 +37,7 @@ export type SanityPostProjection = {
   contentType?: string;
   category?: string;
   topics?: string[];
-  author?: string;
+  author?: SanityAuthorProjection;
   featuredImage?: SanityImageProjection;
   socialImage?: SanityImageProjection;
   seo?: ArticleSeo;
@@ -54,7 +69,15 @@ export const SANITY_ARTICLE_PROJECTION = [
   "  contentType,",
   '  "category": category->title,',
   '  "topics": topics[]->title,',
-  '  "author": author->name,',
+  '  "author": author->{',
+  '    "_id": _id,',
+  "    name,",
+  '    "slug": slug.current,',
+  "    entityType,",
+  "    schemaName,",
+  "    role,",
+  "    linkedin",
+  "  },",
   "  featuredImage {",
   "    externalUrl,",
   '    "assetUrl": image.asset->url,',
@@ -93,6 +116,40 @@ export const SANITY_ARTICLE_PROJECTION = [
   "}",
 ].join("\n");
 
+const ANKIT_AUTHOR_SLUG = "ankit-l-kanoi-founder";
+const ANKIT_PROFILE_URL = "https://tatkalclaims.com/about/#ankit-l-kanoi";
+const ANKIT_LINKEDIN_URL =
+  "https://www.linkedin.com/in/ankit-kanoi-9730b1403/";
+
+function normalizeAuthor(
+  author: SanityAuthorProjection | undefined
+): ContentAuthor {
+  const displayName = author?.name?.trim() || "Tatkal Claims";
+  const slug = author?.slug?.trim() || undefined;
+  const isKnownAnkit = slug === ANKIT_AUTHOR_SLUG;
+  const entityType =
+    author?.entityType || (isKnownAnkit ? "Person" : "Organization");
+  const schemaName =
+    author?.schemaName?.trim() ||
+    (isKnownAnkit
+      ? displayName.replace(/,\s*Founder$/i, "").trim()
+      : displayName);
+  const role = author?.role?.trim() || (isKnownAnkit ? "Founder" : undefined);
+  const linkedin =
+    author?.linkedin?.trim() || (isKnownAnkit ? ANKIT_LINKEDIN_URL : undefined);
+  const profileUrl = isKnownAnkit ? ANKIT_PROFILE_URL : undefined;
+
+  return {
+    displayName,
+    schemaName,
+    entityType,
+    slug,
+    role,
+    linkedin,
+    profileUrl,
+  };
+}
+
 function normalizeImage(
   image: SanityImageProjection | undefined,
   fallbackAlt: string
@@ -113,6 +170,7 @@ function normalizeImage(
 
 export function mapSanityPost(post: SanityPostProjection): ContentPost {
   const image = normalizeImage(post.featuredImage, post.title);
+  const authorEntity = normalizeAuthor(post.author);
 
   if (!image) {
     throw new Error('Sanity article "' + post.slug + '" has no usable featured image');
@@ -124,7 +182,8 @@ export function mapSanityPost(post: SanityPostProjection): ContentPost {
     excerpt: post.excerpt,
     category: post.category || "Uncategorized",
     topics: post.topics || [],
-    author: post.author || "Tatkal Claims",
+    author: authorEntity.displayName,
+    authorEntity,
     date: post.publishedAt.slice(0, 10),
     publishedAt: post.publishedAt,
     updatedAt: post.updatedAt,

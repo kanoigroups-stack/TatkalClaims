@@ -45,22 +45,26 @@ const aboutSchema = {
       description:
         "India's most trusted insurance dispute resolution platform. 500+ cases assisted, ₹20+ Crores recovered.",
       mainEntity: {
-        "@type": "Organization",
-        name: "Tatkal Claims",
-        url: "https://tatkalclaims.com",
-        logo: "https://tatkalclaims.com/logo.png",
-        sameAs: [
-          "https://tatkalclaims.com/blog/",
-          "https://tatkalclaims.com/partner-with-us/",
-          "https://www.linkedin.com/in/ankit-kanoi-9730b1403/",
-        ],
+        "@id": "https://tatkalclaims.com/#organization",
+      },
+    },
+    {
+      "@type": "Person",
+      "@id": "https://tatkalclaims.com/about/#ankit-l-kanoi",
+      name: "Ankit L Kanoi",
+      jobTitle: "Founder",
+      url: "https://tatkalclaims.com/about/#ankit-l-kanoi",
+      sameAs: [
+        "https://www.linkedin.com/in/ankit-kanoi-9730b1403/",
+      ],
+      worksFor: {
+        "@id": "https://tatkalclaims.com/#organization",
       },
     },
     {
       "@type": "Review",
       itemReviewed: {
-        "@type": "Organization",
-        name: "Tatkal Claims",
+        "@id": "https://tatkalclaims.com/#organization",
       },
       reviewRating: {
         "@type": "Rating",
@@ -259,7 +263,10 @@ export default function AboutPage() {
 
       {/* Founder */}
       <SectionWrapper className="bg-white">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div
+          id="ankit-l-kanoi"
+          className="grid scroll-mt-24 lg:grid-cols-2 gap-12 items-center"
+        >
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
               Meet the <span className="text-blue-700">Founder</span>

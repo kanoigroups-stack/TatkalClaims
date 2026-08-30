@@ -17,6 +17,16 @@ export type ArticleSeo = {
   ogImageUrl?: string;
 };
 
+export type ContentAuthor = {
+  displayName: string;
+  schemaName: string;
+  entityType: "Person" | "Organization";
+  slug?: string;
+  role?: string;
+  linkedin?: string;
+  profileUrl?: string;
+};
+
 export type ContentPost = {
   slug: string;
   title: string;
@@ -24,6 +34,7 @@ export type ContentPost = {
   category: string;
   topics: string[];
   author: string;
+  authorEntity: ContentAuthor;
   date: string;
   publishedAt: string;
   updatedAt?: string;
