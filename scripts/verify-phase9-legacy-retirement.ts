@@ -108,15 +108,17 @@ async function main() {
   );
 
   for (const source of [sanityClient, sanityPreview, articleSchemaFile]) {
-    assert(source.includes("legacyOrder"), "legacyOrder was removed from live Sanity ordering/schema");
+    assert(source.includes("legacyOrder"), "legacyOrder migration evidence was removed from the Sanity model");
   }
   assert(
-    sanityClient.includes("order(coalesce(legacyOrder, 999999) asc, publishedAt desc)"),
-    "Public Sanity ordering no longer preserves legacyOrder"
+    sanityClient.includes("order(publishedAt desc)") &&
+      !sanityClient.includes("order(coalesce(legacyOrder"),
+    "Public Sanity ordering must use current editorial publication date, not legacyOrder"
   );
   assert(
-    sanityPreview.includes("order(coalesce(legacyOrder, 999999) asc, publishedAt desc)"),
-    "Preview Sanity ordering no longer preserves legacyOrder"
+    sanityPreview.includes("order(publishedAt desc)") &&
+      !sanityPreview.includes("order(coalesce(legacyOrder"),
+    "Preview Sanity ordering must use current editorial publication date, not legacyOrder"
   );
 
   assert(
@@ -192,7 +194,8 @@ async function main() {
     protectedSlugs: PROTECTED_SLUGS,
     retiredRuntimePaths: RETIRED_RUNTIME_PATHS,
     legacyOrder: {
-      retained: true,
+      retainedAsMigrationEvidence: true,
+      usedForEditorialOrdering: false,
       migratedCount: migratedOrders.length,
       min: migratedOrders[0],
       max: migratedOrders[migratedOrders.length - 1],
