@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: bootstrap-r1-lockfile
+  cancel-in-progress: true
+
 jobs:
   lockfile:
     runs-on: ubuntu-latest
