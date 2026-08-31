@@ -46,9 +46,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return {
@@ -76,11 +77,12 @@ function contentTypeLabel(contentType?: string) {
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const [post, relatedPosts] = await Promise.all([
-    getPostBySlug(params.slug),
-    getRelatedPosts(params.slug, 3),
+    getPostBySlug(slug),
+    getRelatedPosts(slug, 3),
   ]);
 
   if (!post) {
