@@ -138,21 +138,9 @@ jobs:
       - name: Type-check application and verification code
         run: npx tsc --noEmit
 
-      - name: Set up Node.js for latest Sanity CLI
+      - name: Validate Studio schema with repository Sanity CLI
         if: needs.changes.outputs.schema == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.12
-
-      - name: Validate Studio schema with latest Sanity CLI
-        if: needs.changes.outputs.schema == 'true'
-        run: npx --yes sanity@latest schemas validate --workspace tatkalClaims --level error
-
-      - name: Restore Node.js for application build
-        if: needs.changes.outputs.schema == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+        run: npx --no-install sanity schemas validate --workspace tatkalClaims --level error
 
       - name: Build application
         run: npm run build
