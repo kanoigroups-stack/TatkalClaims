@@ -205,9 +205,9 @@ async function main() {
     },
   };
 
-  await mkdir("migration/phase9", { recursive: true });
+  await mkdir("migration/verification", { recursive: true });
   await writeFile(
-    "migration/phase9/legacy-retirement-verification.json",
+    "migration/verification/application-safety-verification.json",
     JSON.stringify(report, null, 2) + "\n",
     "utf8"
   );
