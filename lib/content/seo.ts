@@ -174,8 +174,6 @@ export function buildArticleMetadata(
       images: [
         {
           url: image,
-          width: 800,
-          height: 400,
           alt: post.title,
         },
       ],
@@ -253,8 +251,6 @@ export function buildArticleSchema(post: ContentPost) {
     image: {
       "@type": "ImageObject",
       url: post.image.url,
-      width: 800,
-      height: 400,
     },
     author: buildAuthorSchema(post.authorEntity),
     publisher: {
