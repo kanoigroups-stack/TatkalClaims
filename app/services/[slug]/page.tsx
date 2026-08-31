@@ -23,10 +23,10 @@ export function generateStaticParams() {
   return getAllServiceSlugs().map((slug) => ({ slug }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Metadata {
   const service = getServiceBySlug(params.slug);
   if (!service)
@@ -158,12 +158,13 @@ const geoContent: Record<string, GeoAnswer[]> = {
   ],
 };
 
-export default function ServiceDetailPage({
+export default async function ServiceDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const service = getServiceBySlug(params.slug);
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
   if (!service) notFound();
 
   const related = getRelatedServices(service.relatedSlugs);
