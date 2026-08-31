@@ -17,8 +17,15 @@ export default function StickyMobileCTA() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const footer = document.querySelector("footer");
+      const isMobileViewport = window.matchMedia("(max-width: 1023px)").matches;
       const articleAdsActive =
         document.body.dataset.articleAdsActive === "true";
+
+      if (!isMobileViewport) {
+        setIsVisible(false);
+        document.body.classList.remove("pb-24");
+        return;
+      }
 
       if (articleAdsActive) {
         setIsVisible(false);
@@ -45,9 +52,12 @@ export default function StickyMobileCTA() {
       }
     }; 
 
-    window.addEventListener("scroll", handleScroll); 
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
       document.body.classList.remove("pb-24");
     }; 
   }, []);
