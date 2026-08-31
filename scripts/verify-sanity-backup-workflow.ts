@@ -36,7 +36,7 @@ async function main() {
   );
 
   assert(
-    workflow.includes('npx sanity dataset export "$SANITY_DATASET" "$PLAIN" --overwrite'),
+    workflow.includes('npx --no-install sanity dataset export "$SANITY_DATASET" "$PLAIN" --overwrite'),
     "Backup workflow does not use the repo-pinned Sanity v3 export command"
   );
 
