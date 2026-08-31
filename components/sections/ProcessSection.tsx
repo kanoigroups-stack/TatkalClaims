@@ -19,12 +19,6 @@ const howToSchema = {
   "@type": "HowTo",
   name: "How to Resolve an Insurance Claim Dispute",
   description: "A transparent 5-step process designed to maximize your chances of claim recovery",
-  totalTime: "P3M",
-  estimatedCost: {
-    "@type": "MonetaryAmount",
-    currency: "INR",
-    value: "0",
-  },
   step: steps.map((step, index) => ({
     "@type": "HowToStep",
     position: index + 1,
