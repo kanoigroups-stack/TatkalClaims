@@ -24,7 +24,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const topic = getKnowledgeTopicBySlug(params.slug);
+  const { slug } = await params;
+  const topic = getKnowledgeTopicBySlug(slug);
 
   if (!topic) {
     return {
