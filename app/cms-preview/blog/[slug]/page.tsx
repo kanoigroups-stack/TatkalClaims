@@ -11,10 +11,12 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+
   try {
-    const post = await getPreviewSanityPostBySlug(params.slug);
+    const post = await getPreviewSanityPostBySlug(slug);
 
     if (!post) {
       return {
@@ -35,12 +37,13 @@ export async function generateMetadata({
 export default async function CmsPreviewArticlePage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   let post;
 
   try {
-    post = await getPreviewSanityPostBySlug(params.slug);
+    post = await getPreviewSanityPostBySlug(slug);
   } catch (error) {
     return (
       <main className="min-h-screen bg-slate-50 px-4 py-24">
