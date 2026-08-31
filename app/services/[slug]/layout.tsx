@@ -2,14 +2,15 @@ import { notFound } from "next/navigation";
 import { getServiceBySlug } from "@/lib/services";
 import { ORGANIZATION_ID, SITE_URL } from "@/lib/content/seo";
 
-export default function ServiceLayout({
+export default async function ServiceLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const service = getServiceBySlug(params.slug);
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
 
   if (!service) notFound();
 

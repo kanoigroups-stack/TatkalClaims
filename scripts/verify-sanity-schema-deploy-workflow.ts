@@ -40,10 +40,10 @@ async function main() {
   );
 
   const validateIndex = workflow.indexOf(
-    "sanity@latest schemas validate --workspace tatkalClaims --level error"
+    "sanity@6.11.0 schemas validate --workspace tatkalClaims --level error"
   );
   const deployIndex = workflow.indexOf(
-    "sanity@latest schemas deploy --workspace tatkalClaims --verbose"
+    "sanity@6.11.0 schemas deploy --workspace tatkalClaims --verbose"
   );
 
   assert(
@@ -52,7 +52,7 @@ async function main() {
   );
 
   assert(
-    workflow.includes("sanity@latest schemas list --json") &&
+    workflow.includes("sanity@6.11.0 schemas list --json") &&
       workflow.includes("schema-deploy-verification.json"),
     "Schema deploy must verify stored schemas after deployment"
   );

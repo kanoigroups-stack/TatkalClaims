@@ -93,7 +93,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Show verification scope
         run: |
@@ -139,15 +139,15 @@ jobs:
       - name: Type-check application and verification code
         run: npx tsc --noEmit
 
-      - name: Set up Node.js for latest Sanity CLI
+      - name: Set up Node.js for pinned Sanity CLI
         if: needs.changes.outputs.schema == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22.12
 
-      - name: Validate Studio schema with latest Sanity CLI
+      - name: Validate Studio schema with pinned Sanity CLI
         if: needs.changes.outputs.schema == 'true'
-        run: npx --yes sanity@latest schemas validate --workspace tatkalClaims --level error
+        run: npx --yes sanity@6.11.0 schemas validate --workspace tatkalClaims --level error
 
       - name: Restore Node.js for application build
         if: needs.changes.outputs.schema == 'true'
