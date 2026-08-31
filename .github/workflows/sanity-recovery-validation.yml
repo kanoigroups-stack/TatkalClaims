@@ -44,10 +44,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Check required recovery secrets
         shell: bash
@@ -170,7 +170,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          npx sanity dataset import "${{ steps.archive.outputs.plain }}" "$SANITY_RECOVERY_DATASET"
+          npx --no-install sanity dataset import "${{ steps.archive.outputs.plain }}" "$SANITY_RECOVERY_DATASET"
 
       - name: Verify restored dataset against backup
         env:
