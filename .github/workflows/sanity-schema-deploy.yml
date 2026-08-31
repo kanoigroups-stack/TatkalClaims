@@ -29,7 +29,7 @@ jobs:
           node-version: 22.12
 
       - name: Install repository dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Check schema deploy token
         shell: bash
@@ -41,16 +41,16 @@ jobs:
           fi
 
       - name: Validate Tatkal Claims Studio schema
-        run: npx --yes sanity@latest schemas validate --workspace tatkalClaims --level error
+        run: npx --no-install sanity schemas validate --workspace tatkalClaims --level error
 
       - name: Deploy Tatkal Claims Studio schema
-        run: npx --yes sanity@latest schemas deploy --workspace tatkalClaims --verbose
+        run: npx --no-install sanity schemas deploy --workspace tatkalClaims --verbose
 
       - name: Verify deployed schema is stored
         shell: bash
         run: |
           set -euo pipefail
-          npx --yes sanity@latest schemas list --json > schema-deploy-verification.json
+          npx --no-install sanity schemas list --json > schema-deploy-verification.json
           node - <<'NODE'
           const fs = require("fs");
           const data = JSON.parse(fs.readFileSync("schema-deploy-verification.json", "utf8"));
