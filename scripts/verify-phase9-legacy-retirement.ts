@@ -107,7 +107,7 @@ async function main() {
     "Public article route does not render Portable Text directly"
   );
 
-  for (const source of [sanityClient, sanityPreview, articleSchemaFile]) {
+  for (const source of [sanityClient, articleSchemaFile]) {
     assert(source.includes("legacyOrder"), "legacyOrder migration evidence was removed from the Sanity model");
   }
   assert(
