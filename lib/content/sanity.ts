@@ -240,7 +240,7 @@ export function mapSanityPost(post: SanityPostProjection): ContentPost {
 
 export async function getSanityPosts(): Promise<ContentPost[]> {
   const query =
-    '*[_type == "article"] | order(coalesce(legacyOrder, 999999) asc, publishedAt desc) ' +
+    '*[_type == "article"] | order(publishedAt desc) ' +
     SANITY_ARTICLE_PROJECTION;
   const posts = await client.fetch<SanityPostProjection[]>(
     query,
