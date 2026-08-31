@@ -27,8 +27,9 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}): Metadata {
-  const service = getServiceBySlug(params.slug);
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
   if (!service)
     return {
       title: "Service Not Found",
