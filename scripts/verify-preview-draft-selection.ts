@@ -28,14 +28,13 @@ async function main() {
   );
 
   assert(
-    previewClient.includes(
-      "order(coalesce(legacyOrder, 999999) asc, publishedAt desc)"
-    ),
-    "CMS preview list must preserve migrated archive ordering"
+    previewClient.includes("order(publishedAt desc)") &&
+      !previewClient.includes("order(coalesce(legacyOrder"),
+    "CMS preview list must use current editorial publication ordering, not legacyOrder"
   );
 
   console.log(
-    "CMS preview uses previewDrafts with no-store and preserves archive ordering."
+    "CMS preview uses previewDrafts with no-store and current publication ordering."
   );
 }
 
