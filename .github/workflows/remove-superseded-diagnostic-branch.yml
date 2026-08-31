@@ -1,0 +1,20 @@
+name: Remove superseded diagnostic branch
+
+on:
+  push:
+    branches:
+      - security/next15-lts-reproducible-builds
+    paths:
+      - .github/workflows/remove-superseded-diagnostic-branch.yml
+
+permissions:
+  contents: write
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository with push credentials
+        uses: actions/checkout@v4
+      - name: Delete superseded Sanity adapter diagnostic branch
+        run: git push origin --delete "cms/sanity-content-adapter"
