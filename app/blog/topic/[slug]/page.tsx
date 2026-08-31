@@ -22,9 +22,10 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const topic = getKnowledgeTopicBySlug(params.slug);
+  const { slug } = await params;
+  const topic = getKnowledgeTopicBySlug(slug);
 
   if (!topic) {
     return {
@@ -53,9 +54,10 @@ export async function generateMetadata({
 export default async function TopicLandingPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const topic = getKnowledgeTopicBySlug(params.slug);
+  const { slug } = await params;
+  const topic = getKnowledgeTopicBySlug(slug);
 
   if (!topic) {
     notFound();
