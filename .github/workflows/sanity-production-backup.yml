@@ -29,10 +29,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Check required backup secrets
         shell: bash
@@ -63,7 +63,7 @@ jobs:
 
           # The recovery backup intentionally keeps both draft documents
           # and asset binaries using Sanity export defaults.
-          npx sanity dataset export "$SANITY_DATASET" "$PLAIN" --overwrite
+          npx --no-install sanity dataset export "$SANITY_DATASET" "$PLAIN" --overwrite
 
           test -s "$PLAIN"
           gzip -t "$PLAIN"
