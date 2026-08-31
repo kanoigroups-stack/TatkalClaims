@@ -42,7 +42,7 @@ export default function TestimonialsSection() {
   }, []);
 
   useEffect(() => {
-    if (isPaused) {
+    if (isPaused || prefersReducedMotion) {
       if (timerRef.current) clearInterval(timerRef.current);
       return;
     }
@@ -50,7 +50,7 @@ export default function TestimonialsSection() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [goNext, isPaused]);
+  }, [goNext, isPaused, prefersReducedMotion]);
 
   return (
     <SectionWrapper id="testimonials" className="bg-slate-50/50">
