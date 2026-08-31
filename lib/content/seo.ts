@@ -136,7 +136,15 @@ export function buildArticleMetadata(
   const description = seo?.metaDescription?.trim() || post.excerpt;
   const openGraphTitle = seo?.ogTitle?.trim() || title;
   const openGraphDescription = seo?.ogDescription?.trim() || description;
-  const image = seo?.ogImageUrl || post.socialImage?.url || post.image.url;
+  const explicitSocialImage = seo?.ogImageUrl || post.socialImage?.url;
+  const editorialSvgUrl = SITE_URL + "/editorial/" + post.slug + ".svg";
+  const useRasterEditorialFallback =
+    !explicitSocialImage && post.image.url === editorialSvgUrl;
+  const image = useRasterEditorialFallback
+    ? SITE_URL + "/api/og/editorial/" + post.slug
+    : explicitSocialImage || post.image.url;
+  const imageWidth = useRasterEditorialFallback ? 1200 : 800;
+  const imageHeight = useRasterEditorialFallback ? 630 : 400;
   const modifiedTime = post.updatedAt || post.date;
   const canonical =
     seo?.canonicalOverride?.trim() || getPublicArticlePath(post);
@@ -174,9 +182,10 @@ export function buildArticleMetadata(
       images: [
         {
           url: image,
-          width: 800,
-          height: 400,
+          width: imageWidth,
+          height: imageHeight,
           alt: post.title,
+          ...(useRasterEditorialFallback ? { type: "image/png" } : {}),
         },
       ],
       type: "article",
