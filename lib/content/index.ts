@@ -38,29 +38,6 @@ export async function getPostsByAuthorSlug(
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
 
-export async function getLatestPosts(
-  limit: number
-): Promise<ContentPost[]> {
-  const posts = await getAllPosts();
-  return [...posts]
-    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-    .slice(0, Math.max(0, limit));
-}
-
-export async function getFeaturedPosts(): Promise<ContentPost[]> {
-  const posts = await getAllPosts();
-  return posts.filter((post) => post.featured);
-}
-
-export async function getPostsByCategory(
-  category: string
-): Promise<ContentPost[]> {
-  const posts = await getAllPosts();
-  return posts.filter(
-    (post) => post.category.toLowerCase() === category.toLowerCase()
-  );
-}
-
 export async function getRelatedPosts(
   slug: string,
   limit = 3
