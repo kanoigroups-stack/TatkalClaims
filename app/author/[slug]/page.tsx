@@ -36,9 +36,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const author = await getAuthorBySlug(params.slug);
+  const { slug } = await params;
+  const author = await getAuthorBySlug(slug);
 
   if (!author) {
     return {
@@ -53,11 +54,12 @@ export async function generateMetadata({
 export default async function AuthorProfilePage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const [author, posts] = await Promise.all([
-    getAuthorBySlug(params.slug),
-    getPostsByAuthorSlug(params.slug),
+    getAuthorBySlug(slug),
+    getPostsByAuthorSlug(slug),
   ]);
 
   if (!author) {
