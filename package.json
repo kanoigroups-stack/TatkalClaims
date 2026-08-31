@@ -1,5 +1,5 @@
 {
-  "name": "claimresolve-pro",
+  "name": "tatkal-claims",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -10,27 +10,27 @@
   },
   "dependencies": {
     "@portabletext/react": "3.2.1",
-    "@sanity/client": "6.15.7",
+    "@sanity/client": "6.20.1",
     "@sanity/image-url": "1.1.0",
-    "@sanity/vision": "3.36.4",
+    "@sanity/vision": "3.37.1",
     "framer-motion": "^11.0.0",
     "lucide-react": "^0.378.0",
-    "next": "14.2.0",
-    "next-sanity": "8.5.0",
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "sanity": "3.36.4",
+    "next": "15.5.24",
+    "next-sanity": "9.4.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "sanity": "3.37.1",
     "styled-components": "6.1.8"
   },
   "devDependencies": {
     "typescript": "^5.4.0",
     "@types/node": "^20.12.0",
-    "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
     "tailwindcss": "^3.4.0",
     "postcss": "^8.4.0",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.0"
+    "eslint-config-next": "15.5.24"
   }
 }
