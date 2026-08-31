@@ -70,7 +70,7 @@ async function main() {
 
   assert(
     workflow.includes(
-      'npx sanity dataset import "${{ steps.archive.outputs.plain }}" "$SANITY_RECOVERY_DATASET"'
+      'npx --no-install sanity dataset import "${{ steps.archive.outputs.plain }}" "$SANITY_RECOVERY_DATASET"'
     ) &&
       !workflow.includes("--replace") &&
       !workflow.includes("--missing"),
