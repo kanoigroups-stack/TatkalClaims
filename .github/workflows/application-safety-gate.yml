@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - cms/phase9b-legacy-retirement-dry-run
   pull_request:
     branches:
       - main
@@ -62,13 +61,13 @@ jobs:
             [[ -z "$file" ]] && continue
 
             case "$file" in
-              app/blog/*|app/cms-preview/*|app/sitemap.ts|app/ads.txt/route.ts|app/globals.css|app/privacy-policy/page.tsx|app/page.tsx|components/blog/*|components/ads/*|components/floating/*|lib/content/*|lib/adsense/*|sanity/*|sanity.config.*|sanity.cli.*|.env.example|middleware.ts|next.config.js|scripts/*|docs/*|migration/*|package.json|package-lock.json|.github/workflows/sanity-phase9-legacy-retirement.yml|.github/workflows/sanity-production-backup.yml|.github/workflows/sanity-recovery-validation.yml|.github/workflows/sanity-schema-deploy.yml)
+              app/blog/*|app/cms-preview/*|app/sitemap.ts|app/ads.txt/route.ts|app/globals.css|app/privacy-policy/page.tsx|app/page.tsx|components/blog/*|components/ads/*|components/floating/*|lib/content/*|lib/adsense/*|sanity/*|sanity.config.*|sanity.cli.*|.env.example|middleware.ts|next.config.js|scripts/*|docs/*|migration/*|package.json|package-lock.json|.github/workflows/application-safety-gate.yml|.github/workflows/sanity-production-backup.yml|.github/workflows/sanity-recovery-validation.yml|.github/workflows/sanity-schema-deploy.yml)
                 safeguards=true
                 ;;
             esac
 
             case "$file" in
-              sanity/*|sanity.config.*|sanity.cli.*|package.json|package-lock.json|.github/workflows/sanity-phase9-legacy-retirement.yml)
+              sanity/*|sanity.config.*|sanity.cli.*|package.json|package-lock.json|.github/workflows/application-safety-gate.yml)
                 schema=true
                 ;;
             esac
@@ -100,7 +99,7 @@ jobs:
           echo "Content/runtime safeguards: ${{ needs.changes.outputs.safeguards }}"
           echo "Sanity schema validation: ${{ needs.changes.outputs.schema }}"
 
-      - name: Verify Phase 9 Sanity-only retirement invariants
+      - name: Verify Sanity-only runtime invariants
         if: needs.changes.outputs.safeguards == 'true'
         run: npx --yes tsx@4.19.2 scripts/verify-phase9-legacy-retirement.ts
 
@@ -158,10 +157,10 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Upload Phase 9 retirement verification
+      - name: Upload application safety verification
         if: needs.changes.outputs.safeguards == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: phase9-legacy-retirement-verification
-          path: migration/phase9/legacy-retirement-verification.json
+          name: application-safety-verification
+          path: migration/verification/application-safety-verification.json
           if-no-files-found: error
