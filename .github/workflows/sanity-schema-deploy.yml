@@ -21,10 +21,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Node.js for pinned Sanity CLI
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22.12
 
@@ -61,7 +61,7 @@ jobs:
           NODE
 
       - name: Upload non-sensitive schema verification
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sanity-schema-deploy-verification
           path: schema-deploy-verification.json
