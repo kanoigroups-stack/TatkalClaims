@@ -33,7 +33,7 @@ function getPreviewClient() {
 export async function getPreviewSanityPosts(): Promise<ContentPost[]> {
   const query =
     '*[_type == "article" && defined(slug.current) && defined(title) && defined(excerpt) && defined(publishedAt)] | ' +
-    "order(coalesce(legacyOrder, 999999) asc, publishedAt desc) " +
+    "order(publishedAt desc) " +
     SANITY_ARTICLE_PROJECTION;
 
   const posts = await getPreviewClient().fetch<SanityPostProjection[]>(

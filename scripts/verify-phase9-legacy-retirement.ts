@@ -107,16 +107,20 @@ async function main() {
     "Public article route does not render Portable Text directly"
   );
 
-  for (const source of [sanityClient, sanityPreview, articleSchemaFile]) {
-    assert(source.includes("legacyOrder"), "legacyOrder was removed from live Sanity ordering/schema");
-  }
   assert(
-    sanityClient.includes("order(coalesce(legacyOrder, 999999) asc, publishedAt desc)"),
-    "Public Sanity ordering no longer preserves legacyOrder"
+    sanityClient.includes('"  legacyOrder,"') &&
+      articleSchemaFile.includes('name: "legacyOrder"'),
+    "legacyOrder migration evidence is no longer retained in the Sanity projection/schema"
   );
   assert(
-    sanityPreview.includes("order(coalesce(legacyOrder, 999999) asc, publishedAt desc)"),
-    "Preview Sanity ordering no longer preserves legacyOrder"
+    sanityClient.includes("order(publishedAt desc)") &&
+      !sanityClient.includes("order(coalesce(legacyOrder"),
+    "Public Sanity ordering must use publishedAt rather than legacyOrder"
+  );
+  assert(
+    sanityPreview.includes("order(publishedAt desc)") &&
+      !sanityPreview.includes("order(coalesce(legacyOrder"),
+    "Preview Sanity ordering must use publishedAt rather than legacyOrder"
   );
 
   assert(
@@ -193,6 +197,7 @@ async function main() {
     retiredRuntimePaths: RETIRED_RUNTIME_PATHS,
     legacyOrder: {
       retained: true,
+      usedForEditorialOrdering: false,
       migratedCount: migratedOrders.length,
       min: migratedOrders[0],
       max: migratedOrders[migratedOrders.length - 1],
