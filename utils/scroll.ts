@@ -15,13 +15,3 @@ export function scrollToForm() {
     }, 800);
   }
 }
-
-export function scrollToSection(id: string) {
-  if (typeof window === "undefined") return;
-  const element = document.getElementById(id);
-  if (element) {
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.scrollY - HEADER_OFFSET;
-    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-  }
-}

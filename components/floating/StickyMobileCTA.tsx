@@ -13,18 +13,21 @@ export default function StickyMobileCTA() {
   const pathname = usePathname();
   const isHomePage = pathname === "/" || pathname === "";
 
-  useEffect(() => { 
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const footer = document.querySelector("footer");
+  useEffect(() => {
+    const mobileViewport = window.matchMedia("(max-width: 1023px)");
+
+    const updateVisibility = () => {
       const articleAdsActive =
         document.body.dataset.articleAdsActive === "true";
 
-      if (articleAdsActive) {
+      if (!mobileViewport.matches || articleAdsActive) {
         setIsVisible(false);
         document.body.classList.remove("pb-24");
         return;
       }
+
+      const scrollY = window.scrollY;
+      const footer = document.querySelector("footer");
 
       // Hide CTA when near footer (within 200px of footer)
       let nearFooter = false;
@@ -37,19 +40,30 @@ export default function StickyMobileCTA() {
       const shouldShow = scrollY > 600 && !nearFooter;
       setIsVisible(shouldShow);
 
-      // Add/remove padding to body to prevent footer content from being hidden
+      // Add/remove padding only while the mobile CTA can actually render.
       if (shouldShow) {
         document.body.classList.add("pb-24");
       } else {
         document.body.classList.remove("pb-24");
       }
-    }; 
+    };
 
-    window.addEventListener("scroll", handleScroll); 
+    const articleAdsObserver = new MutationObserver(updateVisibility);
+
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility);
+    mobileViewport.addEventListener("change", updateVisibility);
+    articleAdsObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-article-ads-active"],
+    });
+
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", updateVisibility);
+      mobileViewport.removeEventListener("change", updateVisibility);
+      articleAdsObserver.disconnect();
       document.body.classList.remove("pb-24");
-    }; 
+    };
   }, []);
 
   return (
