@@ -92,7 +92,7 @@ jobs:
           };
 
           async function query(groq) {
-            const url = `${base}/query/${dataset}?query=${encodeURIComponent(groq)}`;
+            const url = `${base}/query/${dataset}?perspective=raw&query=${encodeURIComponent(groq)}`;
             const response = await fetch(url, {
               headers: { Authorization: `Bearer ${token}` },
             });
