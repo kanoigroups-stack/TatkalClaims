@@ -32,10 +32,9 @@ export default function KnowledgeArticleCard({
   article: KnowledgeArticleSummary;
   emphasis?: boolean;
 }) {
-  const cardImage =
-    preserveFullArtwork && article.socialImage
-      ? article.socialImage
-      : article.image;
+  const useSocialImage =
+    article.image.displaySize === "full" && Boolean(article.socialImage);
+  const cardImage = useSocialImage ? article.socialImage! : article.image;
   const preserveFullArtwork = cardImage.displaySize === "full";
 
   return (
