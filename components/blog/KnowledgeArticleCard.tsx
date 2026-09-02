@@ -18,6 +18,11 @@ export type KnowledgeArticleSummary = {
     alt: string;
     displaySize?: "normal" | "wide" | "full";
   };
+  socialImage?: {
+    url: string;
+    alt: string;
+    displaySize?: "normal" | "wide" | "full";
+  };
 };
 
 export default function KnowledgeArticleCard({
@@ -27,22 +32,28 @@ export default function KnowledgeArticleCard({
   article: KnowledgeArticleSummary;
   emphasis?: boolean;
 }) {
+  const cardImage =
+    preserveFullArtwork && article.socialImage
+      ? article.socialImage
+      : article.image;
+  const preserveFullArtwork = cardImage.displaySize === "full";
+
   return (
     <article className="group h-full overflow-hidden rounded-2xl border border-slate-200 bg-white font-body shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
       <Link href={"/blog/" + article.slug + "/"} className="flex h-full flex-col">
         <div
           className={
             "relative aspect-video overflow-hidden " +
-            (article.image.displaySize === "full" ? "bg-white" : "bg-slate-100")
+            (preserveFullArtwork ? "bg-white" : "bg-slate-100")
           }
         >
           <Image
-            src={article.image.url}
-            alt={article.image.alt}
+            src={cardImage.url}
+            alt={cardImage.alt}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className={
-              article.image.displaySize === "full"
+              preserveFullArtwork
                 ? "object-contain"
                 : "object-cover transition-transform duration-500 group-hover:scale-105"
             }
