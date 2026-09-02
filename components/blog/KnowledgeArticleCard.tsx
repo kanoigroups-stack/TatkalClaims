@@ -16,6 +16,7 @@ export type KnowledgeArticleSummary = {
   image: {
     url: string;
     alt: string;
+    displaySize?: "normal" | "wide" | "full";
   };
 };
 
@@ -35,7 +36,11 @@ export default function KnowledgeArticleCard({
             alt={article.image.alt}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className={
+              article.image.displaySize === "full"
+                ? "object-contain"
+                : "object-cover transition-transform duration-500 group-hover:scale-105"
+            }
           />
         </div>
 
