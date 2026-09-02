@@ -30,7 +30,12 @@ export default function KnowledgeArticleCard({
   return (
     <article className="group h-full overflow-hidden rounded-2xl border border-slate-200 bg-white font-body shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
       <Link href={"/blog/" + article.slug + "/"} className="flex h-full flex-col">
-        <div className="relative aspect-video overflow-hidden bg-slate-100">
+        <div
+          className={
+            "relative aspect-video overflow-hidden " +
+            (article.image.displaySize === "full" ? "bg-white" : "bg-slate-100")
+          }
+        >
           <Image
             src={article.image.url}
             alt={article.image.alt}
