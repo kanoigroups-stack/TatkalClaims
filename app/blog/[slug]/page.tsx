@@ -234,14 +234,18 @@ export default async function BlogPostPage({
       </header>
 
       <figure className="container-main px-4">
-        <div className="relative mx-auto aspect-[16/9] max-w-6xl overflow-hidden rounded-2xl bg-slate-100 shadow-card">
+        <div
+          className={`relative mx-auto max-w-6xl overflow-hidden rounded-2xl bg-slate-100 shadow-card ${
+            post.image.displaySize === "full" ? "aspect-[2/1]" : "aspect-[16/9]"
+          }`}
+        >
           <Image
             src={post.image.url}
             alt={post.image.alt}
             fill
             priority
             sizes="(max-width: 1280px) 100vw, 1200px"
-            className="object-cover"
+            className={post.image.displaySize === "full" ? "object-contain" : "object-cover"}
           />
         </div>
         {(post.image.caption || post.image.credit) && (
