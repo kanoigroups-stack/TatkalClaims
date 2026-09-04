@@ -19,19 +19,6 @@ export type KnowledgeArticleSummary = {
   };
 };
 
-function resolveCardImage(url: string) {
-  const productionPrefix = "https://tatkalclaims.com/editorial/";
-  const isInternalEditorialImage =
-    url.startsWith("/editorial/") || url.startsWith(productionPrefix);
-
-  return {
-    src: isInternalEditorialImage
-      ? url.replace("https://tatkalclaims.com", "")
-      : url,
-    isInternalEditorialImage,
-  };
-}
-
 export default function KnowledgeArticleCard({
   article,
   emphasis = false,
@@ -39,31 +26,17 @@ export default function KnowledgeArticleCard({
   article: KnowledgeArticleSummary;
   emphasis?: boolean;
 }) {
-  const cardImage = resolveCardImage(article.image.url);
-
   return (
     <article className="group h-full overflow-hidden rounded-2xl border border-slate-200 bg-white font-body shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
       <Link href={"/blog/" + article.slug + "/"} className="flex h-full flex-col">
         <div className="relative aspect-video overflow-hidden bg-slate-100">
-          {cardImage.isInternalEditorialImage ? (
-            // Diagnostic path: bypass next/image completely for site-hosted editorial media.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={cardImage.src}
-              alt={article.image.alt}
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          ) : (
-            <Image
-              src={cardImage.src}
-              alt={article.image.alt}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          )}
+          <Image
+            src={article.image.url}
+            alt={article.image.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         </div>
 
         <div className="flex flex-1 flex-col p-5 md:p-6">
