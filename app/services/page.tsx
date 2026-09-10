@@ -11,9 +11,9 @@ import SectionWrapper from "@/components/ui/SectionWrapper";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 export const metadata: Metadata = {
-  title: "Our Services | Insurance Claim Dispute Resolution",
+  title: "Insurance Claim Dispute Resolution Services in India",
   description:
-    "Expert insurance dispute resolution services: claim rejection, claim delay, health insurance disputes, motor insurance claims, mis-selling complaints & short settlement issues. Free case evaluation.",
+    "Get help with rejected, delayed and disputed insurance claims in India. Tatkal Claims reviews policy wording, evidence and escalation options.",
   alternates: { canonical: "/services/" },
   openGraph: {
     title: "Our Services | Tatkal Claims",
