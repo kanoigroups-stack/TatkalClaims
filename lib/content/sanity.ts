@@ -121,6 +121,43 @@ export const SANITY_ARTICLE_PROJECTION = [
   "}",
 ].join("\n");
 
+const SANITY_ARTICLE_SUMMARY_PROJECTION = [
+  "{",
+  "  title,",
+  '  "slug": slug.current,',
+  "  excerpt,",
+  "  contentType,",
+  '  "category": category->title,',
+  '  "topics": topics[]->title,',
+  '  "author": author->{',
+  '    "_id": _id,',
+  "    name,",
+  '    "slug": slug.current,',
+  "    entityType,",
+  "    schemaName,",
+  "    role,",
+  "    credentials,",
+  "    bio,",
+  "    linkedin",
+  "  },",
+  "  featuredImage {",
+  "    externalUrl,",
+  '    "assetUrl": image.asset->url,',
+  "    alt",
+  "  },",
+  "  seo {",
+  "    noIndex",
+  "  },",
+  "  publishedAt,",
+  "  updatedAt,",
+  "  readingTimeMinutes,",
+  "  featured,",
+  "  cornerstone,",
+  "  monetization,",
+  '  "relatedSlugs": relatedArticles[]->slug.current',
+  "}",
+].join("\n");
+
 const SITE_URL = "https://tatkalclaims.com";
 const ANKIT_AUTHOR_SLUG = "ankit-l-kanoi-founder";
 const ANKIT_LINKEDIN_URL =
@@ -250,6 +287,18 @@ export async function getSanityPosts(): Promise<ContentPost[]> {
   return posts.map(mapSanityPost);
 }
 
+export async function getSanityPostSummaries(): Promise<ContentPost[]> {
+  const query =
+    '*[_type == "article"] | order(publishedAt desc) ' +
+    SANITY_ARTICLE_SUMMARY_PROJECTION;
+  const posts = await client.fetch<SanityPostProjection[]>(
+    query,
+    {},
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+  );
+  return posts.map(mapSanityPost);
+}
+
 export async function getSanityPostBySlug(
   slug: string
 ): Promise<ContentPost | null> {
@@ -262,7 +311,6 @@ export async function getSanityPostBySlug(
   );
   return post ? mapSanityPost(post) : null;
 }
-
 
 export async function getSanityAuthors(): Promise<AuthorProfile[]> {
   const query =

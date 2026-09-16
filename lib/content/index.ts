@@ -3,12 +3,26 @@ import {
   getSanityAuthors,
   getSanityPostBySlug,
   getSanityPosts,
+  getSanityPostSummaries,
 } from "./sanity";
 import type { AuthorProfile, ContentPost } from "./types";
 
 export type { AuthorProfile, ContentPost } from "./types";
 
+/**
+ * Lightweight collection/listing adapter. Portable Text body content is
+ * intentionally omitted so list, sitemap, static-param, author, topic, and
+ * related-article requests stay well below Next.js data-cache limits.
+ */
 export async function getAllPosts(): Promise<ContentPost[]> {
+  return getSanityPostSummaries();
+}
+
+/**
+ * Full article collection for migration/verification tooling only. Public
+ * article pages should fetch one full document with getPostBySlug().
+ */
+export async function getAllPostsWithBody(): Promise<ContentPost[]> {
   return getSanityPosts();
 }
 

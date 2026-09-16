@@ -1,6 +1,6 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { constants } from "node:fs";
-import { getAllPosts, getPostBySlug } from "../lib/content";
+import { getAllPostsWithBody, getPostBySlug } from "../lib/content";
 import {
   buildArticleMetadata,
   buildArticleSchema,
@@ -130,7 +130,7 @@ async function main() {
     "Protected permanent claim-rejection redirect is missing"
   );
 
-  const posts = await getAllPosts();
+  const posts = await getAllPostsWithBody();
   assert(
     posts.length >= EXPECTED_MIGRATED_ARTICLES,
     "Expected at least 56 published Sanity articles, found " + posts.length
