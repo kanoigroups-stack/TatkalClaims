@@ -64,6 +64,12 @@ const client = createClient({
   useCdn: true,
 });
 
+// Collection pages already use Next.js revalidation. Bypass Sanity's CDN
+// for those reads so a regeneration sees newly published content immediately.
+const freshCollectionClient = client.withConfig({
+  useCdn: false,
+});
+
 export const SANITY_ARTICLE_PROJECTION = [
   "{",
   "  title,",
@@ -291,7 +297,7 @@ export async function getSanityPostSummaries(): Promise<ContentPost[]> {
   const query =
     '*[_type == "article"] | order(publishedAt desc) ' +
     SANITY_ARTICLE_SUMMARY_PROJECTION;
-  const posts = await client.fetch<SanityPostProjection[]>(
+  const posts = await freshCollectionClient.fetch<SanityPostProjection[]>(
     query,
     {},
     { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
