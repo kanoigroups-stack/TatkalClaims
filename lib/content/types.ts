@@ -41,6 +41,8 @@ export type ContentPost = {
   topics: string[];
   author: string;
   authorEntity: ContentAuthor;
+  reviewer: string;
+  reviewerEntity: ContentAuthor;
   date: string;
   publishedAt: string;
   updatedAt?: string;
