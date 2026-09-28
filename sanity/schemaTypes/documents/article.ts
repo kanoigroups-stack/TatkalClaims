@@ -112,8 +112,8 @@ export const article = defineType({
       type: "number",
       group: "content",
       description:
-        "Migration-compatible value. The frontend may calculate this automatically for future articles.",
-      validation: (Rule) => Rule.integer().min(1),
+        "Required. Estimate from visible article content at 190 words per minute and round up. The frontend fallback is defensive only.",
+      validation: (Rule) => Rule.required().integer().min(1),
     }),
     defineField({
       name: "legacyOrder",
