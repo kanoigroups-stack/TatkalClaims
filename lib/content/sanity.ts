@@ -262,7 +262,7 @@ function countReadableWords(value: unknown, parentKey?: string): number {
   }
 
   if (Array.isArray(value)) {
-    return value.reduce(
+    return value.reduce<number>(
       (total, item) => total + countReadableWords(item, parentKey),
       0
     );
@@ -273,14 +273,14 @@ function countReadableWords(value: unknown, parentKey?: string): number {
   const record = value as Record<string, unknown>;
 
   if (record._type === "block" && Array.isArray(record.children)) {
-    return record.children.reduce((total, child) => {
+    return record.children.reduce<number>((total, child) => {
       if (!child || typeof child !== "object") return total;
       const text = (child as Record<string, unknown>).text;
       return total + (typeof text === "string" ? countWords(text) : 0);
     }, 0);
   }
 
-  return Object.entries(record).reduce((total, [key, child]) => {
+  return Object.entries(record).reduce<number>((total, [key, child]) => {
     if (!READABLE_BODY_KEYS.has(key)) return total;
     return total + countReadableWords(child, key);
   }, 0);
