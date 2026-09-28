@@ -11,6 +11,10 @@ import type {
   ContentAuthor,
   ContentPost,
 } from "./types";
+import {
+  ARTICLE_REVIEWER_ENTITY,
+  ARTICLE_WRITER_ENTITY,
+} from "./editorial-attribution";
 
 export type SanityImageProjection = {
   externalUrl?: string;
@@ -259,8 +263,10 @@ export function mapSanityPost(post: SanityPostProjection): ContentPost {
     excerpt: post.excerpt,
     category: post.category || "Uncategorized",
     topics: post.topics || [],
-    author: authorEntity.displayName,
+    author: ARTICLE_WRITER_ENTITY.displayName,
     authorEntity,
+    reviewer: ARTICLE_REVIEWER_ENTITY.displayName,
+    reviewerEntity: ARTICLE_REVIEWER_ENTITY,
     date: post.publishedAt.slice(0, 10),
     publishedAt: post.publishedAt,
     updatedAt: post.updatedAt,
