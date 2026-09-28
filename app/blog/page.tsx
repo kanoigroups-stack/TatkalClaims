@@ -13,6 +13,7 @@ import {
   buildAuthorSchema,
   ORGANIZATION_ID,
 } from "@/lib/content/seo";
+import { ARTICLE_WRITER_ENTITY } from "@/lib/content/editorial-attribution";
 
 export const revalidate = 60;
 
@@ -75,7 +76,7 @@ export default async function BlogListPage() {
       description: post.excerpt,
       url: "https://tatkalclaims.com/blog/" + post.slug + "/",
       datePublished: post.date,
-      author: buildAuthorSchema(post.authorEntity),
+      author: buildAuthorSchema(ARTICLE_WRITER_ENTITY),
       publisher: {
         "@id": ORGANIZATION_ID,
       },

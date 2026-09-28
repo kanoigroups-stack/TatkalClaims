@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import type { AuthorProfile, ContentAuthor, ContentPost } from "./types";
 import {
+  ARTICLE_REVIEWER_ENTITY,
+  ARTICLE_WRITER_ENTITY,
+} from "./editorial-attribution";
+import {
   getKnowledgeTopicByTitle,
   getKnowledgeTopicPath,
 } from "./topics";
@@ -180,7 +184,7 @@ export function buildArticleMetadata(
       type: "article",
       publishedTime: post.date,
       modifiedTime,
-      authors: [post.author],
+      authors: [ARTICLE_WRITER_ENTITY.displayName],
       tags: [
         post.category,
         ...post.topics,
@@ -252,7 +256,7 @@ export function buildArticleSchema(post: ContentPost) {
       "@type": "ImageObject",
       url: post.image.url,
     },
-    author: buildAuthorSchema(post.authorEntity),
+    author: buildAuthorSchema(ARTICLE_WRITER_ENTITY),
     publisher: {
       "@id": ORGANIZATION_ID,
     },
@@ -261,6 +265,7 @@ export function buildArticleSchema(post: ContentPost) {
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": getPublicArticleUrl(post),
+      reviewedBy: buildAuthorSchema(ARTICLE_REVIEWER_ENTITY),
     },
     keywords: [
       post.category,
