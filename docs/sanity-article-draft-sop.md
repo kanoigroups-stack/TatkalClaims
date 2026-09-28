@@ -136,9 +136,10 @@ If a consequential choice is unclear, surface it before creating the draft rathe
 - Existing article: set only for a substantive editorial update when appropriate.
 - New draft: normally leave empty until a later update.
 
-**`readingTimeMinutes`** — optional but recommended.
-- Populate an integer of at least 1 so the public page does not show "Read time unavailable".
-- Use a consistent estimate based on body text; round up rather than down.
+**`readingTimeMinutes`** — required.
+- Calculate from the visible article content at 190 words per minute and round up to the next whole minute.
+- Store an integer of at least 1 before the draft is considered publish-ready.
+- The frontend has a defensive fallback, but it is not a substitute for populating the CMS field.
 
 ### Migration/settings fields
 
@@ -340,7 +341,7 @@ A draft is not ready for publish approval until all applicable checks pass:
 - featured image has usable source
 - featured-image alt text present
 - publishedAt present
-- reading time populated where practical
+- reading time populated using the 190-words-per-minute rule
 - Portable Text contains no unsupported block types
 - internal links resolve to intended public URLs
 - tables render correctly
