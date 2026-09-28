@@ -198,22 +198,37 @@ export default async function BlogPostPage({
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-slate-200 pt-6 text-sm text-slate-500">
-              {post.authorEntity.slug ? (
-                <Link
-                  href={getAuthorPath({
-                    slug: post.authorEntity.slug,
-                  })}
-                  className="inline-flex items-center gap-2 font-medium text-slate-600 transition-colors hover:text-primary-700"
-                >
-                  <User className="h-4 w-4" aria-hidden="true" />
-                  {post.author}
-                </Link>
-              ) : (
+              <div className="flex flex-col gap-1.5 text-slate-600">
                 <span className="inline-flex items-center gap-2">
                   <User className="h-4 w-4" aria-hidden="true" />
-                  {post.author}
+                  <span>
+                    <span className="font-medium">Written by:</span>{" "}
+                    {post.author}
+                  </span>
                 </span>
-              )}
+                {post.reviewerEntity.slug ? (
+                  <Link
+                    href={getAuthorPath({
+                      slug: post.reviewerEntity.slug,
+                    })}
+                    className="inline-flex items-center gap-2 transition-colors hover:text-primary-700"
+                  >
+                    <User className="h-4 w-4" aria-hidden="true" />
+                    <span>
+                      <span className="font-medium">Reviewed by:</span>{" "}
+                      {post.reviewer}
+                    </span>
+                  </Link>
+                ) : (
+                  <span className="inline-flex items-center gap-2">
+                    <User className="h-4 w-4" aria-hidden="true" />
+                    <span>
+                      <span className="font-medium">Reviewed by:</span>{" "}
+                      {post.reviewer}
+                    </span>
+                  </span>
+                )}
+              </div>
               <span className="inline-flex items-center gap-2">
                 <Calendar className="h-4 w-4" aria-hidden="true" />
                 Published {formatDate(post.date)}
