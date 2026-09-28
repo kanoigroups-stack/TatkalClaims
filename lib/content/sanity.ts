@@ -51,6 +51,7 @@ export type SanityPostProjection = {
   publishedAt: string;
   updatedAt?: string;
   readingTimeMinutes?: number;
+  bodyTextLength?: number;
   legacyOrder?: number;
   body?: unknown[];
   featured?: boolean;
@@ -122,6 +123,7 @@ export const SANITY_ARTICLE_PROJECTION = [
   "  publishedAt,",
   "  updatedAt,",
   "  readingTimeMinutes,",
+  '  "bodyTextLength": length(pt::text(body)),',
   "  legacyOrder,",
   "  body,",
   "  featured,",
@@ -161,6 +163,7 @@ const SANITY_ARTICLE_SUMMARY_PROJECTION = [
   "  publishedAt,",
   "  updatedAt,",
   "  readingTimeMinutes,",
+  '  "bodyTextLength": length(pt::text(body)),',
   "  featured,",
   "  cornerstone,",
   "  monetization,",
@@ -169,6 +172,22 @@ const SANITY_ARTICLE_SUMMARY_PROJECTION = [
 ].join("\n");
 
 const SITE_URL = "https://tatkalclaims.com";
+const READING_WORDS_PER_MINUTE = 190;
+const SUMMARY_CHARACTERS_PER_MINUTE = 900;
+const READABLE_BODY_KEYS = new Set([
+  "text",
+  "body",
+  "question",
+  "answer",
+  "title",
+  "caption",
+  "label",
+  "notes",
+  "cells",
+  "rows",
+  "items",
+  "data",
+]);
 const ANKIT_AUTHOR_SLUG = "ankit-l-kanoi-founder";
 const ANKIT_LINKEDIN_URL =
   "https://www.linkedin.com/in/ankit-kanoi-9730b1403/";
@@ -231,6 +250,70 @@ const SANITY_AUTHOR_PROJECTION = [
   "}",
 ].join("\n");
 
+function countWords(text: string): number {
+  return text.trim().match(/\S+/g)?.length || 0;
+}
+
+function countReadableWords(value: unknown, parentKey?: string): number {
+  if (typeof value === "string") {
+    return !parentKey || READABLE_BODY_KEYS.has(parentKey)
+      ? countWords(value)
+      : 0;
+  }
+
+  if (Array.isArray(value)) {
+    return value.reduce<number>(
+      (total, item) => total + countReadableWords(item, parentKey),
+      0
+    );
+  }
+
+  if (!value || typeof value !== "object") return 0;
+
+  const record = value as Record<string, unknown>;
+
+  if (record._type === "block" && Array.isArray(record.children)) {
+    return record.children.reduce<number>((total, child) => {
+      if (!child || typeof child !== "object") return total;
+      const text = (child as Record<string, unknown>).text;
+      return total + (typeof text === "string" ? countWords(text) : 0);
+    }, 0);
+  }
+
+  return Object.entries(record).reduce<number>((total, [key, child]) => {
+    if (!READABLE_BODY_KEYS.has(key)) return total;
+    return total + countReadableWords(child, key);
+  }, 0);
+}
+
+function resolveReadingTimeMinutes(post: SanityPostProjection): number {
+  if (
+    typeof post.readingTimeMinutes === "number" &&
+    Number.isFinite(post.readingTimeMinutes) &&
+    post.readingTimeMinutes >= 1
+  ) {
+    return post.readingTimeMinutes;
+  }
+
+  const bodyWords = countReadableWords(post.body || []);
+  if (bodyWords > 0) {
+    return Math.max(1, Math.ceil(bodyWords / READING_WORDS_PER_MINUTE));
+  }
+
+  if (
+    typeof post.bodyTextLength === "number" &&
+    Number.isFinite(post.bodyTextLength) &&
+    post.bodyTextLength > 0
+  ) {
+    return Math.max(
+      1,
+      Math.ceil(post.bodyTextLength / SUMMARY_CHARACTERS_PER_MINUTE)
+    );
+  }
+
+  return 1;
+}
+
 function normalizeImage(
   image: SanityImageProjection | undefined,
   fallbackAlt: string
@@ -252,6 +335,7 @@ function normalizeImage(
 export function mapSanityPost(post: SanityPostProjection): ContentPost {
   const image = normalizeImage(post.featuredImage, post.title);
   const authorEntity = normalizeAuthor(post.author);
+  const readingTimeMinutes = resolveReadingTimeMinutes(post);
 
   if (!image) {
     throw new Error('Sanity article "' + post.slug + '" has no usable featured image');
@@ -270,10 +354,8 @@ export function mapSanityPost(post: SanityPostProjection): ContentPost {
     date: post.publishedAt.slice(0, 10),
     publishedAt: post.publishedAt,
     updatedAt: post.updatedAt,
-    readTime: post.readingTimeMinutes
-      ? String(post.readingTimeMinutes) + " min read"
-      : "Read time unavailable",
-    readingTimeMinutes: post.readingTimeMinutes,
+    readTime: String(readingTimeMinutes) + " min read",
+    readingTimeMinutes,
     legacyOrder: post.legacyOrder,
     image,
     socialImage: normalizeImage(post.socialImage, post.title),
