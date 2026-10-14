@@ -45,9 +45,24 @@ for (const required of [
   "SANITY_AUTHORS_TAG",
   "getSanityArticleTag(slug)",
   "getSanityAuthorTag(slug)",
+  "getSanityRelatedPostsBySlug",
+  "candidateLimit",
 ]) {
   assert(sanity.includes(required), `Sanity cache wiring missing: ${required}`);
 }
+
+const contentIndex = fs.readFileSync("lib/content/index.ts", "utf8");
+const relatedSection = contentIndex.slice(
+  contentIndex.indexOf("export async function getRelatedPosts")
+);
+assert(
+  relatedSection.includes("return getSanityRelatedPostsBySlug(slug, limit);"),
+  "Article related-post lookup must use the source-specific Sanity adapter"
+);
+assert(
+  !relatedSection.includes("const posts = await getAllPosts()"),
+  "Article detail routes must not depend on the global article-summary cache"
+);
 
 const webhook = fs.readFileSync("app/api/revalidate/route.ts", "utf8");
 for (const required of [

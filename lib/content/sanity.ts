@@ -69,6 +69,13 @@ export type SanityPostProjection = {
   relatedSlugs?: string[];
 };
 
+type SanityRelatedTargetProjection = {
+  categoryId?: string;
+  topicIds?: string[];
+  contentType?: string;
+  relatedSlugs?: string[];
+};
+
 
 const client = createClient({
   projectId,
@@ -417,6 +424,98 @@ export async function getSanityPostBySlug(
     }
   );
   return post ? mapSanityPost(post) : null;
+}
+
+export async function getSanityRelatedPostsBySlug(
+  slug: string,
+  limit = 3
+): Promise<ContentPost[]> {
+  const safeLimit = Math.max(1, Math.min(limit, 12));
+  const targetQuery = [
+    '*[_type == "article" && slug.current == $slug][0]{',
+    '  "categoryId": category._ref,',
+    '  "topicIds": coalesce(topics[]._ref, []),',
+    "  contentType,",
+    '  "relatedSlugs": coalesce(relatedArticles[]->slug.current, [])',
+    "}",
+  ].join("\n");
+
+  const target = await freshCollectionClient.fetch<SanityRelatedTargetProjection | null>(
+    targetQuery,
+    { slug },
+    {
+      next: {
+        revalidate: PUBLIC_REVALIDATE_SECONDS,
+        tags: [getSanityArticleTag(slug)],
+      },
+    }
+  );
+
+  if (!target) return [];
+
+  const relatedSlugs = (target.relatedSlugs || []).filter(Boolean);
+  const topicIds = (target.topicIds || []).filter(Boolean);
+  const candidateLimit = Math.min(
+    36,
+    Math.max(safeLimit, relatedSlugs.length + safeLimit * 3)
+  );
+
+  const candidateQuery =
+    '*[_type == "article" && slug.current != $slug && defined(publishedAt)] ' +
+    "| order(" +
+    "  (slug.current in $relatedSlugs) desc," +
+    "  (" +
+    "    coalesce(count(topics[@._ref in $topicIds]), 0) * 4 +" +
+    "    select(defined($categoryId) && category._ref == $categoryId => 3, 0) +" +
+    "    select(defined($contentType) && contentType == $contentType => 1, 0)" +
+    "  ) desc," +
+    "  publishedAt desc" +
+    ")[0...$candidateLimit] " +
+    SANITY_ARTICLE_SUMMARY_PROJECTION;
+
+  const candidates = await freshCollectionClient.fetch<SanityPostProjection[]>(
+    candidateQuery,
+    {
+      slug,
+      relatedSlugs,
+      topicIds,
+      categoryId: target.categoryId || null,
+      contentType: target.contentType || null,
+      candidateLimit,
+    },
+    {
+      next: {
+        revalidate: PUBLIC_REVALIDATE_SECONDS,
+        tags: [getSanityArticleTag(slug)],
+      },
+    }
+  );
+
+  const posts = candidates.map(mapSanityPost);
+  const bySlug = new Map(posts.map((post) => [post.slug, post]));
+  const selected: ContentPost[] = [];
+  const seen = new Set<string>([slug]);
+
+  // Preserve the explicit Sanity relatedArticles order first.
+  for (const relatedSlug of relatedSlugs) {
+    const related = bySlug.get(relatedSlug);
+    if (related && !seen.has(related.slug)) {
+      selected.push(related);
+      seen.add(related.slug);
+    }
+    if (selected.length >= safeLimit) return selected;
+  }
+
+  // The GROQ query has already ranked fallback candidates using the same
+  // topic/category/content-type weights as the previous in-memory algorithm.
+  for (const candidate of posts) {
+    if (selected.length >= safeLimit) break;
+    if (seen.has(candidate.slug)) continue;
+    selected.push(candidate);
+    seen.add(candidate.slug);
+  }
+
+  return selected.slice(0, safeLimit);
 }
 
 export async function getSanityAuthors(): Promise<AuthorProfile[]> {
