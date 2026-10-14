@@ -2,20 +2,41 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { parseBody } from "next-sanity/webhook";
 import {
-  SANITY_ARTICLE_DETAILS_TAG,
   SANITY_ARTICLE_SUMMARIES_TAG,
   SANITY_ARTICLES_FULL_TAG,
   SANITY_AUTHORS_TAG,
   getSanityArticleTag,
   getSanityAuthorTag,
 } from "@/lib/content/cache";
+import {
+  getSanityArticleSlugsReferencingDocument,
+  type SanityArticleReferenceKind,
+} from "@/lib/content/sanity";
+import {
+  getKnowledgeTopicByTitle,
+  getKnowledgeTopicPath,
+} from "@/lib/content/topics";
+import {
+  productionDataset,
+  projectId as expectedProjectId,
+} from "@/sanity/env";
 
 type SupportedDocumentType = "article" | "author" | "category" | "topic";
 
-type WebhookPayload = {
+type WebhookSnapshot = {
+  _id?: string;
   _type?: string;
   slug?: string;
-  previousSlug?: string;
+  authorSlug?: string;
+  topicTitles?: string[];
+  title?: string;
+};
+
+type WebhookPayload = {
+  projectId?: string;
+  dataset?: string;
+  before?: WebhookSnapshot | null;
+  after?: WebhookSnapshot | null;
 };
 
 const SUPPORTED_DOCUMENT_TYPES = new Set<SupportedDocumentType>([
@@ -33,7 +54,18 @@ function normalizeSlug(value: unknown): string | null {
   return SLUG_PATTERN.test(slug) ? slug : null;
 }
 
-function isSupportedDocumentType(value: string): value is SupportedDocumentType {
+function normalizeStrings(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function isSupportedDocumentType(
+  value: string
+): value is SupportedDocumentType {
   return SUPPORTED_DOCUMENT_TYPES.has(value as SupportedDocumentType);
 }
 
@@ -61,89 +93,153 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!body?._type || !isSupportedDocumentType(body._type)) {
+    if (
+      body?.projectId !== expectedProjectId ||
+      body?.dataset !== productionDataset
+    ) {
+      return NextResponse.json(
+        { message: "Unexpected Sanity project or dataset" },
+        { status: 400 }
+      );
+    }
+
+    const before = body.before || null;
+    const after = body.after || null;
+    const documentType = after?._type || before?._type;
+
+    if (!documentType || !isSupportedDocumentType(documentType)) {
       return NextResponse.json(
         { message: "Unsupported or missing document type" },
         { status: 400 }
       );
     }
 
-    const currentSlug = normalizeSlug(body.slug);
-    const previousSlug = normalizeSlug(body.previousSlug);
+    const documentId = after?._id || before?._id || null;
+    const currentSlug = normalizeSlug(after?.slug);
+    const previousSlug = normalizeSlug(before?.slug);
     const paths = new Set<string>();
-    const patterns = new Set<string>();
 
     const markPath = (path: string) => {
       revalidatePath(path);
       paths.add(path);
     };
 
-    const markPattern = (path: string) => {
-      revalidatePath(path, "page");
-      patterns.add(path);
+    const invalidateArticle = (slug: string) => {
+      revalidateTag(getSanityArticleTag(slug));
+      markPath(`/blog/${slug}/`);
     };
 
-    if (body._type === "article") {
+    const markAuthor = (slug: string | null) => {
+      if (!slug) return;
+      revalidateTag(getSanityAuthorTag(slug));
+      markPath(`/author/${slug}/`);
+    };
+
+    const markTopicTitles = (titles: string[]) => {
+      for (const title of titles) {
+        const topic = getKnowledgeTopicByTitle(title);
+        if (topic) markPath(getKnowledgeTopicPath(topic));
+      }
+    };
+
+    const getAffectedArticleSlugs = async (
+      kind: SanityArticleReferenceKind
+    ) => {
+      if (!documentId) return [];
+      return getSanityArticleSlugsReferencingDocument(documentId, kind);
+    };
+
+    if (documentType === "article") {
       revalidateTag(SANITY_ARTICLE_SUMMARIES_TAG);
       revalidateTag(SANITY_ARTICLES_FULL_TAG);
 
-      if (currentSlug) {
-        revalidateTag(getSanityArticleTag(currentSlug));
-        markPath(`/blog/${currentSlug}/`);
+      if (currentSlug) invalidateArticle(currentSlug);
+      if (previousSlug && previousSlug !== currentSlug) {
+        invalidateArticle(previousSlug);
       }
 
-      if (previousSlug && previousSlug !== currentSlug) {
-        revalidateTag(getSanityArticleTag(previousSlug));
-        markPath(`/blog/${previousSlug}/`);
+      // If other articles explicitly feature this one in relatedArticles,
+      // refresh only those source pages so their cards cannot retain stale
+      // title/excerpt/image/read-time metadata.
+      const inboundRelatedSlugs =
+        await getAffectedArticleSlugs("relatedArticle");
+      for (const slug of inboundRelatedSlugs) {
+        if (slug !== currentSlug && slug !== previousSlug) {
+          invalidateArticle(slug);
+        }
       }
 
       markPath("/");
       markPath("/blog/");
       markPath("/sitemap.xml");
-      markPattern("/blog/topic/[slug]");
-      markPattern("/author/[slug]");
+
+      const authorSlugs = new Set(
+        [normalizeSlug(before?.authorSlug), normalizeSlug(after?.authorSlug)]
+          .filter((slug): slug is string => Boolean(slug))
+      );
+      for (const slug of authorSlugs) markAuthor(slug);
+
+      markTopicTitles([
+        ...new Set([
+          ...normalizeStrings(before?.topicTitles),
+          ...normalizeStrings(after?.topicTitles),
+        ]),
+      ]);
     }
 
-    if (body._type === "author") {
+    if (documentType === "author") {
       revalidateTag(SANITY_AUTHORS_TAG);
       revalidateTag(SANITY_ARTICLE_SUMMARIES_TAG);
-      revalidateTag(SANITY_ARTICLE_DETAILS_TAG);
       revalidateTag(SANITY_ARTICLES_FULL_TAG);
 
-      if (currentSlug) {
-        revalidateTag(getSanityAuthorTag(currentSlug));
-        markPath(`/author/${currentSlug}/`);
+      markAuthor(currentSlug);
+      if (previousSlug && previousSlug !== currentSlug) {
+        markAuthor(previousSlug);
       }
 
-      if (previousSlug && previousSlug !== currentSlug) {
-        revalidateTag(getSanityAuthorTag(previousSlug));
-        markPath(`/author/${previousSlug}/`);
-      }
+      const affectedArticleSlugs = await getAffectedArticleSlugs("author");
+      for (const slug of affectedArticleSlugs) invalidateArticle(slug);
 
       markPath("/");
       markPath("/blog/");
       markPath("/sitemap.xml");
-      markPattern("/blog/[slug]");
-      markPattern("/blog/topic/[slug]");
     }
 
-    if (body._type === "category" || body._type === "topic") {
+    if (documentType === "category") {
       revalidateTag(SANITY_ARTICLE_SUMMARIES_TAG);
-      revalidateTag(SANITY_ARTICLE_DETAILS_TAG);
       revalidateTag(SANITY_ARTICLES_FULL_TAG);
+
+      const affectedArticleSlugs = await getAffectedArticleSlugs("category");
+      for (const slug of affectedArticleSlugs) invalidateArticle(slug);
 
       markPath("/");
       markPath("/blog/");
       markPath("/sitemap.xml");
-      markPattern("/blog/[slug]");
-      markPattern("/blog/topic/[slug]");
+    }
+
+    if (documentType === "topic") {
+      revalidateTag(SANITY_ARTICLE_SUMMARIES_TAG);
+      revalidateTag(SANITY_ARTICLES_FULL_TAG);
+
+      const affectedArticleSlugs = await getAffectedArticleSlugs("topic");
+      for (const slug of affectedArticleSlugs) invalidateArticle(slug);
+
+      markTopicTitles([
+        ...new Set([
+          ...normalizeStrings([before?.title]),
+          ...normalizeStrings([after?.title]),
+        ]),
+      ]);
+
+      markPath("/");
+      markPath("/blog/");
+      markPath("/sitemap.xml");
     }
 
     return NextResponse.json({
       revalidated: true,
-      documentType: body._type,
+      documentType,
       paths: [...paths],
-      patterns: [...patterns],
     });
   } catch (error: unknown) {
     console.error("Sanity revalidation failed", error);

@@ -5,8 +5,18 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 async function main() {
-  const [sop, articleSchema, imageSchema, seoSchema, portableText, renderer, policy, contentIndex] =
-    await Promise.all([
+  const [
+    sop,
+    articleSchema,
+    imageSchema,
+    seoSchema,
+    portableText,
+    renderer,
+    policy,
+    contentIndex,
+    sanityClient,
+    revalidationRunbook,
+  ] = await Promise.all([
       readFile("docs/sanity-article-draft-sop.md", "utf8"),
       readFile("sanity/schemaTypes/documents/article.ts", "utf8"),
       readFile("sanity/schemaTypes/objects/articleImage.ts", "utf8"),
@@ -15,6 +25,8 @@ async function main() {
       readFile("components/blog/PortableArticleBody.tsx", "utf8"),
       readFile("docs/sanity-mcp-automation.md", "utf8"),
       readFile("lib/content/index.ts", "utf8"),
+      readFile("lib/content/sanity.ts", "utf8"),
+      readFile("docs/sanity-revalidation.md", "utf8"),
     ]);
 
   for (const field of [
@@ -107,10 +119,13 @@ async function main() {
 
   assert(
     contentIndex.includes("getRelatedPosts") &&
-      contentIndex.includes("target.relatedSlugs") &&
+      contentIndex.includes("getSanityRelatedPostsBySlug") &&
+      sanityClient.includes("getSanityRelatedPostsBySlug") &&
+      sanityClient.includes("relatedSlugs") &&
+      sanityClient.includes("coalesce(count(topics[@._ref in $topicIds]), 0) * 4") &&
       sop.includes("public Related articles section") &&
       sop.includes("topic/category/content-type relevance and recency"),
-    "SOP must match the current related-article override and fallback behavior"
+    "SOP must match the source-specific related-article override and fallback behavior"
   );
 
   assert(
@@ -129,6 +144,25 @@ async function main() {
     policy.includes("docs/sanity-article-draft-sop.md") &&
       policy.includes("All MCP-created or MCP-edited articles must follow"),
     "MCP automation policy must require the article draft SOP"
+  );
+
+  assert(
+    sop.includes("signed Sanity webhook") &&
+      sop.includes("12-hour time-based revalidation is a safety fallback") &&
+      sop.includes("Do not trigger a Vercel redeploy merely to clear CMS cache") &&
+      !sop.includes("normal cache propagation window") &&
+      policy.includes("docs/sanity-revalidation.md") &&
+      policy.includes("do not redeploy merely to clear CMS cache") &&
+      revalidationRunbook.includes("SANITY_REVALIDATE_SECRET") &&
+      revalidationRunbook.includes("12-hour") &&
+      revalidationRunbook.includes("Do not redeploy"),
+    "Editorial workflow must describe webhook-driven freshness and forbid cache-clearing redeploys"
+  );
+
+  assert(
+    !sop.includes("Topics**\n- None currently") &&
+      !sop.includes("\n- Legal Team\n"),
+    "SOP must not retain stale hard-coded taxonomy or author baselines"
   );
 
   console.log(

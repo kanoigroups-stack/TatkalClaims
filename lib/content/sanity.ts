@@ -17,7 +17,6 @@ import {
 } from "./editorial-attribution";
 import {
   PUBLIC_REVALIDATE_SECONDS,
-  SANITY_ARTICLE_DETAILS_TAG,
   SANITY_ARTICLE_SUMMARIES_TAG,
   SANITY_ARTICLES_FULL_TAG,
   SANITY_AUTHORS_TAG,
@@ -419,7 +418,7 @@ export async function getSanityPostBySlug(
     {
       next: {
         revalidate: PUBLIC_REVALIDATE_SECONDS,
-        tags: [SANITY_ARTICLE_DETAILS_TAG, getSanityArticleTag(slug)],
+        tags: [getSanityArticleTag(slug)],
       },
     }
   );
@@ -516,6 +515,35 @@ export async function getSanityRelatedPostsBySlug(
   }
 
   return selected.slice(0, safeLimit);
+}
+
+export type SanityArticleReferenceKind =
+  | "author"
+  | "category"
+  | "topic"
+  | "relatedArticle";
+
+export async function getSanityArticleSlugsReferencingDocument(
+  documentId: string,
+  kind: SanityArticleReferenceKind
+): Promise<string[]> {
+  const selectorByKind: Record<SanityArticleReferenceKind, string> = {
+    author: "author._ref == $documentId",
+    category: "category._ref == $documentId",
+    topic: "$documentId in topics[]._ref",
+    relatedArticle: "$documentId in relatedArticles[]._ref",
+  };
+
+  const query =
+    '*[_type == "article" && defined(slug.current) && ' +
+    selectorByKind[kind] +
+    '] | order(publishedAt desc).slug.current';
+
+  return freshCollectionClient.fetch<string[]>(
+    query,
+    { documentId },
+    { cache: "no-store" }
+  );
 }
 
 export async function getSanityAuthors(): Promise<AuthorProfile[]> {

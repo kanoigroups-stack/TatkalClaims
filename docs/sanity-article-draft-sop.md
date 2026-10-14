@@ -35,22 +35,7 @@ Before preparing a draft:
 4. For current/news/regulatory/judgment content, verify the underlying sources before drafting factual claims.
 5. Identify relevant existing Tatkal Claims articles for internal links.
 
-Current reference baseline (query again before each write):
-
-**Authors**
-- Ankit L Kanoi, Founder
-- Insurance Expert
-- Legal Team
-
-**Categories**
-- Claim Delay
-- Claim Rejection
-- Health Insurance
-- Mis-selling
-- News
-
-**Topics**
-- None currently. Do not create a topic merely to fill the optional field.
+Taxonomy and author records are live CMS data, not a hard-coded baseline. Query the current production authors, categories, and topics immediately before each write. Do not rely on names copied into this SOP, and do not create a new taxonomy document merely to fill an optional field.
 
 ## Phase B — article brief
 
@@ -394,14 +379,18 @@ Then ask for explicit approval to publish.
 
 After approved publishing:
 
-1. Confirm draft has been published successfully.
-2. Confirm the public article becomes available/updates after the normal cache propagation window.
-3. Verify public title, excerpt, image, body, tables, links, CTA behavior, and metadata.
+1. Confirm the draft has been published successfully and that no unintended residual draft remains.
+2. Expect the signed Sanity webhook to invalidate the affected public article and collection caches. Verify the normal public URL directly; do **not** wait for an assumed 60-second cache window.
+3. Verify public title, excerpt, image, body, tables, links, CTA behavior, reading time, and metadata.
 4. Verify canonical and robots state.
-5. Verify sitemap inclusion for normal indexable articles.
-6. Confirm protected redirects/slugs are unchanged.
-7. Confirm there is no unintended residual draft.
-8. If the publish introduced a material error, use a controlled corrective draft/revert rather than editing blindly.
+5. Verify `/sitemap.xml` reflects the new, updated, or unpublished article when applicable.
+6. Verify affected author/topic collection pages when the article's author or topics changed.
+7. Confirm protected redirects/slugs are unchanged.
+8. If public content or the sitemap remains stale, diagnose the Sanity webhook/signature/configuration first. The 12-hour time-based revalidation is a safety fallback, not the normal editorial workflow.
+9. **Do not trigger a Vercel redeploy merely to clear CMS cache or normal publication lag.**
+10. If the publish introduced a material error, use a controlled corrective draft/revert rather than editing blindly.
+
+The runtime revalidation architecture and failure procedure are documented in `docs/sanity-revalidation.md`.
 
 ## Phase L — abandoned draft cleanup
 

@@ -39,7 +39,6 @@ assert(
 
 const sanity = fs.readFileSync("lib/content/sanity.ts", "utf8");
 for (const required of [
-  "SANITY_ARTICLE_DETAILS_TAG",
   "SANITY_ARTICLE_SUMMARIES_TAG",
   "SANITY_ARTICLES_FULL_TAG",
   "SANITY_AUTHORS_TAG",
@@ -47,6 +46,8 @@ for (const required of [
   "getSanityAuthorTag(slug)",
   "getSanityRelatedPostsBySlug",
   "candidateLimit",
+  "getSanityArticleSlugsReferencingDocument",
+  'relatedArticle: "$documentId in relatedArticles[]._ref"',
 ]) {
   assert(sanity.includes(required), `Sanity cache wiring missing: ${required}`);
 }
@@ -68,14 +69,31 @@ const webhook = fs.readFileSync("app/api/revalidate/route.ts", "utf8");
 for (const required of [
   "parseBody<WebhookPayload>",
   "SANITY_REVALIDATE_SECRET",
+  "expectedProjectId",
+  "productionDataset",
+  "body?.projectId !== expectedProjectId",
+  "body?.dataset !== productionDataset",
+  "const before = body.before || null",
+  "const after = body.after || null",
   "revalidatePath(path)",
-  'revalidatePath(path, "page")',
   "revalidateTag(SANITY_ARTICLE_SUMMARIES_TAG)",
-  "revalidateTag(getSanityArticleTag(currentSlug))",
+  "revalidateTag(getSanityArticleTag(slug))",
+  'getAffectedArticleSlugs("relatedArticle")',
+  'getAffectedArticleSlugs("author")',
+  'getAffectedArticleSlugs("category")',
+  'getAffectedArticleSlugs("topic")',
+  "getKnowledgeTopicByTitle",
   'message: "Invalid webhook signature"',
 ]) {
   assert(webhook.includes(required), `Webhook safety check missing: ${required}`);
 }
+assert(
+  !webhook.includes('revalidatePath(path, "page")') &&
+    !webhook.includes('markPattern("/blog/[slug]")') &&
+    !webhook.includes('markPattern("/blog/topic/[slug]")') &&
+    !webhook.includes('markPattern("/author/[slug]")'),
+  "Webhook must not return to broad pattern invalidation for routine content changes"
+);
 assert(
   webhook.includes("SLUG_PATTERN"),
   "Webhook must validate slugs before constructing revalidation paths"

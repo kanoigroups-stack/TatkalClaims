@@ -1,7 +1,6 @@
 export const PUBLIC_REVALIDATE_SECONDS = 43_200;
 
 export const SANITY_ARTICLE_SUMMARIES_TAG = "sanity:article-summaries";
-export const SANITY_ARTICLE_DETAILS_TAG = "sanity:article-details";
 export const SANITY_ARTICLES_FULL_TAG = "sanity:articles-full";
 export const SANITY_AUTHORS_TAG = "sanity:authors";
 
