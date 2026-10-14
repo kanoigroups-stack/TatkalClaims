@@ -546,6 +546,18 @@ export async function getSanityArticleSlugsReferencingDocument(
   );
 }
 
+export async function getSanityFallbackRelatedSourceSlugs(): Promise<string[]> {
+  const query =
+    '*[_type == "article" && defined(slug.current) && count(relatedArticles) < 3] ' +
+    '| order(publishedAt desc).slug.current';
+
+  return freshCollectionClient.fetch<string[]>(
+    query,
+    {},
+    { cache: "no-store" }
+  );
+}
+
 export async function getSanityAuthors(): Promise<AuthorProfile[]> {
   const query =
     '*[_type == "author" && defined(slug.current)] | order(name asc) ' +

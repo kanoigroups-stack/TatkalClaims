@@ -47,6 +47,8 @@ for (const required of [
   "getSanityRelatedPostsBySlug",
   "candidateLimit",
   "getSanityArticleSlugsReferencingDocument",
+  "getSanityFallbackRelatedSourceSlugs",
+  "count(relatedArticles) < 3",
   'relatedArticle: "$documentId in relatedArticles[]._ref"',
 ]) {
   assert(sanity.includes(required), `Sanity cache wiring missing: ${required}`);
@@ -82,6 +84,8 @@ for (const required of [
   'getAffectedArticleSlugs("author")',
   'getAffectedArticleSlugs("category")',
   'getAffectedArticleSlugs("topic")',
+  "invalidateFallbackRelatedSources",
+  "getSanityFallbackRelatedSourceSlugs",
   "getKnowledgeTopicByTitle",
   'message: "Invalid webhook signature"',
 ]) {

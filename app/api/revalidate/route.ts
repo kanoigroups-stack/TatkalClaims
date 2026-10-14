@@ -10,6 +10,7 @@ import {
 } from "@/lib/content/cache";
 import {
   getSanityArticleSlugsReferencingDocument,
+  getSanityFallbackRelatedSourceSlugs,
   type SanityArticleReferenceKind,
 } from "@/lib/content/sanity";
 import {
@@ -149,6 +150,15 @@ export async function POST(req: NextRequest) {
       return getSanityArticleSlugsReferencingDocument(documentId, kind);
     };
 
+    const invalidateFallbackRelatedSources = async () => {
+      const fallbackSourceSlugs = await getSanityFallbackRelatedSourceSlugs();
+      for (const slug of fallbackSourceSlugs) {
+        if (slug !== currentSlug && slug !== previousSlug) {
+          invalidateArticle(slug);
+        }
+      }
+    };
+
     if (documentType === "article") {
       revalidateTag(SANITY_ARTICLE_SUMMARIES_TAG);
       revalidateTag(SANITY_ARTICLES_FULL_TAG);
@@ -168,6 +178,12 @@ export async function POST(req: NextRequest) {
           invalidateArticle(slug);
         }
       }
+
+      // Legacy articles with fewer than three explicit relatedArticles use
+      // relevance/recency fallback. Mark those source pages stale so a new,
+      // updated, unpublished, or reclassified article cannot leave their
+      // related cards/ranking stale for the 12-hour safety interval.
+      await invalidateFallbackRelatedSources();
 
       markPath("/");
       markPath("/blog/");
@@ -199,6 +215,7 @@ export async function POST(req: NextRequest) {
 
       const affectedArticleSlugs = await getAffectedArticleSlugs("author");
       for (const slug of affectedArticleSlugs) invalidateArticle(slug);
+      await invalidateFallbackRelatedSources();
 
       markPath("/");
       markPath("/blog/");
@@ -211,6 +228,7 @@ export async function POST(req: NextRequest) {
 
       const affectedArticleSlugs = await getAffectedArticleSlugs("category");
       for (const slug of affectedArticleSlugs) invalidateArticle(slug);
+      await invalidateFallbackRelatedSources();
 
       markPath("/");
       markPath("/blog/");
@@ -223,6 +241,7 @@ export async function POST(req: NextRequest) {
 
       const affectedArticleSlugs = await getAffectedArticleSlugs("topic");
       for (const slug of affectedArticleSlugs) invalidateArticle(slug);
+      await invalidateFallbackRelatedSources();
 
       markTopicTitles([
         ...new Set([

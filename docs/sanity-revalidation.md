@@ -78,26 +78,30 @@ The endpoint invalidates:
 - the article's current and previous author archive
 - the article's current and previous known topic landing pages
 - source article pages that explicitly reference the changed article in `relatedArticles`
+- legacy source articles with fewer than three explicit `relatedArticles`, so automatic relevance/recency fallback recommendations cannot remain stale
 
-The global article-summary cache is refreshed for collection pages, but article-detail pages do not depend on that global cache.
+The global article-summary cache is refreshed for collection pages, but article-detail pages do not depend on that global cache. Fallback-related source routes are only marked stale and regenerate lazily when requested.
 
 ### Author change
 
 The endpoint refreshes:
 - the current/previous author route
 - public articles directly referencing that author
+- legacy fallback-related source pages so related cards cannot retain stale projected metadata
 - collection/sitemap caches that contain projected author data
 
 ### Category change
 
 The endpoint refreshes:
 - public articles directly referencing that category
+- legacy fallback-related source pages whose cards/ranking could otherwise retain stale category data
 - collection/sitemap caches using projected category data
 
 ### Topic change
 
 The endpoint refreshes:
 - public articles directly referencing that topic
+- legacy fallback-related source pages whose relevance ranking could otherwise remain stale
 - the matching current/previous code-backed topic landing page when applicable
 - collection/sitemap caches using projected topic data
 
