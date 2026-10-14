@@ -7,7 +7,7 @@ import {
 } from "@/lib/content/topics";
 import { getAllServiceSlugs } from "@/lib/services";
 
-export const revalidate = 60;
+export const revalidate = 43200;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://tatkalclaims.com";

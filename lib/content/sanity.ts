@@ -15,6 +15,15 @@ import {
   ARTICLE_REVIEWER_ENTITY,
   ARTICLE_WRITER_ENTITY,
 } from "./editorial-attribution";
+import {
+  PUBLIC_REVALIDATE_SECONDS,
+  SANITY_ARTICLE_DETAILS_TAG,
+  SANITY_ARTICLE_SUMMARIES_TAG,
+  SANITY_ARTICLES_FULL_TAG,
+  SANITY_AUTHORS_TAG,
+  getSanityArticleTag,
+  getSanityAuthorTag,
+} from "./cache";
 
 export type SanityImageProjection = {
   externalUrl?: string;
@@ -60,7 +69,6 @@ export type SanityPostProjection = {
   relatedSlugs?: string[];
 };
 
-const PUBLIC_REVALIDATE_SECONDS = 60;
 
 const client = createClient({
   projectId,
@@ -376,7 +384,7 @@ export async function getSanityPosts(): Promise<ContentPost[]> {
   const posts = await client.fetch<SanityPostProjection[]>(
     query,
     {},
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS, tags: [SANITY_ARTICLES_FULL_TAG] } }
   );
   return posts.map(mapSanityPost);
 }
@@ -388,7 +396,7 @@ export async function getSanityPostSummaries(): Promise<ContentPost[]> {
   const posts = await freshCollectionClient.fetch<SanityPostProjection[]>(
     query,
     {},
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS, tags: [SANITY_ARTICLE_SUMMARIES_TAG] } }
   );
   return posts.map(mapSanityPost);
 }
@@ -401,7 +409,12 @@ export async function getSanityPostBySlug(
   const post = await client.fetch<SanityPostProjection | null>(
     query,
     { slug },
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    {
+      next: {
+        revalidate: PUBLIC_REVALIDATE_SECONDS,
+        tags: [SANITY_ARTICLE_DETAILS_TAG, getSanityArticleTag(slug)],
+      },
+    }
   );
   return post ? mapSanityPost(post) : null;
 }
@@ -413,7 +426,7 @@ export async function getSanityAuthors(): Promise<AuthorProfile[]> {
   const authors = await client.fetch<SanityAuthorProjection[]>(
     query,
     {},
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS, tags: [SANITY_AUTHORS_TAG] } }
   );
 
   return authors
@@ -430,7 +443,12 @@ export async function getSanityAuthorBySlug(
   const author = await client.fetch<SanityAuthorProjection | null>(
     query,
     { slug },
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    {
+      next: {
+        revalidate: PUBLIC_REVALIDATE_SECONDS,
+        tags: [SANITY_AUTHORS_TAG, getSanityAuthorTag(slug)],
+      },
+    }
   );
 
   return author ? mapSanityAuthor(author) : null;

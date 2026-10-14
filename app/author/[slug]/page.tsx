@@ -22,7 +22,7 @@ import {
   SITE_URL,
 } from "@/lib/content/seo";
 
-export const revalidate = 60;
+export const revalidate = 43200;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

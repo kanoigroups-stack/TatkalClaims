@@ -15,7 +15,7 @@ import {
 } from "@/lib/content/seo";
 import { ARTICLE_WRITER_ENTITY } from "@/lib/content/editorial-attribution";
 
-export const revalidate = 60;
+export const revalidate = 43200;
 
 export const metadata = {
   title: "Knowledge Center",

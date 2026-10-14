@@ -9,7 +9,7 @@ import FAQSection from "@/components/sections/FAQSection";
 import { getAllPosts } from "@/lib/content";
 import { selectHomepageKnowledgePosts } from "@/lib/content/knowledge";
 
-export const revalidate = 60;
+export const revalidate = 43200;
 
 export default async function Home() {
   const posts = await getAllPosts();

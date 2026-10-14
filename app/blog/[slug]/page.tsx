@@ -32,7 +32,7 @@ import {
 import { formatDate } from "@/utils/date";
 import { getIssueIntentLinkByGuideSlug } from "@/lib/content/issue-intent-links";
 
-export const revalidate = 60;
+export const revalidate = 43200;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

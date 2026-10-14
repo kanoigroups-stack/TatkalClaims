@@ -10,7 +10,7 @@ import {
   getKnowledgeTopicPath,
 } from "@/lib/content/topics";
 
-export const revalidate = 60;
+export const revalidate = 43200;
 export const dynamicParams = false;
 
 export function generateStaticParams() {
