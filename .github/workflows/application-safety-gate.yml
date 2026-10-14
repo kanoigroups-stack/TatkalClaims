@@ -99,6 +99,10 @@ jobs:
           echo "Content/runtime safeguards: ${{ needs.changes.outputs.safeguards }}"
           echo "Sanity schema validation: ${{ needs.changes.outputs.schema }}"
 
+      - name: Verify ISR and Sanity revalidation safeguards
+        if: needs.changes.outputs.safeguards == 'true'
+        run: npm run verify:isr
+
       - name: Verify Sanity-only runtime invariants
         if: needs.changes.outputs.safeguards == 'true'
         run: npx --yes tsx@4.19.2 scripts/verify-phase9-legacy-retirement.ts

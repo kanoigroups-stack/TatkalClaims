@@ -15,6 +15,14 @@ import {
   ARTICLE_REVIEWER_ENTITY,
   ARTICLE_WRITER_ENTITY,
 } from "./editorial-attribution";
+import {
+  PUBLIC_REVALIDATE_SECONDS,
+  SANITY_ARTICLE_SUMMARIES_TAG,
+  SANITY_ARTICLES_FULL_TAG,
+  SANITY_AUTHORS_TAG,
+  getSanityArticleTag,
+  getSanityAuthorTag,
+} from "./cache";
 
 export type SanityImageProjection = {
   externalUrl?: string;
@@ -60,7 +68,13 @@ export type SanityPostProjection = {
   relatedSlugs?: string[];
 };
 
-const PUBLIC_REVALIDATE_SECONDS = 60;
+type SanityRelatedTargetProjection = {
+  categoryId?: string;
+  topicIds?: string[];
+  contentType?: string;
+  relatedSlugs?: string[];
+};
+
 
 const client = createClient({
   projectId,
@@ -376,7 +390,7 @@ export async function getSanityPosts(): Promise<ContentPost[]> {
   const posts = await client.fetch<SanityPostProjection[]>(
     query,
     {},
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS, tags: [SANITY_ARTICLES_FULL_TAG] } }
   );
   return posts.map(mapSanityPost);
 }
@@ -388,7 +402,7 @@ export async function getSanityPostSummaries(): Promise<ContentPost[]> {
   const posts = await freshCollectionClient.fetch<SanityPostProjection[]>(
     query,
     {},
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS, tags: [SANITY_ARTICLE_SUMMARIES_TAG] } }
   );
   return posts.map(mapSanityPost);
 }
@@ -401,9 +415,147 @@ export async function getSanityPostBySlug(
   const post = await client.fetch<SanityPostProjection | null>(
     query,
     { slug },
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    {
+      next: {
+        revalidate: PUBLIC_REVALIDATE_SECONDS,
+        tags: [getSanityArticleTag(slug)],
+      },
+    }
   );
   return post ? mapSanityPost(post) : null;
+}
+
+export async function getSanityRelatedPostsBySlug(
+  slug: string,
+  limit = 3
+): Promise<ContentPost[]> {
+  const safeLimit = Math.max(1, Math.min(limit, 12));
+  const targetQuery = [
+    '*[_type == "article" && slug.current == $slug][0]{',
+    '  "categoryId": category._ref,',
+    '  "topicIds": coalesce(topics[]._ref, []),',
+    "  contentType,",
+    '  "relatedSlugs": coalesce(relatedArticles[]->slug.current, [])',
+    "}",
+  ].join("\n");
+
+  const target = await freshCollectionClient.fetch<SanityRelatedTargetProjection | null>(
+    targetQuery,
+    { slug },
+    {
+      next: {
+        revalidate: PUBLIC_REVALIDATE_SECONDS,
+        tags: [getSanityArticleTag(slug)],
+      },
+    }
+  );
+
+  if (!target) return [];
+
+  const relatedSlugs = (target.relatedSlugs || []).filter(Boolean);
+  const topicIds = (target.topicIds || []).filter(Boolean);
+  const candidateLimit = Math.min(
+    36,
+    Math.max(safeLimit, relatedSlugs.length + safeLimit * 3)
+  );
+
+  const candidateQuery =
+    '*[_type == "article" && slug.current != $slug && defined(publishedAt)] ' +
+    "| order(" +
+    "  (slug.current in $relatedSlugs) desc," +
+    "  (" +
+    "    coalesce(count(topics[@._ref in $topicIds]), 0) * 4 +" +
+    "    select(defined($categoryId) && category._ref == $categoryId => 3, 0) +" +
+    "    select(defined($contentType) && contentType == $contentType => 1, 0)" +
+    "  ) desc," +
+    "  publishedAt desc" +
+    ")[0...$candidateLimit] " +
+    SANITY_ARTICLE_SUMMARY_PROJECTION;
+
+  const candidates = await freshCollectionClient.fetch<SanityPostProjection[]>(
+    candidateQuery,
+    {
+      slug,
+      relatedSlugs,
+      topicIds,
+      categoryId: target.categoryId || null,
+      contentType: target.contentType || null,
+      candidateLimit,
+    },
+    {
+      next: {
+        revalidate: PUBLIC_REVALIDATE_SECONDS,
+        tags: [getSanityArticleTag(slug)],
+      },
+    }
+  );
+
+  const posts = candidates.map(mapSanityPost);
+  const bySlug = new Map(posts.map((post) => [post.slug, post]));
+  const selected: ContentPost[] = [];
+  const seen = new Set<string>([slug]);
+
+  // Preserve the explicit Sanity relatedArticles order first.
+  for (const relatedSlug of relatedSlugs) {
+    const related = bySlug.get(relatedSlug);
+    if (related && !seen.has(related.slug)) {
+      selected.push(related);
+      seen.add(related.slug);
+    }
+    if (selected.length >= safeLimit) return selected;
+  }
+
+  // The GROQ query has already ranked fallback candidates using the same
+  // topic/category/content-type weights as the previous in-memory algorithm.
+  for (const candidate of posts) {
+    if (selected.length >= safeLimit) break;
+    if (seen.has(candidate.slug)) continue;
+    selected.push(candidate);
+    seen.add(candidate.slug);
+  }
+
+  return selected.slice(0, safeLimit);
+}
+
+export type SanityArticleReferenceKind =
+  | "author"
+  | "category"
+  | "topic"
+  | "relatedArticle";
+
+export async function getSanityArticleSlugsReferencingDocument(
+  documentId: string,
+  kind: SanityArticleReferenceKind
+): Promise<string[]> {
+  const selectorByKind: Record<SanityArticleReferenceKind, string> = {
+    author: "author._ref == $documentId",
+    category: "category._ref == $documentId",
+    topic: "$documentId in topics[]._ref",
+    relatedArticle: "$documentId in relatedArticles[]._ref",
+  };
+
+  const query =
+    '*[_type == "article" && defined(slug.current) && ' +
+    selectorByKind[kind] +
+    '] | order(publishedAt desc).slug.current';
+
+  return freshCollectionClient.fetch<string[]>(
+    query,
+    { documentId },
+    { cache: "no-store" }
+  );
+}
+
+export async function getSanityFallbackRelatedSourceSlugs(): Promise<string[]> {
+  const query =
+    '*[_type == "article" && defined(slug.current) && count(relatedArticles) < 3] ' +
+    '| order(publishedAt desc).slug.current';
+
+  return freshCollectionClient.fetch<string[]>(
+    query,
+    {},
+    { cache: "no-store" }
+  );
 }
 
 export async function getSanityAuthors(): Promise<AuthorProfile[]> {
@@ -413,7 +565,7 @@ export async function getSanityAuthors(): Promise<AuthorProfile[]> {
   const authors = await client.fetch<SanityAuthorProjection[]>(
     query,
     {},
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS, tags: [SANITY_AUTHORS_TAG] } }
   );
 
   return authors
@@ -430,7 +582,12 @@ export async function getSanityAuthorBySlug(
   const author = await client.fetch<SanityAuthorProjection | null>(
     query,
     { slug },
-    { next: { revalidate: PUBLIC_REVALIDATE_SECONDS } }
+    {
+      next: {
+        revalidate: PUBLIC_REVALIDATE_SECONDS,
+        tags: [SANITY_AUTHORS_TAG, getSanityAuthorTag(slug)],
+      },
+    }
   );
 
   return author ? mapSanityAuthor(author) : null;

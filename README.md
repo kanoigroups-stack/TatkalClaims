@@ -16,7 +16,7 @@ Tatkal Claims articles are managed in **Sanity CMS**, not in a repository JSON f
 - Studio: `https://tatkalclaims.com/studio/`
 - Public articles: `/blog/[slug]/`
 - Authenticated editorial preview: `/cms-preview/blog/`
-- Public content reads the Sanity `production` dataset with 60-second revalidation.
+- Public content reads the Sanity `production` dataset with signed Sanity webhook revalidation and a 12-hour time-based safety fallback.
 - Drafts must be reviewed through the authenticated preview and are not published automatically.
 - Do not change migrated slugs or `legacyOrder` during routine editorial work.
 - Do not reintroduce the retired `data/blogs.json` / `BLOG_CONTENT_SOURCE=legacy` runtime.
@@ -25,6 +25,7 @@ For MCP-assisted article creation and editing, follow:
 
 - `docs/sanity-article-draft-sop.md`
 - `docs/sanity-mcp-automation.md`
+- `docs/sanity-revalidation.md`
 
 ## Content Safety
 
@@ -35,7 +36,7 @@ For MCP-assisted article creation and editing, follow:
 
 ## Tech Stack
 
-- Next.js 14
+- Next.js 15
 - React 18
 - TypeScript
 - Tailwind CSS

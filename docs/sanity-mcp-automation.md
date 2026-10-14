@@ -58,7 +58,7 @@ All MCP-created or MCP-edited articles must follow:
 
 `docs/sanity-article-draft-sop.md`
 
-That SOP is authoritative for field population, draft-only writes, preview isolation, SEO/media/link checks, protected-slug handling, publish approval, post-publish verification, and abandoned-draft cleanup.
+That SOP is authoritative for field population, draft-only writes, preview isolation, SEO/media/link checks, protected-slug handling, publish approval, post-publish verification, and abandoned-draft cleanup. Runtime publication freshness and webhook failure handling are documented in `docs/sanity-revalidation.md`.
 
 ## Planned editorial automation after schema deployment
 
@@ -72,6 +72,6 @@ Once MCP can read the deployed schema, the safe target workflow is:
 - confirm public article is unchanged while still a draft
 - request explicit publish approval
 - publish only after approval
-- verify public propagation and SEO metadata
+- verify webhook-driven public refresh, sitemap freshness, and SEO metadata; do not redeploy merely to clear CMS cache
 
 This keeps routine editorial work automated without giving up the existing production safety gates.
