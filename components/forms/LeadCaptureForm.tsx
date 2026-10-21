@@ -4,6 +4,13 @@ import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import {
+  LEAD_VERIFICATION_ENABLED,
+  GOOGLE_FORM_REFERENCE_ENTRY,
+  createLeadReference,
+  verifySavedGoogleFormResponse,
+  recordVerifiedLeadConversion,
+} from "@/lib/lead-verification";
 
 const issueTypes = ["Claim Rejection", "Claim Delay", "Short Settlement", "Mis-selling", "Policy Dispute", "Other"];
 
@@ -36,6 +43,8 @@ export default function LeadCaptureForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [pendingReference, setPendingReference] = useState<string | null>(null);
+  const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
 
   const validate = useCallback((): boolean => {
     const newErrors: FormErrors = {};
@@ -93,6 +102,40 @@ export default function LeadCaptureForm() {
     validate();
   };
 
+  const completeSubmission = (reference?: string) => {
+    // This event only fires after independent receipt confirmation.
+    if (reference) recordVerifiedLeadConversion(reference);
+    setPendingReference(null);
+    setAwaitingConfirmation(false);
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    setErrors({});
+    setTouched({});
+    setTimeout(() => {
+      setIsSubmitted(false);
+      setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
+    }, 3000);
+  };
+
+  const verifyReceipt = async (reference: string) => {
+    const confirmed = await verifySavedGoogleFormResponse(reference);
+    if (confirmed) {
+      completeSubmission(reference);
+    } else {
+      // A missing response might still have reached Google Forms. Never
+      // POST the same enquiry a second time merely because lookup timed out.
+      setIsSubmitting(false);
+      setAwaitingConfirmation(true);
+    }
+  };
+
+  const retryReceiptLookup = async () => {
+    if (!pendingReference || isSubmitting) return;
+    setAwaitingConfirmation(false);
+    setIsSubmitting(true);
+    await verifyReceipt(pendingReference);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
@@ -114,35 +157,69 @@ export default function LeadCaptureForm() {
       }
     });
 
+    // Unique, non-personal ID used ONLY when the verified flow is configured.
+    // The matching OPTIONAL short-answer entry must already exist in the
+    // original Google Form; otherwise leave the feature flag disabled.
+    const reference = LEAD_VERIFICATION_ENABLED ? createLeadReference() : null;
+    if (reference) {
+      body.append(GOOGLE_FORM_REFERENCE_ENTRY, reference);
+      setPendingReference(reference);
+    }
+
+    let sendError = false;
     try {
-      // Google Forms doesn't send CORS headers back, so the response is
-      // opaque in "no-cors" mode — we can't read status/body. As long as the
-      // request doesn't throw, treat it as sent. URLSearchParams sends this
-      // as application/x-www-form-urlencoded, matching what Google's
-      // formResponse endpoint expects from a real form submission.
+      // IMPORTANT: no-cors produces an opaque response. This is not proof of
+      // successful receipt, so verified mode always checks the actual Form.
       await fetch(GOOGLE_FORM_ACTION_URL, {
         method: "POST",
         mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: body.toString(),
       });
-
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setErrors({});
-      setTouched({});
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
-      }, 3000);
     } catch (err) {
-      console.error("Lead form submission failed:", err);
+      // A network exception does not prove whether the Form was saved.
+      console.error("Google Forms submission could not be confirmed:", err);
+      sendError = true;
+    }
+
+    if (reference) {
+      await verifyReceipt(reference);
+      return;
+    }
+
+    // Legacy behavior remains unchanged until the owner completes setup,
+    // tests notification emails, and explicitly enables verified mode.
+    if (sendError) {
       setIsSubmitting(false);
       alert("Something went wrong submitting the form. Please try again or contact us directly.");
+      return;
     }
+    completeSubmission();
   };
+
+  if (awaitingConfirmation && pendingReference) {
+    return (
+      <div className="bg-white rounded-2xl p-8 border border-amber-200 shadow-float" role="status" aria-live="polite">
+        <AlertCircle className="w-8 h-8 text-amber-600 mb-3" aria-hidden="true" />
+        <h3 className="text-xl font-bold text-slate-900 mb-2">We could not confirm receipt yet</h3>
+        <p className="text-sm text-slate-700 mb-3">
+          Your enquiry may have reached us. Please do not submit it again, as
+          that could create a duplicate. You can check confirmation below
+          or contact us directly.
+        </p>
+        <p className="text-xs text-slate-600 mb-4">
+          Reference: <strong>{pendingReference}</strong>
+        </p>
+        <button type="button" className="btn-primary px-5 py-3 mb-3 disabled:opacity-60"
+          disabled={isSubmitting} onClick={retryReceiptLookup}>
+          {isSubmitting ? "Checking..." : "Check submission again"}
+        </button>
+        <p className="text-sm text-slate-700">
+          Or call <a className="underline text-primary-700" href="tel:+917207382073">+91 7207382073</a>.
+        </p>
+      </div>
+    );
+  }
 
   if (isSubmitted) {
     return (
