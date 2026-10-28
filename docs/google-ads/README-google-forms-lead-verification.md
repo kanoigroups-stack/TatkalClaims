@@ -34,18 +34,26 @@ action or import the GA4 event into Ads.
 - No Vercel settings, Google Forms questions, owner emails, Google Ads settings,
   secrets, or production traffic were changed by creating this draft.
 
+## Verified existing Google Form metadata (28 October 2026)
+
+- Editor: https://docs.google.com/forms/d/1iQBlYHV5KfnHpPU6iHgN4_CQpjrXGXcMarXnH-RekNM/edit
+- Public respondent URL: https://docs.google.com/forms/d/e/1FAIpQLSf4V-9TMQUR6GqYWjYRu4o3yScg1yQ7ceku-vNr7jjubpLtlw/viewform
+- Optional short-answer question **Tatkal Lead Reference (system)**: added with Required=OFF and verified to exist once.
+- Verified public form field ID from the Google Forms pre-filled-link UI: **entry.345237712**.
+- Existing questions (Name, Email, Phone, Issue Type, Message) and notification settings were not edited.
+- Setting up the field alone **does not** enable website verification; the flag remains OFF.
+
 ## Owner-assisted setup required BEFORE activation
 
-1. Get explicit owner authorization to edit the EXISTING Google Form. The
+1. **Completed 28 Oct:** owner approved the optional reference field in the EXISTING Google Form. The
    published /forms/d/e/.../viewform URL is NOT the form editor URL.
-2. Add exactly one **optional** short-answer item named:
+2. **Completed 28 Oct:** exactly one **optional** short-answer item added, named:
    Tatkal Lead Reference (system)
    This item is visible when someone visits the Google Form directly (Google
    Forms cannot make ordinary questions hidden); it is not shown in the
    TatkalClaims website form. Verify the change does not break existing users.
    Do not make it required: older/direct submissions must continue to work.
-3. Use the Google Form editor's **Get pre-filled link** feature to identify
-   the entry.<digits> form field for that new question. Do not guess the entry ID.
+3. **Completed 28 Oct:** Google Forms **Get pre-filled link** confirmed **entry.345237712**. Do not replace it with a guessed field ID.
 4. From the same form, open **Extensions > Apps Script**, create a bound project
    containing google-forms-readonly-verifier.gs. Its only operation is reading
    saved responses; it does not trigger a submit or send notifications.
@@ -60,7 +68,7 @@ action or import the GA4 event into Ads.
    accessible web app is unsuitable.
 7. Securely configure these Vercel variables for the intended environment:
    - NEXT_PUBLIC_LEAD_VERIFICATION_ENABLED=true
-   - NEXT_PUBLIC_GOOGLE_FORM_REFERENCE_ENTRY=entry.<verified numeric ID>
+   - NEXT_PUBLIC_GOOGLE_FORM_REFERENCE_ENTRY=entry.345237712
    - GOOGLE_FORMS_VERIFY_WEBAPP_URL=https://script.google.com/macros/s/.../exec
    - GOOGLE_FORMS_VERIFY_SHARED_SECRET=<same strong private secret>
    Keep the feature flag unset/false until the form owner has authorized the
@@ -117,3 +125,11 @@ https://developers.google.com/apps-script/guides/web
 
 Google Forms API alternative:
 https://developers.google.com/workspace/forms/api/reference/rest/v1/forms.responses/list
+
+## Deployment separation
+
+The Google Form's optional reference field was edited on 28 Oct with owner approval.
+The Next.js production code, Google Ads settings, and live submission workflow
+have **not** been changed. The Google Apps Script verifier must still receive
+explicit credential review and a separate deployment/enable approval; do not
+interpret a successful Vercel preview build as proof of real lead verification.
