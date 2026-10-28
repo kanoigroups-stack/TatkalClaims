@@ -54,9 +54,12 @@ action or import the GA4 event into Ads.
    TatkalClaims website form. Verify the change does not break existing users.
    Do not make it required: older/direct submissions must continue to work.
 3. **Completed 28 Oct:** Google Forms **Get pre-filled link** confirmed **entry.345237712**. Do not replace it with a guessed field ID.
-4. From the same form, open **Extensions > Apps Script**, create a bound project
-   containing google-forms-readonly-verifier.gs. Its only operation is reading
-   saved responses; it does not trigger a submit or send notifications.
+4. **Prepared 28 Oct:** Open the Form-bound Apps Script project at
+   https://script.google.com/u/0/home/projects/1CfvhkxcSuy5oWjde43NNn3dIi680Mri5_6hOwYUVwvM5cNxJIQI5svpQ/edit .
+   TinyFish reported saving the file `TatkalLeadVerifier.gs` with the draft
+   read-only response verifier. **Not executed, OAuth-authorized or deployed;**
+   an authorized reviewer must still verify the saved script text and security
+   before any execution. This does not trigger response submits or emails.
 5. In Apps Script **Project settings > Script properties**, enter a strong
    high-entropy VERIFY_SHARED_SECRET. Never place credentials in source,
    a chat message, a public spreadsheet or a GitHub commit.
@@ -114,6 +117,9 @@ action or import the GA4 event into Ads.
 - Production analytics quality and email behavior remain UNVERIFIED until the
   checks above have been completed on real authorized test infrastructure.
 - The current campaign remains PAUSED, independent of this website PR.
+- The optional reference question was added with approval. Apps Script was
+  saved but remains undeployed. Live email receipt and conversion tests have
+  NOT been performed; they are required before activation.
 
 ## Documentation
 
