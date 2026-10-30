@@ -52,10 +52,16 @@ export async function POST(request: NextRequest) {
 
   let body: unknown;
   try {
+    // Do not rely solely on Content-Length: chunked POSTs may omit it.
+    // A single UUID reference request should be far below 512 bytes.
     if (Number(request.headers.get("content-length") || "0") > 512) {
       return reply({ confirmed: false, error: "Invalid request" }, 400);
     }
-    body = await request.json();
+    const raw = await request.text();
+    if (raw.length > 512) {
+      return reply({ confirmed: false, error: "Invalid request" }, 400);
+    }
+    body = JSON.parse(raw);
   } catch {
     return reply({ confirmed: false, error: "Invalid request" }, 400);
   }
