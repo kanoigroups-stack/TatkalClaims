@@ -44,12 +44,24 @@ export async function verifySavedGoogleFormResponse(reference: string): Promise<
 }
 
 /**
+ * Only the actual live website may emit verified paid-lead GA4 events.
+ * Vercel previews use the same GA4 property for basic site analytics and
+ * MUST NOT produce live generate_lead conversions during QA.
+ */
+export function isLiveLeadConversionHost(hostname: string): boolean {
+  return hostname === "tatkalclaims.com" || hostname === "www.tatkalclaims.com";
+}
+
+/**
  * GA4 event after confirmed receipt only. Best-effort browser deduplication:
  * a server-wide exactly-once ledger has NOT been configured.
  * No customer names, phones, messages, or claim details enter analytics.
  */
 export function recordVerifiedLeadConversion(reference: string): void {
   if (typeof window === "undefined") return;
+  // This is intentionally false on .vercel.app and staging hostnames.
+  // Use a mocked gtag callback for preview QA; do not contaminate live GA4.
+  if (!isLiveLeadConversionHost(window.location.hostname)) return;
   const key = "tc-verified-lead-event:" + reference;
   try {
     if (window.localStorage.getItem(key) === "1") return;
