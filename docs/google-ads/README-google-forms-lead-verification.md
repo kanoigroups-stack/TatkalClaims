@@ -54,34 +54,45 @@ action or import the GA4 event into Ads.
    TatkalClaims website form. Verify the change does not break existing users.
    Do not make it required: older/direct submissions must continue to work.
 3. **Completed 28 Oct:** Google Forms **Get pre-filled link** confirmed **entry.345237712**. Do not replace it with a guessed field ID.
-4. **Prepared 28 Oct:** Open the Form-bound Apps Script project at
+4. **Verified 30 Oct:** The owner manually saved the complete verifier to
+   `Code.gs` in the Form-bound Apps Script project:
    https://script.google.com/u/0/home/projects/1CfvhkxcSuy5oWjde43NNn3dIi680Mri5_6hOwYUVwvM5cNxJIQI5svpQ/edit .
-   TinyFish reported saving the file `TatkalLeadVerifier.gs` with the draft
-   read-only response verifier. **Not executed, OAuth-authorized or deployed;**
-   an authorized reviewer must still verify the saved script text and security
-   before any execution. This does not trigger response submits or emails.
+   Targeted in-editor inspection confirmed response lookup and exact reference
+   comparison. The owner ran the separate read-only smoke test once and
+   observed all three boolean checks PASS in the Apps Script execution log.
+   The verifier is **not deployed as a web app**; the passing internal test
+   does not imply a working external website connection.
 5. In Apps Script **Project settings > Script properties**, enter a strong
    high-entropy VERIFY_SHARED_SECRET. Never place credentials in source,
    a chat message, a public spreadsheet or a GitHub commit.
-6. Deploy an Apps Script **Web app**, Execute as: **Me** (form owner);
-   access may need **Anyone** for server-to-server Next.js calls. This grants
-   the web app elevated ability to READ responses; review the risk and restrict
-   access via the shared secret. The verifier returns only {confirmed:boolean}.
-   An OAuth-protected Google Forms API alternative is possible if a publicly
-   accessible web app is unsuitable.
+6. **Requires explicit separate owner approval, not yet performed.** Deploy
+   an Apps Script **Web app**, Execute as: **Me** (form owner). Calls from an
+   unauthenticated Vercel server typically require web-app access **Anyone**
+   (including anonymous visitors, not merely signed-in Google users). This is a
+   **publicly reachable endpoint executing with the Form owner's privileges**.
+   Even though it returns only `{confirmed:boolean}`, and validates a strong
+   server-only shared secret, the web app is not network-private. Obtain
+   informed approval for this specific Google access setting before clicking
+   Deploy. If unacceptable, choose a restricted OAuth-based Google Forms API
+   integration instead; that path needs different credentials and development.
 7. Securely configure these Vercel variables for the intended environment:
    - NEXT_PUBLIC_LEAD_VERIFICATION_ENABLED=true
    - NEXT_PUBLIC_GOOGLE_FORM_REFERENCE_ENTRY=entry.345237712
    - GOOGLE_FORMS_VERIFY_WEBAPP_URL=https://script.google.com/macros/s/.../exec
    - GOOGLE_FORMS_VERIFY_SHARED_SECRET=<same strong private secret>
-   Keep the feature flag unset/false until the form owner has authorized the
-   setup and the script/entry ID are verified.
+   Scope all **four** variables to the Preview environment and **only** the
+   Git branch `draft/google-forms-verified-lead-tracking-20261021` for QA.
+   Do not add them to Production, Development, or all-preview branches.
+   An environment-variable change affects only **new deployments**.
+   Keep the flag unset/false until explicit deployment/access approval and
+   the endpoint/security review are complete.
 8. Check that the web app response returns confirmed=true only when the exact
    UUID is present in a saved response. Missing or invalid configuration fails
    closed, i.e. NO conversion event.
-9. Confirm that the existing Google Forms email notification still reaches
-   the owner's usual inbox. Google Forms email delivery is not established
-   merely by querying saved responses.
+9. **Verified 29 Oct:** One synthetic QA submission was saved in the
+   existing Form and its owner-notification email was found in Gmail; the email
+   links to the exact editor Form ID. This is distinct from the verification
+   of the Apps Script internal lookup.
 10. Configure GA4's generate_lead event as a key event only after testing,
     and import it to Google Ads with suitable primary/secondary conversion
     settings. Activate Google Ads auto-tagging separately. Keep ads paused
@@ -92,8 +103,12 @@ action or import the GA4 event into Ads.
 - With flag OFF, legacy form works as before and NO verified conversion fires.
 - With flag ON and Form configured, submit a clearly marked test enquiry once.
   Exactly one saved Form response and the usual notification email must arrive.
-- Verify the receipt by exact UUID and check a single GA4 generate_lead event;
-  check that the event has no personally identifiable data.
+- Verify the receipt by exact UUID in the preview. **Preview intentionally
+  suppresses GA4 `generate_lead`** to avoid contaminating real lead conversions.
+  Test the event gating with a mock `window.gtag`, ensuring the event only
+  fires with both a verified response and the live production hostname.
+  Check that no PII or claim content reaches analytics. Only test the actual
+  production GA4 event after separate production approval.
 - Test the optional Other issue-type option and its free-text answer.
 - Temporarily break the verifier, use an unknown UUID, and simulate timeouts.
   The website must show "could not confirm", NOT a thank-you or conversion.
@@ -114,12 +129,14 @@ action or import the GA4 event into Ads.
   modify them. Very delayed responses need manual reconciliation.
 - A partial network failure may mean that an enquiry was saved despite an
   unconfirmed UI result. Never automatically POST the same data again.
-- Production analytics quality and email behavior remain UNVERIFIED until the
-  checks above have been completed on real authorized test infrastructure.
+- **Internal verifier and owner notification passed** as of 30 October 2026.
+  **Public endpoint, Vercel preview, and GA4 client event remain UNVERIFIED.**
+  Do not equate the internal smoke test with an end-to-end website integration.
 - The current campaign remains PAUSED, independent of this website PR.
-- The optional reference question was added with approval. Apps Script was
-  saved but remains undeployed. Live email receipt and conversion tests have
-  NOT been performed; they are required before activation.
+- The optional reference question was added with approval. The Apps Script
+  source was manually saved; its internal read-only three-case smoke test passed
+  and Form email notification was verified. **External end-to-end verification
+  and actual GA4 event delivery have NOT been tested**; Script is undeployed.
 
 ## Documentation
 
@@ -139,3 +156,62 @@ The Next.js production code, Google Ads settings, and live submission workflow
 have **not** been changed. The Google Apps Script verifier must still receive
 explicit credential review and a separate deployment/enable approval; do not
 interpret a successful Vercel preview build as proof of real lead verification.
+
+
+## Live QA record, confirmed 30 October 2026
+
+Owner-visible Apps Script execution log from `tcReadOnlyLeadVerificationSmokeTest`:
+
+| Condition | Observed |
+|---|---|
+| Existing saved QA UUID | `knownSavedReferenceConfirmed: true` |
+| Nonexistent UUID rejected | `unknownReferenceRejected: true` |
+| Incorrect private key rejected | `wrongSecretRejected: true` |
+| Execution | Completed without error |
+
+The existing QA Form response was saved 29 October 2026 and Form notification
+delivered to the connected inbox. **Do not reuse its UUID indefinitely:** the
+lookup checks the previous 48 hours. A new preview-specific test should use a
+clearly labelled synthetic record after endpoint approval. Never re-post an
+existing customer enquiry because receipt verification is uncertain.
+
+## Preview-only readiness review (30 October 2026)
+
+Project: Vercel `tatkal-claimsfinal`, non-production branch
+`draft/google-forms-verified-lead-tracking-20261021`. Connected Git preview
+builds are available. The project currently has **no Google Forms verifier
+variables** configured; current Google Apps Script has **no web-app deployment**.
+The existing draft is therefore disabled-by-default.
+
+**Security/analytics guardrails before preview activation:**
+
+1. Owner reviews the Google Apps Script web-app access impact, explicitly
+   authorizes its execution identity and public access choice, and deploys
+   only after that approval. Do not store shared-secret values in the repo,
+   chat, preview logs, URLs, or browser JS.
+2. Configure the four variables above as **branch-specific Preview only**.
+   Secret must be high entropy and only in Apps Script Properties and
+   Vercel server runtime. Public `NEXT_PUBLIC_*` values contain only the
+   enabled flag and non-secret Google Form field ID.
+3. Preview's `generate_lead` dispatch is blocked by an exact production-host
+   check in `lib/lead-verification.ts`; preview may test receipt and user
+   acknowledgement without polluting the normal production GA4 property.
+4. The Vercel verification API now validates the parsed request body's actual
+   size even when Content-Length is omitted; failed or unavailable lookups
+   return `confirmed:false`. Existing Google Forms browser POST is opaque
+   and must never be counted as a success.
+5. Confirm an authorized form submission from the preview delivers **one**
+   Google Form response and owner email. Test unknown UUID, bad secret,
+   unavailable script, and repeat **lookup** (no resubmission).
+6. Form owner must specifically approve any eventual production merge and
+   production activation; publishing the Google Apps Script endpoint is a
+   distinct approval from approving draft preparation.
+7. Rate-limiting or WAF protection for the API endpoint is recommended before
+   exposing it at scale. Same-origin browser checks alone are not a robust
+   defense against scripted clients. Browser-local dedup is not cross-device
+   exactly-once conversion enforcement.
+
+References: Google Apps Script web-app access and execution identity:
+https://developers.google.com/apps-script/guides/web
+Vercel branch-scoped Preview environment variables:
+https://vercel.com/docs/environment-variables
