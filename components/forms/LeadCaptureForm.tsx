@@ -11,6 +11,7 @@ import {
   verifySavedGoogleFormResponse,
   recordVerifiedLeadConversion,
   rememberLeadReferenceForRecovery,
+  clearLeadReferenceForRecovery,
 } from "@/lib/lead-verification";
 
 const issueTypes = ["Claim Rejection", "Claim Delay", "Short Settlement", "Mis-selling", "Policy Dispute", "Other"];
@@ -105,7 +106,10 @@ export default function LeadCaptureForm() {
 
   const completeSubmission = (reference?: string) => {
     // This event only fires after independent receipt confirmation.
-    if (reference) recordVerifiedLeadConversion(reference);
+    if (reference) {
+      recordVerifiedLeadConversion(reference);
+      clearLeadReferenceForRecovery(reference);
+    }
     setPendingReference(null);
     setAwaitingConfirmation(false);
     setIsSubmitting(false);
