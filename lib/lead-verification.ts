@@ -60,6 +60,29 @@ export function getRecoverableLeadReference(): string | null {
   return null;
 }
 
+/**
+ * Remove only the reference that has actually been confirmed. Never clear a
+ * newer pending enquiry's marker from an older asynchronous response.
+ */
+export function clearLeadReferenceForRecovery(reference: string): void {
+  if (typeof window === "undefined" || !UUID_PATTERN.test(reference)) return;
+  try {
+    const raw = window.sessionStorage.getItem(RECOVERY_STORAGE_KEY);
+    if (!raw) return;
+    const saved: unknown = JSON.parse(raw);
+    if (
+      saved !== null &&
+      typeof saved === "object" &&
+      "reference" in saved &&
+      (saved as { reference: unknown }).reference === reference
+    ) {
+      window.sessionStorage.removeItem(RECOVERY_STORAGE_KEY);
+    }
+  } catch {
+    // A storage failure must not affect the receipt confirmation.
+  }
+}
+
 export function createLeadReference(): string {
   return crypto.randomUUID();
 }
