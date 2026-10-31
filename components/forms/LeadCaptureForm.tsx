@@ -10,6 +10,7 @@ import {
   createLeadReference,
   verifySavedGoogleFormResponse,
   recordVerifiedLeadConversion,
+  rememberLeadReferenceForRecovery,
 } from "@/lib/lead-verification";
 
 const issueTypes = ["Claim Rejection", "Claim Delay", "Short Settlement", "Mis-selling", "Policy Dispute", "Other"];
@@ -111,14 +112,25 @@ export default function LeadCaptureForm() {
     setIsSubmitted(true);
     setErrors({});
     setTouched({});
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
-    }, 3000);
+    // Verified enquiries remain acknowledged instead of resetting to a
+    // blank form and inviting accidental duplicate submissions. Preserve
+    // the legacy three-second reset only while verification is disabled.
+    if (!reference) {
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({ name: "", email: "", phone: "", issueType: "", message: "" });
+      }, 3000);
+    }
   };
 
   const verifyReceipt = async (reference: string) => {
-    const confirmed = await verifySavedGoogleFormResponse(reference);
+    // Lookup errors are never a reason to re-POST the enquiry.
+    let confirmed = false;
+    try {
+      confirmed = await verifySavedGoogleFormResponse(reference);
+    } catch {
+      // Fail closed: show the receipt-uncertain state, not Thank You.
+    }
     if (confirmed) {
       completeSubmission(reference);
     } else {
@@ -162,6 +174,10 @@ export default function LeadCaptureForm() {
     // original Google Form; otherwise leave the feature flag disabled.
     const reference = LEAD_VERIFICATION_ENABLED ? createLeadReference() : null;
     if (reference) {
+      // Save a non-personal reference *before* the opaque Form POST.
+      // If a page render fails after the POST, app/error.tsx can verify it
+      // without sending a second enquiry.
+      rememberLeadReferenceForRecovery(reference);
       body.append(GOOGLE_FORM_REFERENCE_ENTRY, reference);
       setPendingReference(reference);
     }
