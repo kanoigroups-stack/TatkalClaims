@@ -13,6 +13,53 @@ export const GOOGLE_FORM_REFERENCE_ENTRY =
 
 const POLL_DELAYS_MS = [900, 1500, 2500, 4000, 6000];
 
+/**
+ * A UUID-only, short-lived recovery marker lets the App Router error boundary
+ * verify a lead already POSTed to Google Forms without posting it again.
+ * No name, phone, email, message, or claim details are stored.
+ */
+const RECOVERY_STORAGE_KEY = "tc:lead-receipt-recovery";
+const RECOVERY_MAX_AGE_MS = 48 * 60 * 60 * 1000;
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+export function rememberLeadReferenceForRecovery(reference: string): void {
+  if (typeof window === "undefined" || !UUID_PATTERN.test(reference)) return;
+  try {
+    window.sessionStorage.setItem(
+      RECOVERY_STORAGE_KEY,
+      JSON.stringify({ reference, createdAt: Date.now() })
+    );
+  } catch {
+    // Disabled storage must not prevent an enquiry from being submitted.
+  }
+}
+
+export function getRecoverableLeadReference(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(RECOVERY_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    if (parsed && typeof parsed === "object" &&
+      "reference" in parsed && "createdAt" in parsed) {
+      const value = parsed as { reference: unknown; createdAt: unknown };
+      if (
+        typeof value.reference === "string" &&
+        UUID_PATTERN.test(value.reference) &&
+        typeof value.createdAt === "number" &&
+        Number.isFinite(value.createdAt) &&
+        Date.now() >= value.createdAt &&
+        Date.now() - value.createdAt <= RECOVERY_MAX_AGE_MS
+      ) return value.reference;
+    }
+    window.sessionStorage.removeItem(RECOVERY_STORAGE_KEY);
+  } catch {
+    // Missing/corrupt storage must degrade to the ordinary safe error page.
+  }
+  return null;
+}
+
 export function createLeadReference(): string {
   return crypto.randomUUID();
 }
@@ -69,7 +116,12 @@ export function recordVerifiedLeadConversion(reference: string): void {
     // Storage may be disabled by the visitor.
   }
   if (typeof window.gtag !== "function") return;
-  window.gtag("event", "generate_lead", { method: "google_form_confirmed" });
+  try {
+    window.gtag("event", "generate_lead", { method: "google_form_confirmed" });
+  } catch {
+    // Third-party analytics must never break the verified lead UI.
+    return;
+  }
   try {
     window.localStorage.setItem(key, "1");
   } catch {
