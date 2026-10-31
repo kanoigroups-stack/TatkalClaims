@@ -7,6 +7,7 @@ import {
   getRecoverableLeadReference,
   verifySavedGoogleFormResponse,
   recordVerifiedLeadConversion,
+  clearLeadReferenceForRecovery,
 } from "@/lib/lead-verification";
 
 type RecoveryStatus = "idle" | "checking" | "confirmed" | "uncertain";
@@ -31,6 +32,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         // Same verified-only conversion gate as LeadCaptureForm; preview
         // hostnames are excluded from production GA4.
         recordVerifiedLeadConversion(reference);
+        clearLeadReferenceForRecovery(reference);
         setRecoveryStatus("confirmed");
       } else {
         setRecoveryStatus("uncertain");
