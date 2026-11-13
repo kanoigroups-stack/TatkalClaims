@@ -6,7 +6,7 @@ function article(id = "drafts.article-editorial-example-20261113",
   slug = "health-claim-deduction-example-2026") {
   return {
     _id: id, _type: "article",
-    title: "Health Claim Deduction: An Editorial Example",
+    title: `Health Claim Deduction: Editorial Example ${id}`,
     slug: {_type: "slug", current: slug},
     excerpt: "How to review a health insurance settlement and ask for an itemised explanation.",
     contentType: "guide", monetization: "none", featured: false, cornerstone: false,
