@@ -1,0 +1,75 @@
+name: Sanity ICU/HDU draft import (one time)
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Inspect only or create one unpublished ICU/HDU draft
+        required: true
+        default: inspect
+        type: choice
+        options:
+          - inspect
+          - create-draft
+      confirmation:
+        description: For create-draft, type CREATE_ICU_HDU_DRAFT_ONLY (no publishing)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanity-icu-hdu-draft-import-production
+  cancel-in-progress: false
+
+jobs:
+  draft-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SANITY_EDITORIAL_DRAFT_TOKEN: ${{ secrets.SANITY_EDITORIAL_DRAFT_TOKEN }}
+      PRIVATE_MANUSCRIPT_B64: ${{ secrets.SANITY_ICU_HDU_DRAFT_GZIP_B64 }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22.22.2'
+      - name: Install pinned repository dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Reject unconfirmed writes and missing secrets
+        shell: bash
+        env:
+          REQUESTED_ACTION: ${{ inputs.action }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -euo pipefail
+          test -n "$SANITY_EDITORIAL_DRAFT_TOKEN" || { echo "Missing SANITY_EDITORIAL_DRAFT_TOKEN"; exit 1; }
+          test -n "$PRIVATE_MANUSCRIPT_B64" || { echo "Missing SANITY_ICU_HDU_DRAFT_GZIP_B64"; exit 1; }
+          if [ "$REQUESTED_ACTION" = 'create-draft' ] && [ "$CONFIRMATION" != 'CREATE_ICU_HDU_DRAFT_ONLY' ]; then
+            echo 'Correct typed confirmation required for draft creation.'
+            exit 1
+          fi
+      - name: Decode private editorial payload and validate
+        shell: bash
+        env:
+          REQUESTED_ACTION: ${{ inputs.action }}
+        run: |
+          set -euo pipefail
+          umask 077
+          tmp="$(mktemp)"
+          trap 'rm -f "$tmp"' EXIT
+          printf '%s' "$PRIVATE_MANUSCRIPT_B64" | base64 --decode | gzip -dc > "$tmp"
+          node scripts/import-icu-hdu-draft-only.mjs --validate "$tmp"
+          if [ "$REQUESTED_ACTION" = 'inspect' ]; then
+            node scripts/import-icu-hdu-draft-only.mjs --preflight "$tmp"
+          elif [ "$REQUESTED_ACTION" = 'create-draft' ]; then
+            node scripts/import-icu-hdu-draft-only.mjs --create "$tmp"
+          else
+            echo 'Unsupported action.'
+            exit 1
+          fi
+      - name: Security summary
+        if: success()
+        run: |
+          echo 'No publish, patch, delete, Vercel deploy, repo write or article-content artifact occurred.'
