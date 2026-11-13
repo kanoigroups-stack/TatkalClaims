@@ -127,6 +127,12 @@ jobs:
         if: needs.changes.outputs.safeguards == 'true'
         run: npx --yes tsx@4.19.2 scripts/verify-sanity-article-draft-sop.ts
 
+      - name: Test reusable Sanity draft-only writer
+        if: needs.changes.outputs.safeguards == 'true'
+        run: |
+          node --check scripts/sanity-editorial-drafts.mjs
+          node --test scripts/sanity-editorial-drafts.test.mjs
+
       - name: Verify Phase 13 editorial and SEO hardening
         if: needs.changes.outputs.safeguards == 'true'
         run: npx --yes tsx@4.19.2 scripts/verify-phase13-editorial-seo-hardening.ts

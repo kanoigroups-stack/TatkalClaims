@@ -2,6 +2,19 @@ name: Sanity schema deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      operation:
+        description: "Choose schema-only (safe default) or one-time registration of existing TatkalClaims Studio"
+        type: choice
+        required: true
+        default: schema-only
+        options:
+          - schema-only
+          - register-existing-studio
+      registration_confirmation:
+        description: "For registration type REGISTER_TATKALCLAIMS_STUDIO_ONLY (requires separate user approval)"
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -43,8 +56,25 @@ jobs:
       - name: Validate Tatkal Claims Studio schema
         run: npx --yes sanity@6.11.0 schemas validate --workspace tatkalClaims --level error
 
+      - name: Confirm explicitly approved external Studio registration
+        if: ${{ inputs.operation == 'register-existing-studio' }}
+        shell: bash
+        env:
+          REGISTRATION_CONFIRMATION: ${{ inputs.registration_confirmation }}
+        run: |
+          set -euo pipefail
+          if [ "$REGISTRATION_CONFIRMATION" != 'REGISTER_TATKALCLAIMS_STUDIO_ONLY' ]; then
+            echo "::error::Explicit registration confirmation is required."
+            exit 1
+          fi
+
       - name: Deploy Tatkal Claims Studio schema
+        if: ${{ inputs.operation != 'register-existing-studio' }}
         run: npx --yes sanity@6.11.0 schemas deploy --workspace tatkalClaims --verbose
+
+      - name: Register existing self-hosted Tatkal Claims Studio and deploy its schema
+        if: ${{ inputs.operation == 'register-existing-studio' }}
+        run: npx --yes sanity@6.14.1 deploy --external --url https://tatkalclaims.com/studio --schema-required --yes
 
       - name: Verify deployed schema is stored
         shell: bash
