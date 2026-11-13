@@ -39,7 +39,7 @@ jobs:
       - name: Set up Node.js for pinned Sanity CLI
         uses: actions/setup-node@v7
         with:
-          node-version: 22.12
+          node-version: 22.22.2
 
       - name: Install repository dependencies
         run: npm ci --no-audit --no-fund
@@ -54,7 +54,7 @@ jobs:
           fi
 
       - name: Validate Tatkal Claims Studio schema
-        run: npx --yes sanity@6.11.0 schemas validate --workspace tatkalClaims --level error
+        run: npx --no-install sanity schema validate --workspace tatkalClaims --level error
 
       - name: Confirm explicitly approved external Studio registration
         if: ${{ inputs.operation == 'register-existing-studio' }}
@@ -70,17 +70,17 @@ jobs:
 
       - name: Deploy Tatkal Claims Studio schema
         if: ${{ inputs.operation != 'register-existing-studio' }}
-        run: npx --yes sanity@6.11.0 schemas deploy --workspace tatkalClaims --verbose
+        run: npx --no-install sanity schema deploy --workspace tatkalClaims --verbose
 
       - name: Register existing self-hosted Tatkal Claims Studio and deploy its schema
         if: ${{ inputs.operation == 'register-existing-studio' }}
-        run: npx --yes sanity@6.14.1 deploy --external --url https://tatkalclaims.com/studio --schema-required --yes
+        run: npx --no-install sanity deploy --external --url https://tatkalclaims.com/studio --schema-required --yes
 
       - name: Verify deployed schema is stored
         shell: bash
         run: |
           set -euo pipefail
-          npx --yes sanity@6.11.0 schemas list --json > schema-deploy-verification.json
+          npx --no-install sanity schema list --json > schema-deploy-verification.json
           node - <<'NODE'
           const fs = require("fs");
           const data = JSON.parse(fs.readFileSync("schema-deploy-verification.json", "utf8"));
