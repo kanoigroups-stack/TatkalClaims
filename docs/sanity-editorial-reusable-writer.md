@@ -26,7 +26,16 @@ Its documentation says that an externally hosted Studio such as
 also deploys the schema. This may improve workspace discovery, but **it is
 not proven to repair the MCP field validation bug**. Treat registering the
 production Studio as a separate configuration change requiring the user's
-explicit approval. Do not run it as a workaround without inspecting the
+explicit approval. This proposal adds an **opt-in** `register-existing-studio`
+operation to the existing `.github/workflows/sanity-schema-deploy.yml`;
+its default `schema-only` operation is unchanged. The registration operation
+requires typed confirmation `REGISTER_TATKALCLAIMS_STUDIO_ONLY`, and will run
+`sanity deploy --external --url https://tatkalclaims.com/studio --schema-required`
+using the already stored dedicated deploy token. It registers only the
+existing externally hosted Studio and its schema; it is not a Vercel website
+deploy, new Studio hosting, or content publication. This one-time action must
+not be selected until the user explicitly approves the production
+configuration change. Do not run it as a workaround without inspecting the
 real Studio URL and the relevant CLI behavior. If registration restores the
 native connector, use that instead of the fallback writer.
 
