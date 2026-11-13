@@ -35,15 +35,15 @@ async function main() {
   );
 
   assert(
-    workflow.includes("node-version: 22.12"),
+    workflow.includes("node-version: 22.22.2"),
     "Current Sanity CLI schema commands require Node 22.12+"
   );
 
   const validateIndex = workflow.indexOf(
-    "sanity@6.11.0 schemas validate --workspace tatkalClaims --level error"
+    "sanity schema validate --workspace tatkalClaims --level error"
   );
   const deployIndex = workflow.indexOf(
-    "sanity@6.11.0 schemas deploy --workspace tatkalClaims --verbose"
+    "sanity schema deploy --workspace tatkalClaims --verbose"
   );
 
   assert(
@@ -52,7 +52,7 @@ async function main() {
   );
 
   assert(
-    workflow.includes("sanity@6.11.0 schemas list --json") &&
+    workflow.includes("sanity schema list --json") &&
       workflow.includes("schema-deploy-verification.json"),
     "Schema deploy must verify stored schemas after deployment"
   );
