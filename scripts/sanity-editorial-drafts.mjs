@@ -163,12 +163,12 @@ export function validatePatch(payload) {
   return payload;
 }
 export function parsePayload(text) {
-  const lines = text.split(/\r?\n/).filter(x => x.trim().length > 0);
-  if (lines.length === 1) {
-    const value = JSON.parse(lines[0]);
-    return value;
+  try { return JSON.parse(text); }
+  catch {
+    const lines = text.split(/\r?\n/).filter(x => x.trim().length > 0);
+    insist(lines.length > 0, "Empty editorial payload");
+    return lines.map(line => JSON.parse(line));
   }
-  return lines.map(line => JSON.parse(line));
 }
 async function clientFor(mode) {
   const token = process.env.SANITY_EDITORIAL_DRAFT_TOKEN;
