@@ -40,7 +40,8 @@ jobs:
         run: |
           set -euo pipefail
           npm install --no-save --package-lock=false --no-audit --no-fund \
-            "sanity@${SANITY_STUDIO_VERSION}" "@sanity/vision@${SANITY_STUDIO_VERSION}"
+            "sanity@${SANITY_STUDIO_VERSION}" "@sanity/vision@${SANITY_STUDIO_VERSION}" \
+            "styled-components@6.1.15"
           node -e 'for (const name of ["sanity","@sanity/vision"]) { const version = require(name + "/package.json").version; if (version !== process.env.SANITY_STUDIO_VERSION) throw new Error(name + " unexpectedly resolved to " + version); console.log(name + "@" + version) }'
           git diff --exit-code -- package.json package-lock.json
 
