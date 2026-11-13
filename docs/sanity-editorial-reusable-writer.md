@@ -18,6 +18,18 @@ Sanity reported no content mutation. The repository's real Studio schema
 The MCP schema selection is currently a legacy-only \`_.schemas.tatkalClaims\`.
 Prefer the native Sanity connector again if this is repaired.
 
+## Separate native connector repair candidate (not executed)
+Sanity currently reports no registered Studio application for project `ah5vm288`.
+Its documentation says that an externally hosted Studio such as
+`https://tatkalclaims.com/studio` can be registered using
+`sanity deploy --external --url https://tatkalclaims.com/studio`, which
+also deploys the schema. This may improve workspace discovery, but **it is
+not proven to repair the MCP field validation bug**. Treat registering the
+production Studio as a separate configuration change requiring the user's
+explicit approval. Do not run it as a workaround without inspecting the
+real Studio URL and the relevant CLI behavior. If registration restores the
+native connector, use that instead of the fallback writer.
+
 ## Draft-only workflow
 1. Research/cannibalization check using Sanity; verify primary legal/regulatory
    sources, existing category/topic/author and internal links.
