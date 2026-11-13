@@ -68,7 +68,35 @@ jobs:
       - name: Build Next.js application with temporary Sanity packages
         run: npm run build
 
-      - name: Confirm no production artifacts were changed
+      - name: Generate proposed pinned dependency files inside runner
         run: |
-          echo "Read-only diagnostic complete. No Sanity registration, schema upload, Content Lake mutation, Git merge, or production deployment executed."
-          git diff --exit-code -- package.json package-lock.json
+          set -euo pipefail
+          npm install --save-exact --package-lock-only --no-audit --no-fund \
+            "sanity@${SANITY_STUDIO_VERSION}" "@sanity/vision@${SANITY_STUDIO_VERSION}" \
+            "styled-components@6.1.15"
+          node - <<'NODE'
+          const p = require('./package.json')
+          const l = require('./package-lock.json')
+          for (const [key,version] of Object.entries({'sanity':'3.99.0','@sanity/vision':'3.99.0','styled-components':'6.1.15'})) {
+            if (p.dependencies[key] !== version || l.packages[''].dependencies[key] !== version) {
+              throw new Error('Version mismatch for ' + key)
+            }
+          }
+          console.log('Proposed package.json and package-lock.json are aligned')
+          NODE
+          echo "Generated reproducible upgrade candidate only in temporary runner files."
+
+      - name: Upload non-sensitive lockfile upgrade candidate
+        uses: actions/upload-artifact@v7
+        with:
+          name: sanity-399-dependency-upgrade-candidate
+          path: |
+            package.json
+            package-lock.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Confirm no changes were committed or deployed
+        run: |
+          echo "Compatibility test and dependency candidate generation complete."
+          echo "No Sanity schema upload, Content Lake mutation, Studio registration, Git merge or production deployment executed."
