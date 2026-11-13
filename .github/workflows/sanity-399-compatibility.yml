@@ -1,0 +1,73 @@
+name: Sanity 3.99 compatibility diagnostic (no writes)
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/sanity-399-compatibility.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanity-399-compatibility-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  verify-compatible-cli:
+    name: Test Sanity 3.99 / React 18 compatibility without deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ah5vm288
+      NEXT_PUBLIC_SANITY_DATASET: production
+      SANITY_STUDIO_VERSION: 3.99.0
+    steps:
+      - name: Check out candidate branch (read-only)
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js 22.22.2 for diagnostic
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22.22.2
+
+      - name: Install existing lockfile dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Temporarily overlay matching Sanity Studio 3.x packages
+        run: |
+          set -euo pipefail
+          npm install --no-save --package-lock=false --no-audit --no-fund \
+            "sanity@${SANITY_STUDIO_VERSION}" "@sanity/vision@${SANITY_STUDIO_VERSION}"
+          node -e 'for (const name of ["sanity","@sanity/vision"]) { const version = require(name + "/package.json").version; if (version !== process.env.SANITY_STUDIO_VERSION) throw new Error(name + " unexpectedly resolved to " + version); console.log(name + "@" + version) }'
+          git diff --exit-code -- package.json package-lock.json
+
+      - name: Validate schema locally (no Content Lake calls)
+        run: npx --no-install sanity schemas validate --workspace tatkalClaims --level error
+
+      - name: Extract schema and verify article fields (no upload)
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx --no-install sanity schemas extract --workspace tatkalClaims --path /tmp/tatkalclaims-schema-diagnostic.json --force
+          node - <<'NODE'
+          const fs = require('node:fs')
+          const schema = fs.readFileSync('/tmp/tatkalclaims-schema-diagnostic.json','utf8')
+          for (const name of ['article', 'title', 'slug', 'body', 'seo', 'relatedArticles']) {
+            if (!schema.includes('"' + name + '"')) throw new Error('Missing schema field/type: ' + name)
+          }
+          console.log('Schema extraction includes article type and core article fields')
+          NODE
+
+      - name: Typecheck embedded Studio and application
+        run: npx tsc --noEmit
+
+      - name: Build Next.js application with temporary Sanity packages
+        run: npm run build
+
+      - name: Confirm no production artifacts were changed
+        run: |
+          echo "Read-only diagnostic complete. No Sanity registration, schema upload, Content Lake mutation, Git merge, or production deployment executed."
+          git diff --exit-code -- package.json package-lock.json
