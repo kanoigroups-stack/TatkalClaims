@@ -337,6 +337,22 @@ A draft is not ready for publish approval until all applicable checks pass:
 - existing migrated slug/date/legacyOrder invariants preserved
 - protected-slug rule respected
 
+### Mandatory template-aware checks (learned from the 14 November 2026 ICU/HDU correction)
+
+Run these checks **before asking for publishing approval**. Presence of data in Sanity is not evidence that it renders correctly on the website.
+
+1. **One author/reviewer display only.** The public article template already renders "Written by: Tatkal Claims, Claims Review Team" and "Reviewed by: Ankit L Kanoi, Founder". Do not insert those same bylines as Portable Text paragraphs. Verify they appear once in the rendered header.
+2. **One FAQ heading only.** The public renderer generates the heading for each `faqBlock`. Do not precede it with a separate Portable Text H2 such as "Frequently Asked Questions" unless the actual template demonstrably requires it. Check the eight or other authored FAQ items are visible and the expected FAQ structured data is emitted where supported.
+3. **No duplicate related-reading section.** The page template renders up to three `relatedArticles` cards. Never add a separate "Related TatkalClaims reading" heading and three standalone link paragraphs to repeat them. Keep up to **two genuinely contextual in-body links**, integrated with the relevant discussion, and verify each destination is an existing canonical public slug. Confirm that reciprocal edits to already published source articles are drafted, reviewed and separately approved before publication.
+4. **Actual table headers.** Use `articleTable.hasHeaderRow: true` when the first row contains labels; inspect the generated HTML for `<th scope="col">` rather than ordinary `<td>` cells. Check all row widths, wrapping and mobile overflow.
+5. **Reader-facing headings.** Remove staging language such as "editorial notes", "draft", "research", "review needed" or internal instructions unless genuinely relevant to readers. Preferred source section heading: "Sources and references".
+6. **Dates must distinguish first publication from editorial revision.** Preserve `publishedAt` for an existing published article. For a substantive correction, set `updatedAt` to the actual editorial update time and confirm `BlogPosting.dateModified` reflects the revision date while `datePublished` remains unchanged. In this site, `lib/content/seo.ts` uses `post.updatedAt || post.date`; Sanity's system `_updatedAt` alone does not update structured data. Refresh `updatedAt` immediately before publishing if the review and approval span different dates.
+7. **Source authority and formatting.** Distinguish current regulations from superseded circulars; verify dates and links and do not treat a historical circular as currently binding. Check all public source blocks for correct names, links, and concise reader-facing notes.
+8. **Metadata, image and citations.** Check canonical, noindex/nofollow, title/description length, OG image, 1200×675 JPG hero, 1200×630 JPG social image when supplied, meaningful `featuredImage.alt` and `socialImage.alt`, and a single intended H1.
+9. **True draft preview is required.** Open the authenticated `/cms-preview/blog/[slug]/` page and inspect its rendered body, headings, tables, FAQ, relevant images and links. If authentication prevents access, explicitly mark **visual preview QA as blocked**; do not claim that Sanity validation or the public page verifies the draft rendering.
+10. **Independent checks and evidence.** Re-read the saved draft, compare its changed paths against the published document, run available Sanity validation (noting incomplete custom callbacks), and verify public content is unchanged until approval. If a check cannot be performed, state the limitation in the approval request.
+11. **Postpublish verification.** Following explicit approval, inspect the live HTML and JSON-LD, confirming that updated dates, contextual links, tables, FAQ and related cards render as intended. Don't equate an MCP publish success message with complete live-page verification.
+
 ## Phase I — preview isolation
 
 Use:
