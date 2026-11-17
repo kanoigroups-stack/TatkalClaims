@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Phone,
@@ -268,6 +269,14 @@ export default function AboutPage() {
           className="grid scroll-mt-24 lg:grid-cols-2 gap-12 items-center"
         >
           <div>
+            <Image
+              src="/images/ankit-l-kanoi-founder.webp"
+              alt="Ankit L Kanoi, Founder of Tatkal Claims"
+              width={640}
+              height={710}
+              sizes="(min-width: 640px) 256px, 224px"
+              className="mb-6 h-auto w-56 max-w-full bg-white object-contain sm:w-64"
+            />
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
               Meet the <span className="text-blue-700">Founder</span>
             </h2>
